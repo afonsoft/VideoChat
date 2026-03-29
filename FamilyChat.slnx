@@ -11,6 +11,6 @@
     <Project Path="src/web/app/app.csproj" />
   </Folder>
   <Folder Name="/src/mobile/">
-    <Project Path="src/mobile/FamilyChat.Mobile/FamilyChat.Mobile.csproj" />
+    <Project Path="src/mobile/FamilyChat.Mobile.csproj" />
   </Folder>
 </Solution>

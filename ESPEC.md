@@ -534,7 +534,7 @@ namespace FamilyChat.Mobile.Models
 ```xml
 <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" />
 <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
-<PackageReference Include="CommunityToolkit.Mvvm" Version="10.1.1" />
+<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
 ```
 
 ## Configuração de Banco de Dados
