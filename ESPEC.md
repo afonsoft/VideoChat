@@ -29,9 +29,13 @@ public class ChatGroup
     public GroupType Type { get; private set; }
     public Guid CreatorId { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public DateTime? LastActivityAt { get; private set; }
+    public bool IsActive { get; private set; }
     public int MaxParticipants { get; private set; }
-    public List<ChatGroupMember> Members { get; private set; }
-    public List<CallParticipant> ActiveCallParticipants { get; private set; }
+    public IReadOnlyCollection<ChatGroupMember> Members { get; private set; }
+    public IReadOnlyCollection<ChatMessage> Messages { get; private set; }
+    public IReadOnlyCollection<CallParticipant> ActiveCallParticipants { get; private set; }
+}
 
     public ChatGroup(string name, string description, GroupType type, Guid creatorId, int maxParticipants = 10)
     {

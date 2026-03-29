@@ -73,8 +73,20 @@ FamilyChat/
 │   │   ├── FamilyChat.EntityFrameworkCore/   # DbContext e Repositories
 │   │   └── FamilyChat.HttpApi/               # API Controllers e SignalR Hub
 │   ├── web/                                 # Frontend Web
-│   │   ├── FamilyChat.Web/                   # Projeto web MVC (configuração)
-│   │   └── FamilyChat.Web.Angular/        # Frontend Angular
+│   │   ├── app.csproj                    # Projeto web principal
+│   │   └── src/                          # Fontes Angular
+│   │       ├── app/
+│   │       │   ├── app.component.ts
+│   │       │   ├── app.module.ts
+│   │       │   ├── app.routes.ts
+│   │       │   └── components/
+│   │       │       └── chat-room/
+│   │       │           ├── chat-room.component.ts
+│   │       │           └── chat-room.component.html
+│   │       ├── main.ts
+│   │       ├── polyfills.ts
+│   │       └── environments/
+│   │           └── environment.prod.ts
 │   └── mobile/                              # Aplicação Mobile
 │       └── FamilyChat.Mobile/             # Projeto MAUI
 ├── docker-compose.familychat.yml             # Docker Compose para deploy
@@ -86,6 +98,7 @@ FamilyChat/
 ├── database-setup.sql                       # Script PostgreSQL
 ├── DATABASE.md                              # Guia completo de configuração
 ├── ESPEC.md                                 # Especificação técnica
+├── FamilyChat.slnx                          # Solution file
 └── README.md                                # Documentação completa
 ```
 
@@ -125,15 +138,18 @@ FamilyChat/
 ### 1. Deploy com Docker Compose (Recomendado)
 
 ```bash
-# Para Windows
-.\deploy.ps1
-
-# Para Linux/Mac
-chmod +x deploy.sh
-./deploy.sh
-
-# Ou manualmente:
+# Para desenvolvimento com IP específico (192.168.68.113)
 docker-compose -f docker-compose.familychat.yml up --build -d
+
+# Para desenvolvimento local (localhost)
+docker-compose -f docker-compose.familychat.yml up --build -d
+
+# Verificar status dos containers
+docker-compose -f docker-compose.familychat.yml ps
+
+# Acessar logs
+docker-compose -f docker-compose.familychat.yml logs -f familychat-api
+docker-compose -f docker-compose.familychat.yml logs -f familychat-frontend
 ```
 
 **Endpoints Disponíveis:**
@@ -146,10 +162,13 @@ docker-compose -f docker-compose.familychat.yml up --build -d
 
 ```bash
 # Build API
-docker build -f Dockerfile.api -t familychat-api .
+cd src/api/FamilyChat.HttpApi
+dotnet build
 
 # Build Frontend
-docker build -f Dockerfile.frontend -t familychat-frontend .
+cd src/web
+npm install
+npm run build
 
 # Run individual containers
 docker run -d --name familychat-api -p 5000:80 familychat-api
@@ -169,6 +188,15 @@ Host=192.168.68.113;Database=FamilyChat;Username=postgres;Password=postgres
 
 # Redis
 192.168.68.113:6379
+```
+
+**Para Docker:**
+```bash
+# PostgreSQL
+Host=host.docker.internal;Database=FamilyChat;Username=postgres;Password=postgres
+
+# Redis
+host.docker.internal:6379
 ```
 
 ## 📊 Dados Iniciais (Seed)
