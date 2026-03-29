@@ -1,13 +1,13 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using SimpleConnect.Application.Contracts.DTOs;
-using SimpleConnect.Application.Contracts.Services;
-using SimpleConnect.Domain.Entities;
-using SimpleConnect.Domain.Shared.ValueObjects;
-using SimpleConnect.Domain.Shared.Enums;
-using SimpleConnect.Domain.Repositories;
+using FamiyChat.Application.Contracts.DTOs;
+using FamiyChat.Application.Contracts.Services;
+using FamiyChat.Domain.Entities;
+using FamiyChat.Domain.Shared.ValueObjects;
+using FamiyChat.Domain.Shared.Enums;
+using FamiyChat.Domain.Repositories;
 
-namespace SimpleConnect.Application.Services;
+namespace FamiyChat.Application.Services;
 
 public class VideoCallAppService : IVideoCallAppService
 {

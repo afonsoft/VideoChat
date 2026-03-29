@@ -1,6 +1,6 @@
-using SimpleConnect.Application.Contracts.DTOs;
+using FamiyChat.Application.Contracts.DTOs;
 
-namespace SimpleConnect.Application.Contracts.Services;
+namespace FamiyChat.Application.Contracts.Services;
 
 public interface IChatAppService
 {

@@ -1,4 +1,4 @@
-﻿namespace SimpleConnect.Domain;
+﻿namespace FamiyChat.Domain;
 
 public class Class1
 {

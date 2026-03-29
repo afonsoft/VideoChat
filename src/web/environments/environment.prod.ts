@@ -20,7 +20,7 @@ export const environment = {
   apis: {
     default: {
       url: 'https://localhost:44372',
-      rootNamespace: 'SimpleConnect.Abp',
+      rootNamespace: 'FamiyChat.Abp',
     },
   },
 } as Environment;

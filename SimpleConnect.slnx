@@ -1,16 +1,16 @@
 <Solution>
   <Folder Name="/src/api/">
-    <Project Path="src/api/SimpleConnect.Domain.Shared/SimpleConnect.Domain.Shared.csproj" />
-    <Project Path="src/api/SimpleConnect.Domain/SimpleConnect.Domain.csproj" />
-    <Project Path="src/api/SimpleConnect.Application.Contracts/SimpleConnect.Application.Contracts.csproj" />
-    <Project Path="src/api/SimpleConnect.Application/SimpleConnect.Application.csproj" />
-    <Project Path="src/api/SimpleConnect.EntityFrameworkCore/SimpleConnect.EntityFrameworkCore.csproj" />
-    <Project Path="src/api/SimpleConnect.HttpApi/SimpleConnect.HttpApi.csproj" />
+    <Project Path="src/api/FamiyChat.Domain.Shared/FamiyChat.Domain.Shared.csproj" />
+    <Project Path="src/api/FamiyChat.Domain/FamiyChat.Domain.csproj" />
+    <Project Path="src/api/FamiyChat.Application.Contracts/FamiyChat.Application.Contracts.csproj" />
+    <Project Path="src/api/FamiyChat.Application/FamiyChat.Application.csproj" />
+    <Project Path="src/api/FamiyChat.EntityFrameworkCore/FamiyChat.EntityFrameworkCore.csproj" />
+    <Project Path="src/api/FamiyChat.HttpApi/FamiyChat.HttpApi.csproj" />
   </Folder>
   <Folder Name="/src/web/">
-    <Project Path="src/web/SimpleConnect.Web/SimpleConnect.Web.csproj" />
+    <Project Path="src/web/FamiyChat.Web/FamiyChat.Web.csproj" />
   </Folder>
   <Folder Name="/src/mobile/">
-    <Project Path="src/mobile/SimpleConnect.Mobile/SimpleConnect.Mobile.csproj" />
+    <Project Path="src/mobile/FamiyChat.Mobile/FamiyChat.Mobile.csproj" />
   </Folder>
 </Solution>

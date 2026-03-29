@@ -74,9 +74,9 @@ FamilyChat/
 │   │   └── FamilyChat.HttpApi/               # API Controllers e SignalR Hub
 │   ├── web/                                 # Frontend Web
 │   │   ├── FamilyChat.Web/                   # Projeto web MVC (configuração)
-│   │   └── SimpleConnect.Web.Angular/        # Frontend Angular
+│   │   └── FamiyChat.Web.Angular/        # Frontend Angular
 │   └── mobile/                              # Aplicação Mobile
-│       └── SimpleConnect.Mobile/             # Projeto MAUI
+│       └── FamiyChat.Mobile/             # Projeto MAUI
 ├── docker-compose.familychat.yml             # Docker Compose para deploy
 ├── Dockerfile.api                            # Dockerfile para API
 ├── Dockerfile.frontend                       # Dockerfile para Frontend
@@ -208,7 +208,7 @@ ChatMessageAttachments    -- Anexos das mensagens
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=SimpleConnect;Username=postgres;Password=sua_senha"
+    "DefaultConnection": "Host=localhost;Database=FamiyChat;Username=postgres;Password=sua_senha"
   }
 }
 ```
@@ -282,8 +282,8 @@ Use os dados seed criados automaticamente:
 ## 🔐 Autenticação
 
 JWT configurado com:
-- **Issuer**: SimpleConnect
-- **Audience**: SimpleConnectUsers
+- **Issuer**: FamiyChat
+- **Audience**: FamiyChatUsers
 - **Key**: Configurável via appsettings
 
 Para produção:
@@ -304,9 +304,9 @@ Para produção:
 **iOS (Info.plist):**
 ```xml
 <key>NSCameraUsageDescription</key>
-<string>SimpleConnect precisa acessar a câmera para videochamadas</string>
+<string>FamiyChat precisa acessar a câmera para videochamadas</string>
 <key>NSMicrophoneUsageDescription</key>
-<string>SimpleConnect precisa acessar o microfone para chamadas</string>
+<string>FamiyChat precisa acessar o microfone para chamadas</string>
 ```
 
 ## 🌐 WebRTC Setup
@@ -347,19 +347,19 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY ["src/SimpleConnect.HttpApi/SimpleConnect.HttpApi.csproj", "src/SimpleConnect.HttpApi/"]
-RUN dotnet restore "src/SimpleConnect.HttpApi/SimpleConnect.HttpApi.csproj"
+COPY ["src/FamiyChat.HttpApi/FamiyChat.HttpApi.csproj", "src/FamiyChat.HttpApi/"]
+RUN dotnet restore "src/FamiyChat.HttpApi/FamiyChat.HttpApi.csproj"
 COPY . .
-WORKDIR "/src/src/SimpleConnect.HttpApi"
-RUN dotnet build "SimpleConnect.HttpApi.csproj" -c Release -o /app/build
+WORKDIR "/src/src/FamiyChat.HttpApi"
+RUN dotnet build "FamiyChat.HttpApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "SimpleConnect.HttpApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "FamiyChat.HttpApi.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SimpleConnect.HttpApi.dll"]
+ENTRYPOINT ["dotnet", "FamiyChat.HttpApi.dll"]
 ```
 
 ## 📋 Troubleshooting Comum
@@ -390,7 +390,7 @@ ENTRYPOINT ["dotnet", "SimpleConnect.HttpApi.dll"]
 
 ## ✅ MVP Completo e Funcional!
 
-O SimpleConnect está pronto para demonstração com:
+O FamiyChat está pronto para demonstração com:
 - **Backend** API REST + SignalR funcionais
 - **Frontend** Angular com chat e videochamada
 - **Mobile** MAUI multiplataforma

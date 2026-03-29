@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using SimpleConnect.Domain.Entities;
-using SimpleConnect.Domain.Shared.Enums;
+using FamiyChat.Domain.Entities;
+using FamiyChat.Domain.Shared.Enums;
 
-namespace SimpleConnect.EntityFrameworkCore;
+namespace FamiyChat.EntityFrameworkCore;
 
-public class SimpleConnectDbContext : DbContext
+public class FamiyChatDbContext : DbContext
 {
-    public SimpleConnectDbContext(DbContextOptions<SimpleConnectDbContext> options)
+    public FamiyChatDbContext(DbContextOptions<FamiyChatDbContext> options)
         : base(options)
     {
     }
@@ -20,7 +20,7 @@ public class SimpleConnectDbContext : DbContext
     {
         base.OnModelCreating(builder);
 
-        builder.ConfigureSimpleConnect();
+        builder.ConfigureFamiyChat();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -79,7 +79,7 @@ public class SimpleConnectDbContext : DbContext
 
         messages.AddRange(new[]
         {
-            new ChatMessage("Olá pessoal! Sejam bem-vindos ao SimpleConnect! 🎉", userId, "Usuário Demo", generalGroup.Id, MessageType.System),
+            new ChatMessage("Olá pessoal! Sejam bem-vindos ao FamiyChat! 🎉", userId, "Usuário Demo", generalGroup.Id, MessageType.System),
             new ChatMessage("Obrigado! Estou animado para testar as videochamadas.", Guid.NewGuid(), "Maria Silva", generalGroup.Id, MessageType.Text),
             new ChatMessage("As funcionalidades de chat estão incríveis!", Guid.NewGuid(), "João Santos", generalGroup.Id, MessageType.Text),
             new ChatMessage("Concordo! A interface é muito intuitiva.", Guid.NewGuid(), "Ana Costa", generalGroup.Id, MessageType.Text),

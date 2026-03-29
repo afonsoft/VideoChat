@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
-using SimpleConnect.Domain.Shared.Enums;
+using FamiyChat.Domain.Shared.Enums;
 
-namespace SimpleConnect.Application.Services;
+namespace FamiyChat.Application.Services;
 
 public interface IRedisCacheService
 {

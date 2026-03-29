@@ -1,15 +1,15 @@
 using System.ComponentModel.DataAnnotations;
-using SimpleConnect.Domain.Shared.Constants;
-using SimpleConnect.Domain.Shared.Enums;
+using FamiyChat.Domain.Shared.Constants;
+using FamiyChat.Domain.Shared.Enums;
 
-namespace SimpleConnect.Domain.Entities;
+namespace FamiyChat.Domain.Entities;
 
 public class ChatMessage
 {
     public Guid Id { get; private set; }
 
     [Required]
-    [MaxLength(SimpleConnectConsts.MaxMessageContentLength)]
+    [MaxLength(FamiyChatConsts.MaxMessageContentLength)]
     public string Content { get; private set; } = string.Empty;
 
     public Guid SenderId { get; private set; }
@@ -56,8 +56,8 @@ public class ChatMessage
         if (string.IsNullOrWhiteSpace(newContent))
             throw new ArgumentException("Message content cannot be empty", nameof(newContent));
 
-        if (newContent.Length > SimpleConnectConsts.MaxMessageContentLength)
-            throw new ArgumentException($"Message content cannot exceed {SimpleConnectConsts.MaxMessageContentLength} characters", nameof(newContent));
+        if (newContent.Length > FamiyChatConsts.MaxMessageContentLength)
+            throw new ArgumentException($"Message content cannot exceed {FamiyChatConsts.MaxMessageContentLength} characters", nameof(newContent));
 
         Content = newContent;
         EditedAt = DateTime.UtcNow;

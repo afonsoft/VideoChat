@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleConnect.Application\SimpleConnect.Application.csproj" />
-    <ProjectReference Include="..\SimpleConnect.EntityFrameworkCore\SimpleConnect.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\FamiyChat.Application\FamiyChat.Application.csproj" />
+    <ProjectReference Include="..\FamiyChat.EntityFrameworkCore\FamiyChat.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,13 +1,13 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.AutoMapper;
-using SimpleConnect.Application.Contracts;
+using FamiyChat.Application.Contracts;
 
-namespace SimpleConnect.Application;
+namespace FamiyChat.Application;
 
 [DependsOn(
-    typeof(SimpleConnectApplicationContractsModule),
+    typeof(FamiyChatApplicationContractsModule),
     typeof(AbpAutoMapperModule)
 )]
-public class SimpleConnectApplicationModule : AbpModule
+public class FamiyChatApplicationModule : AbpModule
 {
 }

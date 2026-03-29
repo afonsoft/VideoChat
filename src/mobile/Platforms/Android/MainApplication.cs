@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace SimpleConnect.Mobile;
+namespace FamiyChat.Mobile;
 
 [Application]
 public class MainApplication : MauiApplication

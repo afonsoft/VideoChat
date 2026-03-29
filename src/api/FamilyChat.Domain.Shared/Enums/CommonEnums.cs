@@ -1,4 +1,4 @@
-namespace SimpleConnect.Domain.Shared.Enums;
+namespace FamiyChat.Domain.Shared.Enums;
 
 public enum ParticipantStatus
 {

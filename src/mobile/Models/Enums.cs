@@ -1,4 +1,4 @@
-namespace SimpleConnect.Mobile.Models;
+namespace FamiyChat.Mobile.Models;
 
 public enum ParticipantStatus
 {

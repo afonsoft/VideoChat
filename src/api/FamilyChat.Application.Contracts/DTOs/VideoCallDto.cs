@@ -1,7 +1,7 @@
-using SimpleConnect.Domain.Shared.ValueObjects;
-using SimpleConnect.Domain.Shared.Enums;
+using FamiyChat.Domain.Shared.ValueObjects;
+using FamiyChat.Domain.Shared.Enums;
 
-namespace SimpleConnect.Application.Contracts.DTOs;
+namespace FamiyChat.Application.Contracts.DTOs;
 
 public class WebRTCSignalDto
 {

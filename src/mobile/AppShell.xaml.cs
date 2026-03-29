@@ -1,4 +1,4 @@
-﻿namespace SimpleConnect.Mobile;
+﻿namespace FamiyChat.Mobile;
 
 public partial class AppShell : Shell
 {

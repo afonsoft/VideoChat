@@ -1,14 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using SimpleConnect.Domain.Repositories;
-using SimpleConnect.EntityFrameworkCore;
+using FamiyChat.Domain.Repositories;
+using FamiyChat.EntityFrameworkCore;
 
-namespace SimpleConnect.EntityFrameworkCore;
+namespace FamiyChat.EntityFrameworkCore;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly SimpleConnectDbContext _context;
+    private readonly FamiyChatDbContext _context;
 
-    public UnitOfWork(SimpleConnectDbContext context)
+    public UnitOfWork(FamiyChatDbContext context)
     {
         _context = context;
     }

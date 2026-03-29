@@ -1,6 +1,6 @@
-using SimpleConnect.Domain.Shared.Enums;
+using FamiyChat.Domain.Shared.Enums;
 
-namespace SimpleConnect.Domain.Shared.ValueObjects;
+namespace FamiyChat.Domain.Shared.ValueObjects;
 
 public record CallParticipant
 {
@@ -10,7 +10,7 @@ public record CallParticipant
     public DateTime JoinedAt { get; init; }
     public bool HasAudio { get; init; }
     public bool HasVideo { get; init; }
-    
+
     public CallParticipant(Guid userId, string userName, ParticipantStatus status = ParticipantStatus.Disconnected)
     {
         UserId = userId;
@@ -20,17 +20,17 @@ public record CallParticipant
         HasAudio = false;
         HasVideo = false;
     }
-    
+
     public CallParticipant WithStatus(ParticipantStatus status)
     {
         return this with { Status = status };
     }
-    
+
     public CallParticipant WithAudio(bool hasAudio)
     {
         return this with { HasAudio = hasAudio };
     }
-    
+
     public CallParticipant WithVideo(bool hasVideo)
     {
         return this with { HasVideo = hasVideo };

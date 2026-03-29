@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleConnect.Domain\SimpleConnect.Domain.csproj" />
+    <ProjectReference Include="..\FamiyChat.Domain\FamiyChat.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

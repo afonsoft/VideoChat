@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using SimpleConnect.Domain.Entities;
-using SimpleConnect.Domain.Repositories;
-using SimpleConnect.EntityFrameworkCore;
+using FamiyChat.Domain.Entities;
+using FamiyChat.Domain.Repositories;
+using FamiyChat.EntityFrameworkCore;
 
-namespace SimpleConnect.EntityFrameworkCore.Repositories;
+namespace FamiyChat.EntityFrameworkCore.Repositories;
 
 public class ChatMessageRepository : IChatMessageRepository
 {
-    private readonly SimpleConnectDbContext _context;
+    private readonly FamiyChatDbContext _context;
 
-    public ChatMessageRepository(SimpleConnectDbContext context)
+    public ChatMessageRepository(FamiyChatDbContext context)
     {
         _context = context;
     }
@@ -23,10 +23,10 @@ public class ChatMessageRepository : IChatMessageRepository
     }
 
     public async Task<(List<ChatMessage> messages, int totalCount)> GetMessagesAsync(
-        Guid groupId, 
-        int pageNumber, 
-        int pageSize, 
-        DateTime? beforeDate = null, 
+        Guid groupId,
+        int pageNumber,
+        int pageSize,
+        DateTime? beforeDate = null,
         DateTime? afterDate = null)
     {
         var query = _context.ChatMessages

@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleConnect.Domain\SimpleConnect.Domain.csproj" />
-    <ProjectReference Include="..\SimpleConnect.Application.Contracts\SimpleConnect.Application.Contracts.csproj" />
+    <ProjectReference Include="..\FamiyChat.Domain\FamiyChat.Domain.csproj" />
+    <ProjectReference Include="..\FamiyChat.Application.Contracts\FamiyChat.Application.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

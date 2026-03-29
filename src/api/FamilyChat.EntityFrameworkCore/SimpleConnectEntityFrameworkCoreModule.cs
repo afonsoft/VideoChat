@@ -1,22 +1,22 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SimpleConnect.Domain;
+using FamiyChat.Domain;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Caching.Distributed;
-using SimpleConnect.Application.Services;
+using FamiyChat.Application.Services;
 
-namespace SimpleConnect.EntityFrameworkCore;
+namespace FamiyChat.EntityFrameworkCore;
 
 [DependsOn(
-    typeof(SimpleConnectDomainModule),
+    typeof(FamiyChatDomainModule),
     typeof(AbpEntityFrameworkCoreModule)
 )]
-public class SimpleConnectEntityFrameworkCoreModule : AbpModule
+public class FamiyChatEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAbpDbContext<SimpleConnectDbContext>(options =>
+        context.Services.AddAbpDbContext<FamiyChatDbContext>(options =>
         {
             options.AddDefaultRepositories(includeAllEntities: true);
         });
@@ -34,7 +34,7 @@ public class SimpleConnectEntityFrameworkCoreModule : AbpModule
             {
                 options.Configuration += $",password={redisPassword}";
             }
-            options.InstanceName = "SimpleConnect:";
+            options.InstanceName = "FamiyChat:";
         });
 
         // Register Redis cache service

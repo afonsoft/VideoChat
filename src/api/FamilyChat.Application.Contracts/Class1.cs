@@ -1,4 +1,4 @@
-﻿namespace SimpleConnect.Application.Contracts;
+﻿namespace FamiyChat.Application.Contracts;
 
 public class Class1
 {

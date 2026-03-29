@@ -1,4 +1,4 @@
--- Script para criar banco de dados SimpleConnect no PostgreSQL
+-- Script para criar banco de dados FamiyChat no PostgreSQL
 -- Execute este script como usuário postgres no psql
 
 -- =================================================================
@@ -22,7 +22,7 @@
 -- =================================================================
 
 -- 1. Criar o banco de dados
-CREATE DATABASE simpleconnect
+CREATE DATABASE FamiyChat
     WITH 
     OWNER = postgres
     ENCODING = 'UTF8'
@@ -32,16 +32,16 @@ CREATE DATABASE simpleconnect
     CONNECTION LIMIT = -1;
 
 -- 2. Criar usuário para a aplicação (opcional, se não usar o postgres)
-CREATE USER simpleconnect_user WITH PASSWORD 'simpleconnect_password';
+CREATE USER FamiyChat_user WITH PASSWORD 'FamiyChat_password';
 
 -- 3. Conceder permissões ao usuário
-GRANT ALL PRIVILEGES ON DATABASE simpleconnect TO simpleconnect_user;
+GRANT ALL PRIVILEGES ON DATABASE FamiyChat TO FamiyChat_user;
 
 -- 4. Conceder permissões no schema public
-\c simpleconnect;
-GRANT ALL ON SCHEMA public TO simpleconnect_user;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO simpleconnect_user;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO simpleconnect_user;
+\c FamiyChat;
+GRANT ALL ON SCHEMA public TO FamiyChat_user;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO FamiyChat_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO FamiyChat_user;
 
 -- 5. Habilitar extensões necessárias
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -80,7 +80,7 @@ CREATE TRIGGER trigger_update_chat_group_member_count
     FOR EACH ROW EXECUTE FUNCTION update_chat_group_member_count();
 
 -- 9. Mostrar informações do banco de dados
-\l simpleconnect;
+\l FamiyChat;
 
 -- =================================================================
 -- REDIS CONFIGURAÇÃO (separada - execute no Redis CLI)

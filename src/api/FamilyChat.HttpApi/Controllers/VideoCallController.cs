@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SimpleConnect.Application.Contracts.DTOs;
-using SimpleConnect.Application.Contracts.Services;
+using FamiyChat.Application.Contracts.DTOs;
+using FamiyChat.Application.Contracts.Services;
 
-namespace SimpleConnect.HttpApi.Controllers;
+namespace FamiyChat.HttpApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

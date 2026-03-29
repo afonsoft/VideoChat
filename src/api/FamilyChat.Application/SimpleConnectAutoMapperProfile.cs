@@ -1,13 +1,13 @@
 using AutoMapper;
-using SimpleConnect.Application.Contracts.DTOs;
-using SimpleConnect.Domain.Entities;
-using SimpleConnect.Domain.Shared.ValueObjects;
+using FamiyChat.Application.Contracts.DTOs;
+using FamiyChat.Domain.Entities;
+using FamiyChat.Domain.Shared.ValueObjects;
 
-namespace SimpleConnect.Application;
+namespace FamiyChat.Application;
 
-public class SimpleConnectAutoMapperProfile : Profile
+public class FamiyChatAutoMapperProfile : Profile
 {
-    public SimpleConnectAutoMapperProfile()
+    public FamiyChatAutoMapperProfile()
     {
         CreateMap<ChatGroup, ChatGroupDto>()
             .ForMember(dest => dest.CreatorName, opt => opt.Ignore())

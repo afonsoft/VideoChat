@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 
-namespace SimpleConnect.HttpApi.Services;
+namespace FamiyChat.HttpApi.Services;
 
 public interface IConnectionManager
 {
@@ -60,8 +60,8 @@ public class ConnectionManager : IConnectionManager
     {
         lock (_lock)
         {
-            return Task.FromResult(_userConnections.ContainsKey(userId) 
-                ? _userConnections[userId].ToList() 
+            return Task.FromResult(_userConnections.ContainsKey(userId)
+                ? _userConnections[userId].ToList()
                 : new List<string>());
         }
     }
@@ -70,8 +70,8 @@ public class ConnectionManager : IConnectionManager
     {
         lock (_lock)
         {
-            return Task.FromResult(_connectionUsers.ContainsKey(connectionId) 
-                ? _connectionUsers[connectionId] 
+            return Task.FromResult(_connectionUsers.ContainsKey(connectionId)
+                ? _connectionUsers[connectionId]
                 : null);
         }
     }

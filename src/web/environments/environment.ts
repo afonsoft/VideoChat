@@ -6,21 +6,21 @@ export const environment = {
   production: false,
   application: {
     baseUrl,
-    name: 'SimpleConnect',
+    name: 'FamiyChat',
     logoUrl: '',
   },
   oAuthConfig: {
     issuer: 'https://localhost:5000/',
     redirectUri: baseUrl,
-    clientId: 'SimpleConnect_App',
+    clientId: 'FamiyChat_App',
     responseType: 'code',
-    scope: 'offline_access SimpleConnect',
+    scope: 'offline_access FamiyChat',
     requireHttps: false, // Para desenvolvimento
   },
   apis: {
     default: {
       url: 'https://localhost:5000',
-      rootNamespace: 'SimpleConnect',
+      rootNamespace: 'FamiyChat',
     },
   },
 } as Environment;

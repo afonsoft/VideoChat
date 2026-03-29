@@ -1,22 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SimpleConnect.Application.Services;
-using SimpleConnect.Application;
-using SimpleConnect.Domain.Repositories;
-using SimpleConnect.EntityFrameworkCore.Repositories;
-using SimpleConnect.EntityFrameworkCore;
-using SimpleConnect.HttpApi.Services;
-using SimpleConnect.HttpApi.Hubs;
+using FamiyChat.Application.Services;
+using FamiyChat.Application;
+using FamiyChat.Domain.Repositories;
+using FamiyChat.EntityFrameworkCore.Repositories;
+using FamiyChat.EntityFrameworkCore;
+using FamiyChat.HttpApi.Services;
+using FamiyChat.HttpApi.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
-namespace SimpleConnect.HttpApi;
+namespace FamiyChat.HttpApi;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddSimpleConnect(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddFamiyChat(this IServiceCollection services, string connectionString)
     {
         // Entity Framework
-        services.AddDbContext<SimpleConnectDbContext>(options =>
+        services.AddDbContext<FamiyChatDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
         });
@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IVideoCallAppService, VideoCallAppService>();
 
         // AutoMapper
-        services.AddAutoMapper(typeof(SimpleConnectAutoMapperProfile));
+        services.AddAutoMapper(typeof(FamiyChatAutoMapperProfile));
 
         // SignalR
         services.AddSignalR();

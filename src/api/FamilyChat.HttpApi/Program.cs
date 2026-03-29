@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using SimpleConnect.HttpApi;
-using SimpleConnect.HttpApi.Hubs;
-using SimpleConnect.EntityFrameworkCore;
+using FamiyChat.HttpApi;
+using FamiyChat.HttpApi.Hubs;
+using FamiyChat.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ using Volo.Abp.AspNetCore.SignalR;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ReplaceConfiguration(builder.Configuration);
-builder.Services.AddApplication<SimpleConnectHttpApiModule>();
+builder.Services.AddApplication<FamiyChatHttpApiModule>();
 builder.Host.UseAutofac();
 
 var app = builder.Build();
@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseAbpSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "SimpleConnect API");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "FamiyChat API");
     });
 }
 
@@ -44,7 +44,7 @@ app.MapHub<CommunicationHub>("/hubs/communication");
 // Initialize Database and Seed Data
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<SimpleConnectDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<FamiyChatDbContext>();
 
     // Create database if it doesn't exist
     await context.Database.EnsureCreatedAsync();

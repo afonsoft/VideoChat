@@ -1,8 +1,8 @@
-# Especificação Técnica - SimpleConnect
+# Especificação Técnica - FamiyChat
 
 ## Contexto do Sistema
 
-Atue como um Arquiteto de Software Sênior e Desenvolvedor Full-stack especializado em ecossistema .NET. O objetivo é desenvolver um MVP de uma aplicação de comunicação em tempo real chamada "SimpleConnect" com chat em grupo e videochamadas.
+Atue como um Arquiteto de Software Sênior e Desenvolvedor Full-stack especializado em ecossistema .NET. O objetivo é desenvolver um MVP de uma aplicação de comunicação em tempo real chamada "FamiyChat" com chat em grupo e videochamadas.
 
 ## Requisitos Técnicos
 
@@ -350,7 +350,7 @@ Entity Framework Core com PostgreSQL e seed automático:
 
 #### DbContext com Seed
 ```csharp
-public class SimpleConnectDbContext : DbContext
+public class FamiyChatDbContext : DbContext
 {
     public DbSet<ChatGroup> ChatGroups { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
@@ -358,7 +358,7 @@ public class SimpleConnectDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ConfigureSimpleConnect();
+        builder.ConfigureFamiyChat();
         
         // Índices otimizados para performance
         builder.Entity<ChatMessage>()
@@ -394,7 +394,7 @@ public class SimpleConnectDbContext : DbContext
 
         var messages = new List<ChatMessage>
         {
-            new ChatMessage("Olá pessoal! Sejam bem-vindos ao SimpleConnect! 🎉", userId, "Usuário Demo", groups[0].Id, MessageType.System),
+            new ChatMessage("Olá pessoal! Sejam bem-vindos ao FamiyChat! 🎉", userId, "Usuário Demo", groups[0].Id, MessageType.System),
             new ChatMessage("Obrigado! Estou animado para testar as videochamadas.", Guid.NewGuid(), "Maria Silva", groups[0].Id),
             new ChatMessage("As funcionalidades de chat estão incríveis!", Guid.NewGuid(), "João Santos", groups[0].Id)
         };
@@ -413,7 +413,7 @@ var app = builder.Build();
 // Inicialização automática do banco
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<SimpleConnectDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<FamiyChatDbContext>();
     await context.Database.EnsureCreatedAsync();
     await context.SeedDataAsync();
 }
@@ -506,7 +506,7 @@ Estrutura para aplicação multiplataforma:
 
 #### Models
 ```csharp
-namespace SimpleConnect.Mobile.Models
+namespace FamiyChat.Mobile.Models
 {
     public class ChatGroup
     {
@@ -544,18 +544,18 @@ namespace SimpleConnect.Mobile.Models
 # Ubuntu: sudo apt install postgresql postgresql-contrib
 
 # 2. Criar banco
-psql -U postgres -c "CREATE DATABASE simpleconnect;"
+psql -U postgres -c "CREATE DATABASE FamiyChat;"
 
 # 3. Criar usuário (opcional)
-psql -U postgres -c "CREATE USER simpleconnect_user WITH PASSWORD 'your_password';"
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE simpleconnect TO simpleconnect_user;"
+psql -U postgres -c "CREATE USER FamiyChat_user WITH PASSWORD 'your_password';"
+psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE FamiyChat TO FamiyChat_user;"
 ```
 
 ### Connection String
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=SimpleConnect;Username=postgres;Password=postgres"
+    "DefaultConnection": "Host=localhost;Database=FamiyChat;Username=postgres;Password=postgres"
   }
 }
 ```
@@ -572,20 +572,20 @@ CREATE INDEX idx_chat_group_members_user ON "ChatGroupMembers"("UserId");
 
 ### Backend Startup
 ```bash
-cd src/api/SimpleConnect.HttpApi
+cd src/api/FamiyChat.HttpApi
 dotnet run
 ```
 
 ### Frontend Angular
 ```bash
-cd src/web/SimpleConnect.Web.Angular
+cd src/web/FamiyChat.Web.Angular
 npm install
 ng serve
 ```
 
 ### Mobile MAUI
 ```bash
-cd src/mobile/SimpleConnect.Mobile
+cd src/mobile/FamiyChat.Mobile
 dotnet build
 # Abrir no Visual Studio para deploy
 ```
@@ -613,9 +613,9 @@ dotnet build
 **iOS (Info.plist):**
 ```xml
 <key>NSCameraUsageDescription</key>
-<string>SimpleConnect precisa acessar a câmera para videochamadas</string>
+<string>FamiyChat precisa acessar a câmera para videochamadas</string>
 <key>NSMicrophoneUsageDescription</key>
-<string>SimpleConnect precisa acessar o microfone para chamadas</string>
+<string>FamiyChat precisa acessar o microfone para chamadas</string>
 ```
 
 ### Segurança
@@ -627,23 +627,23 @@ dotnet build
 ## Estrutura Final do Projeto
 
 ```
-SimpleConnect/
+FamiyChat/
 ├── src/
 │   ├── api/                                 # Backend API
-│   │   ├── SimpleConnect.Domain.Shared/     # Enums, Value Objects, Constants
-│   │   ├── SimpleConnect.Domain/             # Entidades de negócio
-│   │   ├── SimpleConnect.Application.Contracts/ # DTOs e Interfaces
-│   │   ├── SimpleConnect.Application/       # Services e AutoMapper
-│   │   ├── SimpleConnect.EntityFrameworkCore/ # DbContext e Repositories
-│   │   └── SimpleConnect.HttpApi/           # API Controllers e SignalR Hub
+│   │   ├── FamiyChat.Domain.Shared/     # Enums, Value Objects, Constants
+│   │   ├── FamiyChat.Domain/             # Entidades de negócio
+│   │   ├── FamiyChat.Application.Contracts/ # DTOs e Interfaces
+│   │   ├── FamiyChat.Application/       # Services e AutoMapper
+│   │   ├── FamiyChat.EntityFrameworkCore/ # DbContext e Repositories
+│   │   └── FamiyChat.HttpApi/           # API Controllers e SignalR Hub
 │   ├── web/                                 # Frontend Web
-│   │   ├── SimpleConnect.Web/               # Projeto web MVC (configuração)
-│   │   └── SimpleConnect.Web.Angular/       # Frontend Angular
+│   │   ├── FamiyChat.Web/               # Projeto web MVC (configuração)
+│   │   └── FamiyChat.Web.Angular/       # Frontend Angular
 │   └── mobile/                              # Aplicação Mobile
-│       └── SimpleConnect.Mobile/             # Projeto MAUI
+│       └── FamiyChat.Mobile/             # Projeto MAUI
 ├── database-setup.sql                       # Script PostgreSQL
 ├── DATABASE.md                              # Documentação do banco
 └── README.md                                # Documentação completa
 ```
 
-O SimpleConnect está pronto para demonstração com arquitetura limpa, código organizado e todas as funcionalidades implementadas seguindo as melhores práticas de desenvolvimento!
+O FamiyChat está pronto para demonstração com arquitetura limpa, código organizado e todas as funcionalidades implementadas seguindo as melhores práticas de desenvolvimento!

@@ -1,4 +1,4 @@
-namespace SimpleConnect.Domain.Entities;
+namespace FamiyChat.Domain.Entities;
 
 public class ChatGroupMember
 {
@@ -10,16 +10,16 @@ public class ChatGroupMember
     public DateTime JoinedAt { get; private set; }
     public DateTime? LastSeenAt { get; private set; }
     public bool IsActive { get; private set; }
-    
+
     public ChatGroup ChatGroup { get; private set; } = null!;
-    
+
     public ChatGroupMember()
     {
         Id = Guid.NewGuid();
         JoinedAt = DateTime.UtcNow;
         IsActive = true;
     }
-    
+
     public ChatGroupMember(Guid userId, string userName, bool isCreator = false)
         : this()
     {
@@ -27,12 +27,12 @@ public class ChatGroupMember
         UserName = userName;
         IsCreator = isCreator;
     }
-    
+
     public void UpdateLastSeen()
     {
         LastSeenAt = DateTime.UtcNow;
     }
-    
+
     public void Deactivate()
     {
         IsActive = false;

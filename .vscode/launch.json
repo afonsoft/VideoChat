@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/api/FamilyChat.HttpApi/bin/Debug/net10.0/SimpleConnect.HttpApi.dll",
+            "program": "${workspaceFolder}/src/api/FamilyChat.HttpApi/bin/Debug/net10.0/FamiyChat.HttpApi.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/api/FamilyChat.HttpApi",
             "stopAtEntry": false,

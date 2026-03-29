@@ -1,15 +1,15 @@
 using System.ComponentModel.DataAnnotations;
-using SimpleConnect.Domain.Shared.Constants;
-using SimpleConnect.Domain.Shared.Enums;
+using FamiyChat.Domain.Shared.Constants;
+using FamiyChat.Domain.Shared.Enums;
 
-namespace SimpleConnect.Application.Contracts.DTOs;
+namespace FamiyChat.Application.Contracts.DTOs;
 
 public class ChatMessageDto
 {
     public Guid Id { get; set; }
 
     [Required]
-    [MaxLength(SimpleConnectConsts.MaxMessageContentLength)]
+    [MaxLength(FamiyChatConsts.MaxMessageContentLength)]
     public string Content { get; set; } = string.Empty;
 
     public Guid SenderId { get; set; }
@@ -39,7 +39,7 @@ public class ChatMessageAttachmentDto
 public class SendMessageDto
 {
     [Required]
-    [MaxLength(SimpleConnectConsts.MaxMessageContentLength)]
+    [MaxLength(FamiyChatConsts.MaxMessageContentLength)]
     public string Content { get; set; } = string.Empty;
 
     public Guid ChatGroupId { get; set; }
@@ -51,7 +51,7 @@ public class SendMessageDto
 public class EditMessageDto
 {
     [Required]
-    [MaxLength(SimpleConnectConsts.MaxMessageContentLength)]
+    [MaxLength(FamiyChatConsts.MaxMessageContentLength)]
     public string Content { get; set; } = string.Empty;
 }
 

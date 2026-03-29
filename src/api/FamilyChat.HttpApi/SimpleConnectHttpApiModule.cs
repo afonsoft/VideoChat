@@ -6,18 +6,18 @@ using Volo.Abp.Swashbuckle;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using SimpleConnect.Domain;
+using FamiyChat.Domain;
 
-namespace SimpleConnect.HttpApi;
+namespace FamiyChat.HttpApi;
 
 [DependsOn(
-    typeof(SimpleConnectDomainModule),
+    typeof(FamiyChatDomainModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAspNetCoreSignalRModule),
     typeof(AbpSwashbuckleModule)
 )]
-public class SimpleConnectHttpApiModule : AbpModule
+public class FamiyChatHttpApiModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
@@ -37,7 +37,7 @@ public class SimpleConnectHttpApiModule : AbpModule
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                        configuration["Jwt:Key"] ?? "SimpleConnectSecretKey123456789"))
+                        configuration["Jwt:Key"] ?? "FamiyChatSecretKey123456789"))
                 };
             });
 
@@ -59,15 +59,15 @@ public class SimpleConnectHttpApiModule : AbpModule
     private void ConfigureSwaggerServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpSwaggerGenWithOAuth(
-            "SimpleConnect",
+            "FamiyChat",
             opt =>
             {
-                opt.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "SimpleConnect API", Version = "v1" });
+                opt.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "FamiyChat API", Version = "v1" });
                 opt.DocInclusionPredicate((docName, description) => true);
                 opt.CustomSchemaIds(type => type.FullName);
             },
-            "SimpleConnect",
-            new string[] { "SimpleConnect" }
+            "FamiyChat",
+            new string[] { "FamiyChat" }
         );
     }
 }

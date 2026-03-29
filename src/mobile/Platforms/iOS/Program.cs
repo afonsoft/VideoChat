@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace SimpleConnect.Mobile;
+namespace FamiyChat.Mobile;
 
 public class Program
 {

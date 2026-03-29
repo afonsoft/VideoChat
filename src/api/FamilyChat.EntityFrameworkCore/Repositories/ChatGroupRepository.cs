@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using SimpleConnect.Domain.Entities;
-using SimpleConnect.Domain.Repositories;
-using SimpleConnect.EntityFrameworkCore;
+using FamiyChat.Domain.Entities;
+using FamiyChat.Domain.Repositories;
+using FamiyChat.EntityFrameworkCore;
 
-namespace SimpleConnect.EntityFrameworkCore.Repositories;
+namespace FamiyChat.EntityFrameworkCore.Repositories;
 
 public class ChatGroupRepository : IChatGroupRepository
 {
-    private readonly SimpleConnectDbContext _context;
+    private readonly FamiyChatDbContext _context;
 
-    public ChatGroupRepository(SimpleConnectDbContext context)
+    public ChatGroupRepository(FamiyChatDbContext context)
     {
         _context = context;
     }

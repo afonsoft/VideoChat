@@ -1,13 +1,13 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.EntityFrameworkCore;
-using SimpleConnect.Domain.Shared;
+using FamiyChat.Domain.Shared;
 
-namespace SimpleConnect.Domain;
+namespace FamiyChat.Domain;
 
 [DependsOn(
-    typeof(SimpleConnectDomainSharedModule),
+    typeof(FamiyChatDomainSharedModule),
     typeof(AbpEntityFrameworkCoreModule)
 )]
-public class SimpleConnectDomainModule : AbpModule
+public class FamiyChatDomainModule : AbpModule
 {
 }

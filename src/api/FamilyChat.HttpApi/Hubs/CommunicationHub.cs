@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using SimpleConnect.Application.Contracts.DTOs;
-using SimpleConnect.Application.Contracts.Services;
-using SimpleConnect.Domain.Shared.ValueObjects;
+using FamiyChat.Application.Contracts.DTOs;
+using FamiyChat.Application.Contracts.Services;
+using FamiyChat.Domain.Shared.ValueObjects;
 
-namespace SimpleConnect.HttpApi.Hubs;
+namespace FamiyChat.HttpApi.Hubs;
 
 public class CommunicationHub : Hub
 {
@@ -40,7 +40,7 @@ public class CommunicationHub : Hub
 
         await _connectionManager.AddConnectionAsync(userId, Context.ConnectionId);
         _logger.LogInformation("User {UserId} connected with connection {ConnectionId}", userId, Context.ConnectionId);
-        
+
         await base.OnConnectedAsync();
     }
 
@@ -48,9 +48,9 @@ public class CommunicationHub : Hub
     {
         var userId = GetUserId();
         await _connectionManager.RemoveConnectionAsync(userId, Context.ConnectionId);
-        
+
         _logger.LogInformation("User {UserId} disconnected", userId);
-        
+
         await base.OnDisconnectedAsync(exception);
     }
 
@@ -60,9 +60,9 @@ public class CommunicationHub : Hub
     {
         var userId = GetUserId();
         var groupGuid = Guid.Parse(groupId);
-        
+
         await Groups.AddToGroupAsync(Context.ConnectionId, $"group_{groupId}");
-        
+
         var joinDto = new JoinGroupDto
         {
             GroupId = groupGuid,
@@ -74,7 +74,7 @@ public class CommunicationHub : Hub
         {
             var group = await _chatAppService.JoinGroupAsync(joinDto);
             await Clients.Group($"group_{groupId}").SendAsync("UserJoinedGroup", new { UserId = userId, Group = group });
-            
+
             _logger.LogInformation("User {UserId} joined group {GroupId}", userId, groupId);
         }
         catch (Exception ex)
@@ -88,9 +88,9 @@ public class CommunicationHub : Hub
     {
         var userId = GetUserId();
         var groupGuid = Guid.Parse(groupId);
-        
+
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"group_{groupId}");
-        
+
         var leaveDto = new LeaveGroupDto
         {
             GroupId = groupGuid,
@@ -101,7 +101,7 @@ public class CommunicationHub : Hub
         {
             await _chatAppService.LeaveGroupAsync(leaveDto);
             await Clients.Group($"group_{groupId}").SendAsync("UserLeftGroup", new { UserId = userId });
-            
+
             _logger.LogInformation("User {UserId} left group {GroupId}", userId, groupId);
         }
         catch (Exception ex)
@@ -123,7 +123,7 @@ public class CommunicationHub : Hub
         {
             var sentMessage = await _messageAppService.SendMessageAsync(message);
             await Clients.Group($"group_{message.ChatGroupId}").SendAsync("MessageReceived", sentMessage);
-            
+
             _logger.LogInformation("Message sent in group {GroupId} by user {UserId}", message.ChatGroupId, userId);
         }
         catch (Exception ex)
@@ -142,7 +142,7 @@ public class CommunicationHub : Hub
             var editDto = new EditMessageDto { Content = content };
             var editedMessage = await _messageAppService.EditMessageAsync(messageId, editDto);
             await Clients.Group($"group_{editedMessage.ChatGroupId}").SendAsync("MessageEdited", editedMessage);
-            
+
             _logger.LogInformation("Message {MessageId} edited by user {UserId}", messageId, userId);
         }
         catch (Exception ex)
@@ -160,7 +160,7 @@ public class CommunicationHub : Hub
         {
             await _messageAppService.DeleteMessageAsync(messageId);
             await Clients.Group($"group_{messageId}").SendAsync("MessageDeleted", new { MessageId = messageId });
-            
+
             _logger.LogInformation("Message {MessageId} deleted by user {UserId}", messageId, userId);
         }
         catch (Exception ex)
@@ -182,11 +182,11 @@ public class CommunicationHub : Hub
         try
         {
             var callInfo = await _videoCallAppService.JoinCallAsync(joinCallDto);
-            
+
             await Groups.AddToGroupAsync(Context.ConnectionId, $"call_{joinCallDto.GroupId}");
             await Clients.Group($"call_{joinCallDto.GroupId}").SendAsync("UserJoinedCall", callInfo);
             await Clients.Caller.SendAsync("CallJoined", callInfo);
-            
+
             _logger.LogInformation("User {UserId} joined call in group {GroupId}", userId, joinCallDto.GroupId);
         }
         catch (Exception ex)
@@ -204,10 +204,10 @@ public class CommunicationHub : Hub
         try
         {
             await _videoCallAppService.LeaveCallAsync(leaveCallDto);
-            
+
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"call_{leaveCallDto.GroupId}");
             await Clients.Group($"call_{leaveCallDto.GroupId}").SendAsync("UserLeftCall", new { UserId = userId, GroupId = leaveCallDto.GroupId });
-            
+
             _logger.LogInformation("User {UserId} left call in group {GroupId}", userId, leaveCallDto.GroupId);
         }
         catch (Exception ex)
@@ -225,7 +225,7 @@ public class CommunicationHub : Hub
         {
             await _videoCallAppService.UpdateParticipantStatusAsync(statusDto);
             await Clients.Group($"call_{statusDto.GroupId}").SendAsync("ParticipantStatusUpdated", statusDto);
-            
+
             _logger.LogInformation("User {UserId} updated status in group {GroupId}", userId, statusDto.GroupId);
         }
         catch (Exception ex)
@@ -244,18 +244,18 @@ public class CommunicationHub : Hub
         try
         {
             var targetConnections = await _connectionManager.GetConnectionsAsync(signal.ToUserId);
-            
+
             foreach (var connectionId in targetConnections)
             {
                 await Clients.Client(connectionId).SendAsync("WebRTCSignalReceived", signal);
             }
-            
-            _logger.LogDebug("WebRTC signal sent from {FromUserId} to {ToUserId} in room {RoomId}", 
+
+            _logger.LogDebug("WebRTC signal sent from {FromUserId} to {ToUserId} in room {RoomId}",
                 signal.FromUserId, signal.ToUserId, signal.RoomId);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error sending WebRTC signal from {FromUserId} to {ToUserId}", 
+            _logger.LogError(ex, "Error sending WebRTC signal from {FromUserId} to {ToUserId}",
                 signal.FromUserId, signal.ToUserId);
         }
     }
@@ -315,8 +315,8 @@ public class CommunicationHub : Hub
 
     private Guid GetUserId()
     {
-        var userIdClaim = Context.User?.FindFirst("sub")?.Value ?? 
-                         Context.User?.FindFirst("user_id")?.Value ?? 
+        var userIdClaim = Context.User?.FindFirst("sub")?.Value ??
+                         Context.User?.FindFirst("user_id")?.Value ??
                          Context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
         return Guid.TryParse(userIdClaim, out var userId) ? userId : Guid.Empty;

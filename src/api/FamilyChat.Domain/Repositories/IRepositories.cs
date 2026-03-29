@@ -1,6 +1,6 @@
-using SimpleConnect.Domain.Entities;
+using FamiyChat.Domain.Entities;
 
-namespace SimpleConnect.Domain.Repositories;
+namespace FamiyChat.Domain.Repositories;
 
 public interface IChatGroupRepository
 {
@@ -15,10 +15,10 @@ public interface IChatMessageRepository
 {
     Task<ChatMessage?> GetAsync(Guid id);
     Task<(List<ChatMessage> messages, int totalCount)> GetMessagesAsync(
-        Guid groupId, 
-        int pageNumber, 
-        int pageSize, 
-        DateTime? beforeDate = null, 
+        Guid groupId,
+        int pageNumber,
+        int pageSize,
+        DateTime? beforeDate = null,
         DateTime? afterDate = null);
     Task AddAsync(ChatMessage message);
     Task UpdateAsync(ChatMessage message);
