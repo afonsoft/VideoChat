@@ -10,6 +10,10 @@ ENV ASPNETCORE_URLS=http://+:5000
 ENV DOTNET_gcServer=true
 ENV DOTNET_gcConcurrent=true
 ENV DOTNET_PROCESSOR_COUNT=2
+# Garbage Collection optimizations
+ENV DOTNET_GarbageCollectionAdaptationMode=1
+ENV DOTNET_ServerGarbageCollection=true
+ENV DOTNET_ConcurrentGarbageCollection=true
 
 # Expose port 80
 EXPOSE 5000
