@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # Backend API - FamilyChat
+  Chat-Api:
+    build:
+      context: .
+      dockerfile: src/api/Dockerfile
+    container_name: chat-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__DefaultConnection: Host=host.docker.internal;Database=FamilyChat;Username=postgres;Password=postgres
+      Redis__Host: host.docker.internal
+      Redis__Port: 6379
+      Redis__Password: 
+      Redis__InstanceName: FamilyChat:
+      Jwt__Issuer: FamilyChat
+      Jwt__Audience: FamilyChatUsers
+      Jwt__Key: FamilyChatSecretKey123456789
+      Jwt__ExpirationMinutes: 60
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - familychat-network
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Frontend - FamilyChat Angular
+  chat-frontend:
+    build:
+      dockerfile: .src/web/Dockerfile
+    container_name: familychat-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    networks:
+      - familychat-network
+    depends_on:
+      - familychat-api
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  familychat-network:
+    driver: bridge
