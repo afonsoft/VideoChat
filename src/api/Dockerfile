@@ -6,6 +6,11 @@ WORKDIR /app
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS=http://+:5000
 
+# Performance optimizations
+ENV DOTNET_gcServer=true
+ENV DOTNET_gcConcurrent=true
+ENV DOTNET_PROCESSOR_COUNT=2
+
 # Expose port 80
 EXPOSE 5000
 

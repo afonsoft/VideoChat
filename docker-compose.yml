@@ -11,6 +11,11 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5000
+      # Performance optimizations
+      DOTNET_gcServer: "true"
+      DOTNET_gcConcurrent: "true"
+      DOTNET_PROCESSOR_COUNT: "2"
+      # Database configuration
       ConnectionStrings__DefaultConnection: Host=host.docker.internal;Database=FamilyChat_db;Username=postgres;Password=postgres
       Redis__Host: host.docker.internal
       Redis__Port: 6379
