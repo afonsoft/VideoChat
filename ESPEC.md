@@ -1,17 +1,17 @@
-# Especificação Técnica - FamilyChat
+# Especificação Técnica - SimpleConnect
 
 ## Contexto do Sistema
 
-Atue como um Arquiteto de Software Sênior e Desenvolvedor Full-stack especializado em ecossistema .NET. O objetivo é desenvolver um MVP de uma aplicação de comunicação em tempo real chamada "FamilyChat" com chat em grupo e videochamadas.
+Atue como um Arquiteto de Software Sênior e Desenvolvedor Full-stack especializado em ecossistema .NET e framework ABP.io. O objetivo é desenvolver um MVP de uma aplicação de comunicação em tempo real chamada "FamilyChat".
 
 ## Requisitos Técnicos
 
-- **Backend**: ASP.NET Core 10 com arquitetura DDD limpa
-- **Banco de Dados**: PostgreSQL com Entity Framework Core (Code-First)
-- **Real-time**: SignalR (WebSockets) para sinalização WebRTC e chat
-- **Frontend Web**: Angular 21 com componentes standalone
-- **Mobile**: .NET MAUI multiplataforma
-- **Funcionalidades**: Chat em grupo, videochamada (máx. 10 participantes)
+- **Backend**: ASP.NET Core com ABP Framework (vLatest), utilizando a arquitetura modular padrão.
+- **Banco de Dados**: PostgreSQL.
+- **Real-time**: SignalR (WebSockets) para sinalização de vídeo e chat.
+- **Frontend Web**: Angular ou Blazor (priorizar componentes reutilizáveis).
+- **Mobile**: Xamarin.Forms (ou MAUI) consumindo as mesmas APIs.
+- **Funcionalidades**: Cadastro via E-mail, Chat de texto e Videochamada em grupo (máximo 10 pessoas).
 
 ## Arquitetura Implementada
 
@@ -35,7 +35,6 @@ public class ChatGroup
     public IReadOnlyCollection<ChatGroupMember> Members { get; private set; }
     public IReadOnlyCollection<ChatMessage> Messages { get; private set; }
     public IReadOnlyCollection<CallParticipant> ActiveCallParticipants { get; private set; }
-}
 
     public ChatGroup(string name, string description, GroupType type, Guid creatorId, int maxParticipants = 10)
     {
@@ -620,19 +619,6 @@ dotnet build
 <string>FamilyChat precisa acessar a câmera para videochamadas</string>
 <key>NSMicrophoneUsageDescription</key>
 <string>FamilyChat precisa acessar o microfone para chamadas</string>
-```
-
-### Segurança
-- JWT authentication configurado
-- CORS para cross-origin
-- Validação de输入 em DTOs
-- Rate limiting para SignalR
-
-## Estrutura Final do Projeto
-
-```
-FamilyChat/
-├── src/
 │   ├── api/                                 # Backend API
 │   │   ├── FamilyChat.Domain.Shared/     # Enums, Value Objects, Constants
 │   │   ├── FamilyChat.Domain/             # Entidades de negócio
