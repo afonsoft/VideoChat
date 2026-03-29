@@ -1,5 +1,5 @@
-# Use the official .NET 8.0 Alpine runtime as a parent image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS base
+# Use the official .NET 10.0 runtime as a parent image
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 WORKDIR /app
 
 # Set environment variables
@@ -18,8 +18,8 @@ ENV DOTNET_ConcurrentGarbageCollection=true
 # Expose port 80
 EXPOSE 5000
 
-# Install dependencies for Alpine
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+# Use the SDK image to build the application
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Install required packages
@@ -51,7 +51,7 @@ RUN dotnet build "FamilyChat.HttpApi.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "FamilyChat.HttpApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Build runtime image
+# Build the runtime image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
