@@ -35,7 +35,7 @@ CREATE DATABASE FamilyChat_db
 CREATE USER FamilyChat_user WITH PASSWORD 'FamilyChat_password';
 
 -- 3. Conceder permissões ao usuário
-GRANT ALL PRIVILEGES ON DATABASE FamilyChat TO FamilyChat_user;
+GRANT ALL PRIVILEGES ON DATABASE FamilyChat_db TO FamilyChat_user;
 
 -- 4. Conceder permissões no schema public
 \c FamilyChat;
