@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SimpleConnect.Application.Contracts/SimpleConnect.Application.Contracts.csproj" />
+    <Project Path="src/SimpleConnect.Application/SimpleConnect.Application.csproj" />
+    <Project Path="src/SimpleConnect.Domain.Shared/SimpleConnect.Domain.Shared.csproj" />
+    <Project Path="src/SimpleConnect.Domain/SimpleConnect.Domain.csproj" />
+    <Project Path="src/SimpleConnect.EntityFrameworkCore/SimpleConnect.EntityFrameworkCore.csproj" />
+    <Project Path="src/SimpleConnect.HttpApi/SimpleConnect.HttpApi.csproj" />
+    <Project Path="src/SimpleConnect.Web/SimpleConnect.Web.csproj" />
+  </Folder>
+  <Project Path="SimpleConnect.Mobile/SimpleConnect.Mobile.csproj" />
+</Solution>
