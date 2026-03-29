@@ -1,5 +1,5 @@
-# Use the official .NET 10 runtime as a parent image
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+# Use the official .NET 8.0 Alpine runtime as a parent image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS base
 WORKDIR /app
 
 # Set environment variables
@@ -14,9 +14,20 @@ ENV DOTNET_PROCESSOR_COUNT=2
 # Expose port 80
 EXPOSE 5000
 
-# Use the SDK image to build the application
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+# Install dependencies for Alpine
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
 WORKDIR /src
+
+# Install required packages
+RUN apk add --no-cache \
+    curl \
+    libgcc \
+    libssl3 \
+    ca-certificates-bundle \
+    zlib \
+    icu-libs \
+    icu-data-full \
+    libgdiplus
 
 # Copy csproj and restore as distinct layers
 COPY ["src/api/FamilyChat.Domain.Shared/FamilyChat.Domain.Shared.csproj", "src/api/FamilyChat.Domain.Shared/"]
