@@ -22,7 +22,7 @@
 -- =================================================================
 
 -- 1. Criar o banco de dados
-CREATE DATABASE FamilyChat
+CREATE DATABASE FamilyChat_db
     WITH 
     OWNER = postgres
     ENCODING = 'UTF8'
