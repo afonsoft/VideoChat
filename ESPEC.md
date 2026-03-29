@@ -1,4 +1,4 @@
-# Especificação Técnica - SimpleConnect
+# Especificação Técnica - FamilyChat
 
 ## Contexto do Sistema
 
