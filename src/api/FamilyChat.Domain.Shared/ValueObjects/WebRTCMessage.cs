@@ -1,4 +1,4 @@
-namespace FamiyChat.Domain.Shared.ValueObjects;
+namespace FamilyChat.Domain.Shared.ValueObjects;
 
 public record WebRTCMessage
 {

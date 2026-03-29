@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 
-namespace FamiyChat.HttpApi.Services;
+namespace FamilyChat.HttpApi.Services;
 
 public interface IConnectionManager
 {

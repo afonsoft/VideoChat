@@ -1,22 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using FamiyChat.Application.Services;
-using FamiyChat.Application;
-using FamiyChat.Domain.Repositories;
-using FamiyChat.EntityFrameworkCore.Repositories;
-using FamiyChat.EntityFrameworkCore;
-using FamiyChat.HttpApi.Services;
-using FamiyChat.HttpApi.Hubs;
+using FamilyChat.Application.Services;
+using FamilyChat.Application;
+using FamilyChat.Domain.Repositories;
+using FamilyChat.EntityFrameworkCore.Repositories;
+using FamilyChat.EntityFrameworkCore;
+using FamilyChat.HttpApi.Services;
+using FamilyChat.HttpApi.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
-namespace FamiyChat.HttpApi;
+namespace FamilyChat.HttpApi;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddFamiyChat(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddFamilyChat(this IServiceCollection services, string connectionString)
     {
         // Entity Framework
-        services.AddDbContext<FamiyChatDbContext>(options =>
+        services.AddDbContext<FamilyChatDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
         });
@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IVideoCallAppService, VideoCallAppService>();
 
         // AutoMapper
-        services.AddAutoMapper(typeof(FamiyChatAutoMapperProfile));
+        services.AddAutoMapper(typeof(FamilyChatAutoMapperProfile));
 
         // SignalR
         services.AddSignalR();

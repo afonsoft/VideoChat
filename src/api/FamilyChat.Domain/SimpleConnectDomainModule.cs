@@ -1,13 +1,13 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.EntityFrameworkCore;
-using FamiyChat.Domain.Shared;
+using FamilyChat.Domain.Shared;
 
-namespace FamiyChat.Domain;
+namespace FamilyChat.Domain;
 
 [DependsOn(
-    typeof(FamiyChatDomainSharedModule),
+    typeof(FamilyChatDomainSharedModule),
     typeof(AbpEntityFrameworkCoreModule)
 )]
-public class FamiyChatDomainModule : AbpModule
+public class FamilyChatDomainModule : AbpModule
 {
 }

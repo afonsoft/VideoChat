@@ -1,15 +1,15 @@
 using System.ComponentModel.DataAnnotations;
-using FamiyChat.Domain.Shared.Constants;
-using FamiyChat.Domain.Shared.Enums;
+using FamilyChat.Domain.Shared.Constants;
+using FamilyChat.Domain.Shared.Enums;
 
-namespace FamiyChat.Application.Contracts.DTOs;
+namespace FamilyChat.Application.Contracts.DTOs;
 
 public class ChatGroupDto
 {
     public Guid Id { get; set; }
 
     [Required]
-    [MaxLength(FamiyChatConsts.MaxGroupNameLength)]
+    [MaxLength(FamilyChatConsts.MaxGroupNameLength)]
     public string Name { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;
@@ -52,19 +52,19 @@ public class CallParticipantDto
 public class CreateChatGroupDto
 {
     [Required]
-    [MaxLength(FamiyChatConsts.MaxGroupNameLength)]
+    [MaxLength(FamilyChatConsts.MaxGroupNameLength)]
     public string Name { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;
     public GroupType Type { get; set; }
-    public int MaxParticipants { get; set; } = FamiyChatConsts.MaxVideoCallParticipants;
+    public int MaxParticipants { get; set; } = FamilyChatConsts.MaxVideoCallParticipants;
     public Guid CreatorId { get; set; }
 }
 
 public class UpdateChatGroupDto
 {
     [Required]
-    [MaxLength(FamiyChatConsts.MaxGroupNameLength)]
+    [MaxLength(FamilyChatConsts.MaxGroupNameLength)]
     public string Name { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;

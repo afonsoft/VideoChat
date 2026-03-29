@@ -1,4 +1,4 @@
-﻿namespace FamiyChat.Domain;
+﻿namespace FamilyChat.Domain;
 
 public class Class1
 {

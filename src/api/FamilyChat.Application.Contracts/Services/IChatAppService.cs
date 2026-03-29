@@ -1,6 +1,6 @@
-using FamiyChat.Application.Contracts.DTOs;
+using FamilyChat.Application.Contracts.DTOs;
 
-namespace FamiyChat.Application.Contracts.Services;
+namespace FamilyChat.Application.Contracts.Services;
 
 public interface IChatAppService
 {

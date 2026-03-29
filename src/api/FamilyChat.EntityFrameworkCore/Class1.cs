@@ -1,4 +1,4 @@
-﻿namespace FamiyChat.EntityFrameworkCore;
+﻿namespace FamilyChat.EntityFrameworkCore;
 
 public class Class1
 {

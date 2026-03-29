@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using FamiyChat.HttpApi;
-using FamiyChat.HttpApi.Hubs;
-using FamiyChat.EntityFrameworkCore;
+using FamilyChat.HttpApi;
+using FamilyChat.HttpApi.Hubs;
+using FamilyChat.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
@@ -14,7 +14,7 @@ using Volo.Abp.AspNetCore.SignalR;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ReplaceConfiguration(builder.Configuration);
-builder.Services.AddApplication<FamiyChatHttpApiModule>();
+builder.Services.AddApplication<FamilyChatHttpApiModule>();
 builder.Host.UseAutofac();
 
 var app = builder.Build();
@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseAbpSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "FamiyChat API");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "FamilyChat API");
     });
 }
 
@@ -44,7 +44,7 @@ app.MapHub<CommunicationHub>("/hubs/communication");
 // Initialize Database and Seed Data
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<FamiyChatDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<FamilyChatDbContext>();
 
     // Create database if it doesn't exist
     await context.Database.EnsureCreatedAsync();

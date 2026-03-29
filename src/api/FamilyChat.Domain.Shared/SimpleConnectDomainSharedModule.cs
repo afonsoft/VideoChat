@@ -1,7 +1,7 @@
 using Volo.Abp.Modularity;
 
-namespace FamiyChat.Domain.Shared;
+namespace FamilyChat.Domain.Shared;
 
-public class FamiyChatDomainSharedModule : AbpModule
+public class FamilyChatDomainSharedModule : AbpModule
 {
 }

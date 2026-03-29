@@ -1,4 +1,4 @@
-namespace FamiyChat.Mobile.Models;
+namespace FamilyChat.Mobile.Models;
 
 public class ChatGroup
 {

@@ -74,9 +74,9 @@ FamilyChat/
 │   │   └── FamilyChat.HttpApi/               # API Controllers e SignalR Hub
 │   ├── web/                                 # Frontend Web
 │   │   ├── FamilyChat.Web/                   # Projeto web MVC (configuração)
-│   │   └── FamiyChat.Web.Angular/        # Frontend Angular
+│   │   └── FamilyChat.Web.Angular/        # Frontend Angular
 │   └── mobile/                              # Aplicação Mobile
-│       └── FamiyChat.Mobile/             # Projeto MAUI
+│       └── FamilyChat.Mobile/             # Projeto MAUI
 ├── docker-compose.familychat.yml             # Docker Compose para deploy
 ├── Dockerfile.api                            # Dockerfile para API
 ├── Dockerfile.frontend                       # Dockerfile para Frontend
@@ -208,7 +208,7 @@ ChatMessageAttachments    -- Anexos das mensagens
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=FamiyChat;Username=postgres;Password=sua_senha"
+    "DefaultConnection": "Host=localhost;Database=FamilyChat;Username=postgres;Password=sua_senha"
   }
 }
 ```
@@ -282,8 +282,8 @@ Use os dados seed criados automaticamente:
 ## 🔐 Autenticação
 
 JWT configurado com:
-- **Issuer**: FamiyChat
-- **Audience**: FamiyChatUsers
+- **Issuer**: FamilyChat
+- **Audience**: FamilyChatUsers
 - **Key**: Configurável via appsettings
 
 Para produção:
@@ -304,9 +304,9 @@ Para produção:
 **iOS (Info.plist):**
 ```xml
 <key>NSCameraUsageDescription</key>
-<string>FamiyChat precisa acessar a câmera para videochamadas</string>
+<string>FamilyChat precisa acessar a câmera para videochamadas</string>
 <key>NSMicrophoneUsageDescription</key>
-<string>FamiyChat precisa acessar o microfone para chamadas</string>
+<string>FamilyChat precisa acessar o microfone para chamadas</string>
 ```
 
 ## 🌐 WebRTC Setup
@@ -347,19 +347,19 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY ["src/FamiyChat.HttpApi/FamiyChat.HttpApi.csproj", "src/FamiyChat.HttpApi/"]
-RUN dotnet restore "src/FamiyChat.HttpApi/FamiyChat.HttpApi.csproj"
+COPY ["src/FamilyChat.HttpApi/FamilyChat.HttpApi.csproj", "src/FamilyChat.HttpApi/"]
+RUN dotnet restore "src/FamilyChat.HttpApi/FamilyChat.HttpApi.csproj"
 COPY . .
-WORKDIR "/src/src/FamiyChat.HttpApi"
-RUN dotnet build "FamiyChat.HttpApi.csproj" -c Release -o /app/build
+WORKDIR "/src/src/FamilyChat.HttpApi"
+RUN dotnet build "FamilyChat.HttpApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "FamiyChat.HttpApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "FamilyChat.HttpApi.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FamiyChat.HttpApi.dll"]
+ENTRYPOINT ["dotnet", "FamilyChat.HttpApi.dll"]
 ```
 
 ## 📋 Troubleshooting Comum
@@ -390,7 +390,7 @@ ENTRYPOINT ["dotnet", "FamiyChat.HttpApi.dll"]
 
 ## ✅ MVP Completo e Funcional!
 
-O FamiyChat está pronto para demonstração com:
+O FamilyChat está pronto para demonstração com:
 - **Backend** API REST + SignalR funcionais
 - **Frontend** Angular com chat e videochamada
 - **Mobile** MAUI multiplataforma

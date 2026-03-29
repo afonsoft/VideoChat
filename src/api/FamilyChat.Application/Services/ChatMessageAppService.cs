@@ -1,11 +1,11 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using FamiyChat.Application.Contracts.DTOs;
-using FamiyChat.Application.Contracts.Services;
-using FamiyChat.Domain.Entities;
-using FamiyChat.Domain.Repositories;
+using FamilyChat.Application.Contracts.DTOs;
+using FamilyChat.Application.Contracts.Services;
+using FamilyChat.Domain.Entities;
+using FamilyChat.Domain.Repositories;
 
-namespace FamiyChat.Application.Services;
+namespace FamilyChat.Application.Services;
 
 public class ChatMessageAppService : IChatMessageAppService
 {

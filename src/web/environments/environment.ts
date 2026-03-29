@@ -6,21 +6,21 @@ export const environment = {
   production: false,
   application: {
     baseUrl,
-    name: 'FamiyChat',
+    name: 'FamilyChat',
     logoUrl: '',
   },
   oAuthConfig: {
     issuer: 'https://localhost:5000/',
     redirectUri: baseUrl,
-    clientId: 'FamiyChat_App',
+    clientId: 'FamilyChat_App',
     responseType: 'code',
-    scope: 'offline_access FamiyChat',
+    scope: 'offline_access FamilyChat',
     requireHttps: false, // Para desenvolvimento
   },
   apis: {
     default: {
       url: 'https://localhost:5000',
-      rootNamespace: 'FamiyChat',
+      rootNamespace: 'FamilyChat',
     },
   },
 } as Environment;

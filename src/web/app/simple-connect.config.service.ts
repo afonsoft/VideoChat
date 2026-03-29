@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class FamiyChatConfigService {
+export class FamilyChatConfigService {
   constructor(private rest: RestService) {}
 
   get() {

@@ -1,15 +1,15 @@
 using System.ComponentModel.DataAnnotations;
-using FamiyChat.Domain.Shared.Constants;
-using FamiyChat.Domain.Shared.Enums;
+using FamilyChat.Domain.Shared.Constants;
+using FamilyChat.Domain.Shared.Enums;
 
-namespace FamiyChat.Application.Contracts.DTOs;
+namespace FamilyChat.Application.Contracts.DTOs;
 
 public class ChatMessageDto
 {
     public Guid Id { get; set; }
 
     [Required]
-    [MaxLength(FamiyChatConsts.MaxMessageContentLength)]
+    [MaxLength(FamilyChatConsts.MaxMessageContentLength)]
     public string Content { get; set; } = string.Empty;
 
     public Guid SenderId { get; set; }
@@ -39,7 +39,7 @@ public class ChatMessageAttachmentDto
 public class SendMessageDto
 {
     [Required]
-    [MaxLength(FamiyChatConsts.MaxMessageContentLength)]
+    [MaxLength(FamilyChatConsts.MaxMessageContentLength)]
     public string Content { get; set; } = string.Empty;
 
     public Guid ChatGroupId { get; set; }
@@ -51,7 +51,7 @@ public class SendMessageDto
 public class EditMessageDto
 {
     [Required]
-    [MaxLength(FamiyChatConsts.MaxMessageContentLength)]
+    [MaxLength(FamilyChatConsts.MaxMessageContentLength)]
     public string Content { get; set; } = string.Empty;
 }
 

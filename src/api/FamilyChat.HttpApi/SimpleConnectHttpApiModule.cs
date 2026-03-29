@@ -6,18 +6,18 @@ using Volo.Abp.Swashbuckle;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using FamiyChat.Domain;
+using FamilyChat.Domain;
 
-namespace FamiyChat.HttpApi;
+namespace FamilyChat.HttpApi;
 
 [DependsOn(
-    typeof(FamiyChatDomainModule),
+    typeof(FamilyChatDomainModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAspNetCoreSignalRModule),
     typeof(AbpSwashbuckleModule)
 )]
-public class FamiyChatHttpApiModule : AbpModule
+public class FamilyChatHttpApiModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
@@ -37,7 +37,7 @@ public class FamiyChatHttpApiModule : AbpModule
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                        configuration["Jwt:Key"] ?? "FamiyChatSecretKey123456789"))
+                        configuration["Jwt:Key"] ?? "FamilyChatSecretKey123456789"))
                 };
             });
 
@@ -59,15 +59,15 @@ public class FamiyChatHttpApiModule : AbpModule
     private void ConfigureSwaggerServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpSwaggerGenWithOAuth(
-            "FamiyChat",
+            "FamilyChat",
             opt =>
             {
-                opt.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "FamiyChat API", Version = "v1" });
+                opt.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "FamilyChat API", Version = "v1" });
                 opt.DocInclusionPredicate((docName, description) => true);
                 opt.CustomSchemaIds(type => type.FullName);
             },
-            "FamiyChat",
-            new string[] { "FamiyChat" }
+            "FamilyChat",
+            new string[] { "FamilyChat" }
         );
     }
 }

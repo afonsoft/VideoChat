@@ -1,11 +1,11 @@
 using Volo.Abp.Modularity;
-using FamiyChat.Domain.Shared;
+using FamilyChat.Domain.Shared;
 
-namespace FamiyChat.Application.Contracts;
+namespace FamilyChat.Application.Contracts;
 
 [DependsOn(
-    typeof(FamiyChatDomainSharedModule)
+    typeof(FamilyChatDomainSharedModule)
 )]
-public class FamiyChatApplicationContractsModule : AbpModule
+public class FamilyChatApplicationContractsModule : AbpModule
 {
 }

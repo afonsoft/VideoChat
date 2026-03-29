@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using FamiyChat.Application.Contracts.DTOs;
-using FamiyChat.Application.Contracts.Services;
-using FamiyChat.Domain.Shared.ValueObjects;
+using FamilyChat.Application.Contracts.DTOs;
+using FamilyChat.Application.Contracts.Services;
+using FamilyChat.Domain.Shared.ValueObjects;
 
-namespace FamiyChat.HttpApi.Hubs;
+namespace FamilyChat.HttpApi.Hubs;
 
 public class CommunicationHub : Hub
 {

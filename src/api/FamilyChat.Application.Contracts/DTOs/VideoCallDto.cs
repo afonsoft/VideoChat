@@ -1,7 +1,7 @@
-using FamiyChat.Domain.Shared.ValueObjects;
-using FamiyChat.Domain.Shared.Enums;
+using FamilyChat.Domain.Shared.ValueObjects;
+using FamilyChat.Domain.Shared.Enums;
 
-namespace FamiyChat.Application.Contracts.DTOs;
+namespace FamilyChat.Application.Contracts.DTOs;
 
 public class WebRTCSignalDto
 {

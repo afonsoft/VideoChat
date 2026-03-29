@@ -1,15 +1,15 @@
 using System.ComponentModel.DataAnnotations;
-using FamiyChat.Domain.Shared.Constants;
-using FamiyChat.Domain.Shared.Enums;
+using FamilyChat.Domain.Shared.Constants;
+using FamilyChat.Domain.Shared.Enums;
 
-namespace FamiyChat.Domain.Entities;
+namespace FamilyChat.Domain.Entities;
 
 public class ChatMessage
 {
     public Guid Id { get; private set; }
 
     [Required]
-    [MaxLength(FamiyChatConsts.MaxMessageContentLength)]
+    [MaxLength(FamilyChatConsts.MaxMessageContentLength)]
     public string Content { get; private set; } = string.Empty;
 
     public Guid SenderId { get; private set; }
@@ -56,8 +56,8 @@ public class ChatMessage
         if (string.IsNullOrWhiteSpace(newContent))
             throw new ArgumentException("Message content cannot be empty", nameof(newContent));
 
-        if (newContent.Length > FamiyChatConsts.MaxMessageContentLength)
-            throw new ArgumentException($"Message content cannot exceed {FamiyChatConsts.MaxMessageContentLength} characters", nameof(newContent));
+        if (newContent.Length > FamilyChatConsts.MaxMessageContentLength)
+            throw new ArgumentException($"Message content cannot exceed {FamilyChatConsts.MaxMessageContentLength} characters", nameof(newContent));
 
         Content = newContent;
         EditedAt = DateTime.UtcNow;

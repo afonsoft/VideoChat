@@ -1,6 +1,6 @@
-using FamiyChat.Domain.Shared.Enums;
+using FamilyChat.Domain.Shared.Enums;
 
-namespace FamiyChat.Domain.Shared.ValueObjects;
+namespace FamilyChat.Domain.Shared.ValueObjects;
 
 public record CallParticipant
 {

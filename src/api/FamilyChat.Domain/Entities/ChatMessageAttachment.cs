@@ -1,4 +1,4 @@
-namespace FamiyChat.Domain.Entities;
+namespace FamilyChat.Domain.Entities;
 
 public class ChatMessageAttachment
 {

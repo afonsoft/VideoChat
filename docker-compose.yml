@@ -26,8 +26,6 @@ services:
       - ./logs:/app/logs
     networks:
       - familychat-network
-    depends_on:
-      - redis
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/health"]
       interval: 30s
@@ -37,11 +35,11 @@ services:
     deploy:
       resources:
         limits:
+          memory: 1024M
+          cpus: '1'
+        reservations:
           memory: 512M
           cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
     logging:
       driver: "json-file"
       options:

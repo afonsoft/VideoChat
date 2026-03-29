@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using FamiyChat.Domain.Entities;
-using FamiyChat.Domain.Shared.Enums;
+using FamilyChat.Domain.Entities;
+using FamilyChat.Domain.Shared.Enums;
 
-namespace FamiyChat.EntityFrameworkCore;
+namespace FamilyChat.EntityFrameworkCore;
 
-public class FamiyChatDbContext : DbContext
+public class FamilyChatDbContext : DbContext
 {
-    public FamiyChatDbContext(DbContextOptions<FamiyChatDbContext> options)
+    public FamilyChatDbContext(DbContextOptions<FamilyChatDbContext> options)
         : base(options)
     {
     }
@@ -20,7 +20,7 @@ public class FamiyChatDbContext : DbContext
     {
         base.OnModelCreating(builder);
 
-        builder.ConfigureFamiyChat();
+        builder.ConfigureFamilyChat();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -50,7 +50,7 @@ public class FamiyChatDbContext : DbContext
             },
             new ChatGroup("Vídeo Conferência", "Sala de videoconferência principal", GroupType.VideoCall, Guid.NewGuid(), 10)
             {
-                Description = "Use esta sala para videochamadas com até 10 participantes."
+                Description = "Use esta sala para videoconferências com até 10 participantes."
             }
         };
 
@@ -79,8 +79,8 @@ public class FamiyChatDbContext : DbContext
 
         messages.AddRange(new[]
         {
-            new ChatMessage("Olá pessoal! Sejam bem-vindos ao FamiyChat! 🎉", userId, "Usuário Demo", generalGroup.Id, MessageType.System),
-            new ChatMessage("Obrigado! Estou animado para testar as videochamadas.", Guid.NewGuid(), "Maria Silva", generalGroup.Id, MessageType.Text),
+            new ChatMessage("Olá pessoal! Sejam bem-vindos ao FamilyChat! 🎉", userId, "Usuário Demo", generalGroup.Id, MessageType.System),
+            new ChatMessage("Obrigado! Estou animado para testar as videoconferências.", Guid.NewGuid(), "Maria Silva", generalGroup.Id, MessageType.Text),
             new ChatMessage("As funcionalidades de chat estão incríveis!", Guid.NewGuid(), "João Santos", generalGroup.Id, MessageType.Text),
             new ChatMessage("Concordo! A interface é muito intuitiva.", Guid.NewGuid(), "Ana Costa", generalGroup.Id, MessageType.Text),
 

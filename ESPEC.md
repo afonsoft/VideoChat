@@ -1,8 +1,8 @@
-# Especificação Técnica - FamiyChat
+# Especificação Técnica - FamilyChat
 
 ## Contexto do Sistema
 
-Atue como um Arquiteto de Software Sênior e Desenvolvedor Full-stack especializado em ecossistema .NET. O objetivo é desenvolver um MVP de uma aplicação de comunicação em tempo real chamada "FamiyChat" com chat em grupo e videochamadas.
+Atue como um Arquiteto de Software Sênior e Desenvolvedor Full-stack especializado em ecossistema .NET. O objetivo é desenvolver um MVP de uma aplicação de comunicação em tempo real chamada "FamilyChat" com chat em grupo e videochamadas.
 
 ## Requisitos Técnicos
 
@@ -350,7 +350,7 @@ Entity Framework Core com PostgreSQL e seed automático:
 
 #### DbContext com Seed
 ```csharp
-public class FamiyChatDbContext : DbContext
+public class FamilyChatDbContext : DbContext
 {
     public DbSet<ChatGroup> ChatGroups { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
@@ -358,7 +358,7 @@ public class FamiyChatDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ConfigureFamiyChat();
+        builder.ConfigureFamilyChat();
         
         // Índices otimizados para performance
         builder.Entity<ChatMessage>()
@@ -394,7 +394,7 @@ public class FamiyChatDbContext : DbContext
 
         var messages = new List<ChatMessage>
         {
-            new ChatMessage("Olá pessoal! Sejam bem-vindos ao FamiyChat! 🎉", userId, "Usuário Demo", groups[0].Id, MessageType.System),
+            new ChatMessage("Olá pessoal! Sejam bem-vindos ao FamilyChat! 🎉", userId, "Usuário Demo", groups[0].Id, MessageType.System),
             new ChatMessage("Obrigado! Estou animado para testar as videochamadas.", Guid.NewGuid(), "Maria Silva", groups[0].Id),
             new ChatMessage("As funcionalidades de chat estão incríveis!", Guid.NewGuid(), "João Santos", groups[0].Id)
         };
@@ -413,7 +413,7 @@ var app = builder.Build();
 // Inicialização automática do banco
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<FamiyChatDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<FamilyChatDbContext>();
     await context.Database.EnsureCreatedAsync();
     await context.SeedDataAsync();
 }
@@ -506,7 +506,7 @@ Estrutura para aplicação multiplataforma:
 
 #### Models
 ```csharp
-namespace FamiyChat.Mobile.Models
+namespace FamilyChat.Mobile.Models
 {
     public class ChatGroup
     {
@@ -544,18 +544,18 @@ namespace FamiyChat.Mobile.Models
 # Ubuntu: sudo apt install postgresql postgresql-contrib
 
 # 2. Criar banco
-psql -U postgres -c "CREATE DATABASE FamiyChat;"
+psql -U postgres -c "CREATE DATABASE FamilyChat;"
 
 # 3. Criar usuário (opcional)
-psql -U postgres -c "CREATE USER FamiyChat_user WITH PASSWORD 'your_password';"
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE FamiyChat TO FamiyChat_user;"
+psql -U postgres -c "CREATE USER FamilyChat_user WITH PASSWORD 'your_password';"
+psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE FamilyChat TO FamilyChat_user;"
 ```
 
 ### Connection String
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=FamiyChat;Username=postgres;Password=postgres"
+    "DefaultConnection": "Host=localhost;Database=FamilyChat;Username=postgres;Password=postgres"
   }
 }
 ```
@@ -572,20 +572,20 @@ CREATE INDEX idx_chat_group_members_user ON "ChatGroupMembers"("UserId");
 
 ### Backend Startup
 ```bash
-cd src/api/FamiyChat.HttpApi
+cd src/api/FamilyChat.HttpApi
 dotnet run
 ```
 
 ### Frontend Angular
 ```bash
-cd src/web/FamiyChat.Web.Angular
+cd src/web/FamilyChat.Web.Angular
 npm install
 ng serve
 ```
 
 ### Mobile MAUI
 ```bash
-cd src/mobile/FamiyChat.Mobile
+cd src/mobile/FamilyChat.Mobile
 dotnet build
 # Abrir no Visual Studio para deploy
 ```
@@ -613,9 +613,9 @@ dotnet build
 **iOS (Info.plist):**
 ```xml
 <key>NSCameraUsageDescription</key>
-<string>FamiyChat precisa acessar a câmera para videochamadas</string>
+<string>FamilyChat precisa acessar a câmera para videochamadas</string>
 <key>NSMicrophoneUsageDescription</key>
-<string>FamiyChat precisa acessar o microfone para chamadas</string>
+<string>FamilyChat precisa acessar o microfone para chamadas</string>
 ```
 
 ### Segurança
@@ -627,23 +627,23 @@ dotnet build
 ## Estrutura Final do Projeto
 
 ```
-FamiyChat/
+FamilyChat/
 ├── src/
 │   ├── api/                                 # Backend API
-│   │   ├── FamiyChat.Domain.Shared/     # Enums, Value Objects, Constants
-│   │   ├── FamiyChat.Domain/             # Entidades de negócio
-│   │   ├── FamiyChat.Application.Contracts/ # DTOs e Interfaces
-│   │   ├── FamiyChat.Application/       # Services e AutoMapper
-│   │   ├── FamiyChat.EntityFrameworkCore/ # DbContext e Repositories
-│   │   └── FamiyChat.HttpApi/           # API Controllers e SignalR Hub
+│   │   ├── FamilyChat.Domain.Shared/     # Enums, Value Objects, Constants
+│   │   ├── FamilyChat.Domain/             # Entidades de negócio
+│   │   ├── FamilyChat.Application.Contracts/ # DTOs e Interfaces
+│   │   ├── FamilyChat.Application/       # Services e AutoMapper
+│   │   ├── FamilyChat.EntityFrameworkCore/ # DbContext e Repositories
+│   │   └── FamilyChat.HttpApi/           # API Controllers e SignalR Hub
 │   ├── web/                                 # Frontend Web
-│   │   ├── FamiyChat.Web/               # Projeto web MVC (configuração)
-│   │   └── FamiyChat.Web.Angular/       # Frontend Angular
+│   │   ├── FamilyChat.Web/               # Projeto web MVC (configuração)
+│   │   └── FamilyChat.Web.Angular/       # Frontend Angular
 │   └── mobile/                              # Aplicação Mobile
-│       └── FamiyChat.Mobile/             # Projeto MAUI
+│       └── FamilyChat.Mobile/             # Projeto MAUI
 ├── database-setup.sql                       # Script PostgreSQL
 ├── DATABASE.md                              # Documentação do banco
 └── README.md                                # Documentação completa
 ```
 
-O FamiyChat está pronto para demonstração com arquitetura limpa, código organizado e todas as funcionalidades implementadas seguindo as melhores práticas de desenvolvimento!
+O FamilyChat está pronto para demonstração com arquitetura limpa, código organizado e todas as funcionalidades implementadas seguindo as melhores práticas de desenvolvimento!

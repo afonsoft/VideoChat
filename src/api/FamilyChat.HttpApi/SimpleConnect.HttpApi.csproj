@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FamiyChat.Application\FamiyChat.Application.csproj" />
-    <ProjectReference Include="..\FamiyChat.EntityFrameworkCore\FamiyChat.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\FamilyChat.Application\FamilyChat.Application.csproj" />
+    <ProjectReference Include="..\FamilyChat.EntityFrameworkCore\FamilyChat.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

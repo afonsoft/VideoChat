@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using FamiyChat.Domain.Entities;
+using FamilyChat.Domain.Entities;
 
-namespace FamiyChat.EntityFrameworkCore;
+namespace FamilyChat.EntityFrameworkCore;
 
-public static class FamiyChatDbContextModelCreatingExtensions
+public static class FamilyChatDbContextModelCreatingExtensions
 {
-    public static void ConfigureFamiyChat(this ModelBuilder builder)
+    public static void ConfigureFamilyChat(this ModelBuilder builder)
     {
         builder.Entity<ChatGroup>(b =>
         {

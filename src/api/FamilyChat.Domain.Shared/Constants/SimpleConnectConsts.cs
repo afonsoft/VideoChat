@@ -1,6 +1,6 @@
-namespace FamiyChat.Domain.Shared.Constants;
+namespace FamilyChat.Domain.Shared.Constants;
 
-public static class FamiyChatConsts
+public static class FamilyChatConsts
 {
     public const string DbTablePrefix = "App";
 

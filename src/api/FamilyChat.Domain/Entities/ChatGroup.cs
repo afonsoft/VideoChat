@@ -1,16 +1,16 @@
 using System.ComponentModel.DataAnnotations;
-using FamiyChat.Domain.Shared.Constants;
-using FamiyChat.Domain.Shared.Enums;
-using FamiyChat.Domain.Shared.ValueObjects;
+using FamilyChat.Domain.Shared.Constants;
+using FamilyChat.Domain.Shared.Enums;
+using FamilyChat.Domain.Shared.ValueObjects;
 
-namespace FamiyChat.Domain.Entities;
+namespace FamilyChat.Domain.Entities;
 
 public class ChatGroup
 {
     public Guid Id { get; private set; }
 
     [Required]
-    [MaxLength(FamiyChatConsts.MaxGroupNameLength)]
+    [MaxLength(FamilyChatConsts.MaxGroupNameLength)]
     public string Name { get; private set; } = string.Empty;
 
     public string Description { get; private set; } = string.Empty;
@@ -41,10 +41,10 @@ public class ChatGroup
         Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
         IsActive = true;
-        MaxParticipants = FamiyChatConsts.MaxVideoCallParticipants;
+        MaxParticipants = FamilyChatConsts.MaxVideoCallParticipants;
     }
 
-    public ChatGroup(string name, string description, GroupType type, Guid creatorId, int maxParticipants = FamiyChatConsts.MaxVideoCallParticipants)
+    public ChatGroup(string name, string description, GroupType type, Guid creatorId, int maxParticipants = FamilyChatConsts.MaxVideoCallParticipants)
         : this()
     {
         Name = name;
@@ -61,8 +61,8 @@ public class ChatGroup
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Group name cannot be empty", nameof(name));
 
-        if (name.Length > FamiyChatConsts.MaxGroupNameLength)
-            throw new ArgumentException($"Group name cannot exceed {FamiyChatConsts.MaxGroupNameLength} characters", nameof(name));
+        if (name.Length > FamilyChatConsts.MaxGroupNameLength)
+            throw new ArgumentException($"Group name cannot exceed {FamilyChatConsts.MaxGroupNameLength} characters", nameof(name));
 
         Name = name;
         UpdateLastActivity();

@@ -1,14 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using FamiyChat.Domain.Repositories;
-using FamiyChat.EntityFrameworkCore;
+using FamilyChat.Domain.Repositories;
+using FamilyChat.EntityFrameworkCore;
 
-namespace FamiyChat.EntityFrameworkCore;
+namespace FamilyChat.EntityFrameworkCore;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly FamiyChatDbContext _context;
+    private readonly FamilyChatDbContext _context;
 
-    public UnitOfWork(FamiyChatDbContext context)
+    public UnitOfWork(FamilyChatDbContext context)
     {
         _context = context;
     }

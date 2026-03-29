@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace FamiyChat.Mobile;
+namespace FamilyChat.Mobile;
 
 public partial class App : Application
 {

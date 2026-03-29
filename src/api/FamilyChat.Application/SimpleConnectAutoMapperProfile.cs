@@ -1,13 +1,13 @@
 using AutoMapper;
-using FamiyChat.Application.Contracts.DTOs;
-using FamiyChat.Domain.Entities;
-using FamiyChat.Domain.Shared.ValueObjects;
+using FamilyChat.Application.Contracts.DTOs;
+using FamilyChat.Domain.Entities;
+using FamilyChat.Domain.Shared.ValueObjects;
 
-namespace FamiyChat.Application;
+namespace FamilyChat.Application;
 
-public class FamiyChatAutoMapperProfile : Profile
+public class FamilyChatAutoMapperProfile : Profile
 {
-    public FamiyChatAutoMapperProfile()
+    public FamilyChatAutoMapperProfile()
     {
         CreateMap<ChatGroup, ChatGroupDto>()
             .ForMember(dest => dest.CreatorName, opt => opt.Ignore())

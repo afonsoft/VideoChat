@@ -42,18 +42,18 @@ psql -U postgres
 
 Conecte ao banco e verifique se foi criado:
 ```bash
-psql -U postgres -d FamiyChat
+psql -U postgres -d FamilyChat
 \dt
 ```
 
 ## Passo 4: Configurar Connection String
 
-No arquivo `src/FamiyChat.HttpApi/appsettings.json`, verifique:
+No arquivo `src/FamilyChat.HttpApi/appsettings.json`, verifique:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=FamiyChat;Username=postgres;Password=sua_senha"
+    "DefaultConnection": "Host=localhost;Database=FamilyChat;Username=postgres;Password=sua_senha"
   }
 }
 ```
@@ -61,7 +61,7 @@ No arquivo `src/FamiyChat.HttpApi/appsettings.json`, verifique:
 ## Passo 5: Executar a Aplicação
 
 ```bash
-cd src/FamiyChat.HttpApi
+cd src/FamilyChat.HttpApi
 dotnet run
 ```
 
@@ -124,12 +124,12 @@ A aplicação criará automaticamente:
 
 ### Backup
 ```bash
-pg_dump -U postgres FamiyChat > backup.sql
+pg_dump -U postgres FamilyChat > backup.sql
 ```
 
 ### Restore
 ```bash
-psql -U postgres FamiyChat < backup.sql
+psql -U postgres FamilyChat < backup.sql
 ```
 
 ## Performance

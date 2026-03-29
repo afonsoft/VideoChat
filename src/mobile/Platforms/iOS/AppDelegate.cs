@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace FamiyChat.Mobile;
+namespace FamilyChat.Mobile;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

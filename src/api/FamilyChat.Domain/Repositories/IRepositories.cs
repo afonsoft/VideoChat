@@ -1,6 +1,6 @@
-using FamiyChat.Domain.Entities;
+using FamilyChat.Domain.Entities;
 
-namespace FamiyChat.Domain.Repositories;
+namespace FamilyChat.Domain.Repositories;
 
 public interface IChatGroupRepository
 {

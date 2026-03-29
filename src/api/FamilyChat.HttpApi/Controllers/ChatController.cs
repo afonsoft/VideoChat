@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using FamiyChat.Application.Contracts.DTOs;
-using FamiyChat.Application.Contracts.Services;
+using FamilyChat.Application.Contracts.DTOs;
+using FamilyChat.Application.Contracts.Services;
 
-namespace FamiyChat.HttpApi.Controllers;
+namespace FamilyChat.HttpApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

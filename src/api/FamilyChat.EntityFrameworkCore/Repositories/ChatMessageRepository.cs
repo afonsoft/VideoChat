@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
-using FamiyChat.Domain.Entities;
-using FamiyChat.Domain.Repositories;
-using FamiyChat.EntityFrameworkCore;
+using FamilyChat.Domain.Entities;
+using FamilyChat.Domain.Repositories;
+using FamilyChat.EntityFrameworkCore;
 
-namespace FamiyChat.EntityFrameworkCore.Repositories;
+namespace FamilyChat.EntityFrameworkCore.Repositories;
 
 public class ChatMessageRepository : IChatMessageRepository
 {
-    private readonly FamiyChatDbContext _context;
+    private readonly FamilyChatDbContext _context;
 
-    public ChatMessageRepository(FamiyChatDbContext context)
+    public ChatMessageRepository(FamilyChatDbContext context)
     {
         _context = context;
     }
