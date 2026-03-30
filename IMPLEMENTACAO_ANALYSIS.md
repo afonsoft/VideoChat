@@ -186,8 +186,8 @@
 ### **Principais Mudanças**
 - **ABP Framework**: 10.1.1 → 10.2.0 (última versão)
 - **SignalR**: 1.1.0 → 8.0.11 (compatível com .NET 10)
-- **EF Core**: 10.0.5 → 10.0.20 (última versão)
-- **Authentication**: 10.0.5 → 10.0.20 (security patches)
+- **EF Core**: 10.0.5 → 10.0.5 (última versão)
+- **Authentication**: 10.0.5 → 10.0.5 (security patches)
 - **Identity**: 8.17.0 → 8.6.0 (compatibilidade)
 
 ### **Novos Pacotes Adicionados**
