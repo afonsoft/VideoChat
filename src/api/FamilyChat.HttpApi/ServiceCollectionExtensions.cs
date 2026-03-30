@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using FamilyChat.Application.Services;
+using FamilyChat.Application.Contracts.Services;
 using FamilyChat.Application;
 using FamilyChat.Domain.Repositories;
 using FamilyChat.EntityFrameworkCore.Repositories;
@@ -8,6 +9,7 @@ using FamilyChat.EntityFrameworkCore;
 using FamilyChat.HttpApi.Services;
 using FamilyChat.HttpApi.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using AutoMapper;
 
 namespace FamilyChat.HttpApi;
 
@@ -32,7 +34,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IVideoCallAppService, VideoCallAppService>();
 
         // AutoMapper
-        services.AddAutoMapper(typeof(FamilyChatAutoMapperProfile));
+        services.AddAutoMapper(cfg => cfg.AddMaps(typeof(FamilyChatAutoMapperProfile).Assembly));
 
         // SignalR
         services.AddSignalR();

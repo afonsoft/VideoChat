@@ -21,7 +21,7 @@ public class FamilyChatMessageDto
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
     public Guid? ReplyToMessageId { get; set; }
-    public ChatMessageDto? ReplyToMessage { get; set; }
+    public FamilyChatMessageDto? ReplyToMessage { get; set; }
 
     public List<ChatMessageAttachmentDto> Attachments { get; set; } = new();
 }
@@ -66,7 +66,7 @@ public class GetMessagesDto
 
 public class MessagePagedResultDto
 {
-    public List<ChatMessageDto> Items { get; set; } = new();
+    public List<FamilyChatMessageDto> Items { get; set; } = new();
     public int TotalCount { get; set; }
     public int PageNumber { get; set; }
     public int PageSize { get; set; }

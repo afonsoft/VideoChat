@@ -68,6 +68,12 @@ public class ChatGroup
         UpdateLastActivity();
     }
 
+    public void UpdateDescription(string description)
+    {
+        Description = description ?? string.Empty;
+        UpdateLastActivity();
+    }
+
     public void AddMember(Guid userId, string userName, bool isCreator = false)
     {
         if (_members.Any(m => m.UserId == userId))

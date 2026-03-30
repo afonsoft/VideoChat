@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using FamilyChat.Domain.Shared.Enums;
 

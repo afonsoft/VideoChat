@@ -1,12 +1,12 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.Autofac;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.SignalR;
 using Volo.Abp.Swashbuckle;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FamilyChat.Domain;
+using FamilyChat.HttpApi.Services;
 
 namespace FamilyChat.HttpApi;
 
@@ -14,7 +14,6 @@ namespace FamilyChat.HttpApi;
     typeof(FamilyChatDomainModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMvcModule),
-    typeof(AbpAspNetCoreSignalRModule),
     typeof(AbpSwashbuckleModule)
 )]
 public class FamilyChatHttpApiModule : AbpModule
@@ -54,20 +53,21 @@ public class FamilyChatHttpApiModule : AbpModule
 
         // Configure Swagger
         ConfigureSwaggerServices(context);
+
+        // Register ConnectionManager
+        context.Services.AddSingleton<IConnectionManager, ConnectionManager>();
     }
 
     private void ConfigureSwaggerServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpSwaggerGenWithOAuth(
             "FamilyChat",
-            opt =>
+            new Dictionary<string, string>
             {
-                opt.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "FamilyChat API", Version = "v1" });
-                opt.DocInclusionPredicate((docName, description) => true);
-                opt.CustomSchemaIds(type => type.FullName);
+                {"FamilyChat", "FamilyChat API"}
             },
-            "FamilyChat",
-            new string[] { "FamilyChat" }
+            null,
+            null
         );
     }
 }

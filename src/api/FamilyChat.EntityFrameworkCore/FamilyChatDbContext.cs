@@ -41,18 +41,9 @@ public class FamilyChatDbContext : AbpDbContext<FamilyChatDbContext>
         // Criar grupos de exemplo
         var groups = new List<ChatGroup>
         {
-            new ChatGroup("Geral", "Grupo para conversas gerais", GroupType.Chat, Guid.NewGuid())
-            {
-                Description = "Bem-vindo ao grupo geral! Use este espaço para conversas informais."
-            },
-            new ChatGroup("Trabalho", "Discussões sobre projetos de trabalho", GroupType.Chat, Guid.NewGuid())
-            {
-                Description = "Espaço para discussões profissionais e alinhamento de equipe."
-            },
-            new ChatGroup("Vídeo Conferência", "Sala de videoconferência principal", GroupType.VideoCall, Guid.NewGuid(), 10)
-            {
-                Description = "Use esta sala para videoconferências com até 10 participantes."
-            }
+            new ChatGroup("Geral", "Bem-vindo ao grupo geral! Use este espaço para conversas informais.", GroupType.Chat, Guid.NewGuid()),
+            new ChatGroup("Trabalho", "Espaço para discussões profissionais e alinhamento de equipe.", GroupType.Chat, Guid.NewGuid()),
+            new ChatGroup("Vídeo Conferência", "Use esta sala para videoconferências com até 10 participantes.", GroupType.VideoCall, Guid.NewGuid(), 10)
         };
 
         await ChatGroups.AddRangeAsync(groups);

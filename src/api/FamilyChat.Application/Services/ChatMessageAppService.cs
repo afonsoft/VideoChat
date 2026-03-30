@@ -29,7 +29,7 @@ public class ChatMessageAppService : IChatMessageAppService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ChatMessageDto> SendMessageAsync(SendMessageDto input)
+    public async Task<FamilyChatMessageDto> SendMessageAsync(SendMessageDto input)
     {
         var group = await _groupRepository.GetAsync(input.ChatGroupId);
         if (group == null)
@@ -48,11 +48,11 @@ public class ChatMessageAppService : IChatMessageAppService
         await _messageRepository.AddAsync(message);
         await _unitOfWork.SaveChangesAsync();
 
-        var result = _mapper.Map<ChatMessageDto>(message);
+        var result = _mapper.Map<FamilyChatMessageDto>(message);
         return result;
     }
 
-    public async Task<ChatMessageDto> EditMessageAsync(Guid messageId, EditMessageDto input)
+    public async Task<FamilyChatMessageDto> EditMessageAsync(Guid messageId, EditMessageDto input)
     {
         var message = await _messageRepository.GetAsync(messageId);
         if (message == null)
@@ -63,7 +63,7 @@ public class ChatMessageAppService : IChatMessageAppService
         await _messageRepository.UpdateAsync(message);
         await _unitOfWork.SaveChangesAsync();
 
-        var result = _mapper.Map<ChatMessageDto>(message);
+        var result = _mapper.Map<FamilyChatMessageDto>(message);
         return result;
     }
 
@@ -94,7 +94,7 @@ public class ChatMessageAppService : IChatMessageAppService
             input.BeforeDate,
             input.AfterDate);
 
-        var messageDtos = _mapper.Map<List<ChatMessageDto>>(messages);
+        var messageDtos = _mapper.Map<List<FamilyChatMessageDto>>(messages);
 
         return new MessagePagedResultDto
         {
@@ -106,13 +106,13 @@ public class ChatMessageAppService : IChatMessageAppService
         };
     }
 
-    public async Task<ChatMessageDto> GetMessageAsync(Guid messageId)
+    public async Task<FamilyChatMessageDto> GetMessageAsync(Guid messageId)
     {
         var message = await _messageRepository.GetAsync(messageId);
         if (message == null)
             throw new ArgumentException("Message not found", nameof(messageId));
 
-        var result = _mapper.Map<ChatMessageDto>(message);
+        var result = _mapper.Map<FamilyChatMessageDto>(message);
         return result;
     }
 }

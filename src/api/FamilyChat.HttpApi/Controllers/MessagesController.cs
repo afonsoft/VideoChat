@@ -19,7 +19,7 @@ public class MessagesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ChatMessageDto>> SendMessage([FromBody] SendMessageDto input)
+    public async Task<ActionResult<FamilyChatMessageDto>> SendMessage([FromBody] SendMessageDto input)
     {
         try
         {
@@ -34,7 +34,7 @@ public class MessagesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ChatMessageDto>> GetMessage(Guid id)
+    public async Task<ActionResult<FamilyChatMessageDto>> GetMessage(Guid id)
     {
         try
         {
@@ -53,7 +53,7 @@ public class MessagesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<ChatMessageDto>> EditMessage(Guid id, [FromBody] EditMessageDto input)
+    public async Task<ActionResult<FamilyChatMessageDto>> EditMessage(Guid id, [FromBody] EditMessageDto input)
     {
         try
         {

@@ -19,7 +19,7 @@ public class FamilyChatAutoMapperProfile : Profile
 
         CreateMap<CallParticipant, CallParticipantDto>();
 
-        CreateMap<ChatMessage, ChatMessageDto>();
+        CreateMap<ChatMessage, FamilyChatMessageDto>();
 
         CreateMap<ChatMessageAttachment, ChatMessageAttachmentDto>();
 

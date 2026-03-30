@@ -5,6 +5,7 @@ using FamilyChat.Domain;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Caching.Distributed;
 using FamilyChat.Application;
+using FamilyChat.Application.Services;
 
 namespace FamilyChat.EntityFrameworkCore;
 
