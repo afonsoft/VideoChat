@@ -6,15 +6,19 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FamilyChat.Domain;
+using FamilyChat.EntityFrameworkCore;
 using FamilyChat.HttpApi.Services;
+using Volo.Abp.AspNetCore.SignalR;
 
 namespace FamilyChat.HttpApi;
 
 [DependsOn(
     typeof(FamilyChatDomainModule),
+    typeof(FamilyChatEntityFrameworkCoreModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMvcModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAspNetCoreSignalRModule)
 )]
 public class FamilyChatHttpApiModule : AbpModule
 {
@@ -60,14 +64,21 @@ public class FamilyChatHttpApiModule : AbpModule
 
     private void ConfigureSwaggerServices(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
+
+        // Read the AuthServer authority and a swagger client id from configuration
+        // Provide safe defaults to avoid passing null into ABP helpers
+        var authServerAuthority = configuration["AuthServer:Authority"] ?? "https://localhost:5001";
+        var swaggerClientId = configuration["AuthServer:SwaggerClientId"] ?? "FamilyChat";
+
         context.Services.AddAbpSwaggerGenWithOAuth(
-            "FamilyChat",
+            authServerAuthority,
             new Dictionary<string, string>
             {
                 {"FamilyChat", "FamilyChat API"}
             },
             null,
-            null
+            swaggerClientId
         );
     }
 }
