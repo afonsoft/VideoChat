@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
 using FamilyChat.Domain.Entities;
 using FamilyChat.Domain.Shared.Enums;
 
 namespace FamilyChat.EntityFrameworkCore;
 
-public class FamilyChatDbContext : DbContext
+public class FamilyChatDbContext : AbpDbContext<FamilyChatDbContext>
 {
     public FamilyChatDbContext(DbContextOptions<FamilyChatDbContext> options)
         : base(options)

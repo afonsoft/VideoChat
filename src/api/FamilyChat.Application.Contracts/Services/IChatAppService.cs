@@ -4,23 +4,23 @@ namespace FamilyChat.Application.Contracts.Services;
 
 public interface IChatAppService
 {
-    Task<ChatGroupDto> CreateGroupAsync(CreateChatGroupDto input);
-    Task<ChatGroupDto> UpdateGroupAsync(Guid groupId, UpdateChatGroupDto input);
+    Task<FamilyChatGroupDto> CreateGroupAsync(CreateChatGroupDto input);
+    Task<FamilyChatGroupDto> UpdateGroupAsync(Guid groupId, UpdateChatGroupDto input);
     Task DeleteGroupAsync(Guid groupId);
-    Task<ChatGroupDto> GetGroupAsync(Guid groupId);
-    Task<List<ChatGroupDto>> GetUserGroupsAsync(Guid userId);
-    Task<ChatGroupDto> JoinGroupAsync(JoinGroupDto input);
+    Task<FamilyChatGroupDto> GetGroupAsync(Guid groupId);
+    Task<List<FamilyChatGroupDto>> GetUserGroupsAsync(Guid userId);
+    Task<FamilyChatGroupDto> JoinGroupAsync(JoinGroupDto input);
     Task LeaveGroupAsync(LeaveGroupDto input);
     Task<List<ChatGroupMemberDto>> GetGroupMembersAsync(Guid groupId);
 }
 
 public interface IChatMessageAppService
 {
-    Task<ChatMessageDto> SendMessageAsync(SendMessageDto input);
-    Task<ChatMessageDto> EditMessageAsync(Guid messageId, EditMessageDto input);
+    Task<FamilyChatMessageDto> SendMessageAsync(SendMessageDto input);
+    Task<FamilyChatMessageDto> EditMessageAsync(Guid messageId, EditMessageDto input);
     Task DeleteMessageAsync(Guid messageId);
     Task<MessagePagedResultDto> GetMessagesAsync(GetMessagesDto input);
-    Task<ChatMessageDto> GetMessageAsync(Guid messageId);
+    Task<FamilyChatMessageDto> GetMessageAsync(Guid messageId);
 }
 
 public interface IVideoCallAppService

@@ -29,7 +29,7 @@ public class ChatAppService : IChatAppService
         _cacheService = cacheService;
     }
 
-    public async Task<ChatGroupDto> CreateGroupAsync(CreateChatGroupDto input)
+    public async Task<FamilyChatGroupDto> CreateGroupAsync(CreateChatGroupDto input)
     {
         _logger.LogInformation("Creating new chat group: {GroupName}", input.Name);
 
@@ -39,16 +39,16 @@ public class ChatAppService : IChatAppService
         await _unitOfWork.SaveChangesAsync();
 
         // Cache the new group
-        var result = _mapper.Map<ChatGroupDto>(group);
+        var result = _mapper.Map<FamilyChatGroupDto>(group);
         await _cacheService.SetAsync(CacheKeys.ChatGroups(group.Id), result, TimeSpan.FromHours(1));
 
         return result;
     }
 
-    public async Task<ChatGroupDto> UpdateGroupAsync(Guid groupId, UpdateChatGroupDto input)
+    public async Task<FamilyChatGroupDto> UpdateGroupAsync(Guid groupId, UpdateChatGroupDto input)
     {
         // Try to get from cache first
-        var cachedGroup = await _cacheService.GetAsync<ChatGroupDto>(CacheKeys.ChatGroups(groupId));
+        var cachedGroup = await _cacheService.GetAsync<FamilyChatGroupDto>(CacheKeys.ChatGroups(groupId));
 
         var group = cachedGroup != null ?
             await _groupRepository.GetAsync(groupId) :
@@ -63,7 +63,7 @@ public class ChatAppService : IChatAppService
         await _unitOfWork.SaveChangesAsync();
 
         // Update cache
-        var result = _mapper.Map<ChatGroupDto>(group);
+        var result = _mapper.Map<FamilyChatGroupDto>(group);
         await _cacheService.SetAsync(CacheKeys.ChatGroups(group.Id), result, TimeSpan.FromHours(1));
 
         return result;
@@ -87,10 +87,10 @@ public class ChatAppService : IChatAppService
         _logger.LogInformation("Group {GroupId} deleted", groupId);
     }
 
-    public async Task<ChatGroupDto> GetGroupAsync(Guid groupId)
+    public async Task<FamilyChatGroupDto> GetGroupAsync(Guid groupId)
     {
         // Try to get from cache first
-        var cachedGroup = await _cacheService.GetAsync<ChatGroupDto>(CacheKeys.ChatGroups(groupId));
+        var cachedGroup = await _cacheService.GetAsync<FamilyChatGroupDto>(CacheKeys.ChatGroups(groupId));
         if (cachedGroup != null)
         {
             _logger.LogDebug("Group {GroupId} retrieved from cache", groupId);
@@ -101,7 +101,7 @@ public class ChatAppService : IChatAppService
         if (group == null)
             throw new ArgumentException("Group not found", nameof(groupId));
 
-        var result = _mapper.Map<ChatGroupDto>(group);
+        var result = _mapper.Map<FamilyChatGroupDto>(group);
 
         // Cache for 1 hour
         await _cacheService.SetAsync(CacheKeys.ChatGroups(group.Id), result, TimeSpan.FromHours(1));
@@ -109,12 +109,12 @@ public class ChatAppService : IChatAppService
         return result;
     }
 
-    public async Task<List<ChatGroupDto>> GetUserGroupsAsync(Guid userId)
+    public async Task<List<FamilyChatGroupDto>> GetUserGroupsAsync(Guid userId)
     {
         var cacheKey = $"user:groups:{userId}";
 
         // Try to get from cache first
-        var cachedGroups = await _cacheService.GetAsync<List<ChatGroupDto>>(cacheKey);
+        var cachedGroups = await _cacheService.GetAsync<List<FamilyChatGroupDto>>(cacheKey);
         if (cachedGroups != null)
         {
             _logger.LogDebug("User {UserId} groups retrieved from cache", userId);
@@ -122,7 +122,7 @@ public class ChatAppService : IChatAppService
         }
 
         var groups = await _groupRepository.GetUserGroupsAsync(userId);
-        var result = _mapper.Map<List<ChatGroupDto>>(groups);
+        var result = _mapper.Map<List<FamilyChatGroupDto>>(groups);
 
         // Cache for 30 minutes
         await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(30));
@@ -130,7 +130,7 @@ public class ChatAppService : IChatAppService
         return result;
     }
 
-    public async Task<ChatGroupDto> JoinGroupAsync(JoinGroupDto input)
+    public async Task<FamilyChatGroupDto> JoinGroupAsync(JoinGroupDto input)
     {
         var group = await _groupRepository.GetAsync(input.GroupId);
         if (group == null)
@@ -142,7 +142,7 @@ public class ChatAppService : IChatAppService
         await _unitOfWork.SaveChangesAsync();
 
         // Update caches
-        var result = _mapper.Map<ChatGroupDto>(group);
+        var result = _mapper.Map<FamilyChatGroupDto>(group);
         await _cacheService.SetAsync(CacheKeys.ChatGroups(group.Id), result, TimeSpan.FromHours(1));
 
         // Update online users cache
@@ -163,7 +163,7 @@ public class ChatAppService : IChatAppService
         await _unitOfWork.SaveChangesAsync();
 
         // Update caches
-        var result = _mapper.Map<ChatGroupDto>(group);
+        var result = _mapper.Map<FamilyChatGroupDto>(group);
         await _cacheService.SetAsync(CacheKeys.ChatGroups(group.Id), result, TimeSpan.FromHours(1));
 
         // Remove from online users cache

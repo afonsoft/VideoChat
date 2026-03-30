@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FamilyChat.Domain;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Caching.Distributed;
-using FamilyChat.Application.Services;
+using FamilyChat.Application;
 
 namespace FamilyChat.EntityFrameworkCore;
 

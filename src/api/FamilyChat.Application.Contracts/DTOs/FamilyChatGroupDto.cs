@@ -4,7 +4,7 @@ using FamilyChat.Domain.Shared.Enums;
 
 namespace FamilyChat.Application.Contracts.DTOs;
 
-public class ChatGroupDto
+public class FamilyChatGroupDto
 {
     public Guid Id { get; set; }
 

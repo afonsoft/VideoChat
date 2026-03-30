@@ -9,7 +9,7 @@ public class FamilyChatAutoMapperProfile : Profile
 {
     public FamilyChatAutoMapperProfile()
     {
-        CreateMap<ChatGroup, ChatGroupDto>()
+        CreateMap<ChatGroup, FamilyChatGroupDto>()
             .ForMember(dest => dest.CreatorName, opt => opt.Ignore())
             .ForMember(dest => dest.CurrentParticipantsCount, opt => opt.MapFrom(src => src.Members.Count(m => m.IsActive)))
             .ForMember(dest => dest.ActiveCallParticipantsCount, opt => opt.MapFrom(src => src.ActiveCallParticipants.Count));

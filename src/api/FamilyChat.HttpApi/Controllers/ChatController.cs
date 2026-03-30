@@ -19,7 +19,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpPost("groups")]
-    public async Task<ActionResult<ChatGroupDto>> CreateGroup([FromBody] CreateChatGroupDto input)
+    public async Task<ActionResult<FamilyChatGroupDto>> CreateGroup([FromBody] CreateChatGroupDto input)
     {
         try
         {
@@ -34,7 +34,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpGet("groups/{id}")]
-    public async Task<ActionResult<ChatGroupDto>> GetGroup(Guid id)
+    public async Task<ActionResult<FamilyChatGroupDto>> GetGroup(Guid id)
     {
         try
         {
@@ -53,7 +53,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpPut("groups/{id}")]
-    public async Task<ActionResult<ChatGroupDto>> UpdateGroup(Guid id, [FromBody] UpdateChatGroupDto input)
+    public async Task<ActionResult<FamilyChatGroupDto>> UpdateGroup(Guid id, [FromBody] UpdateChatGroupDto input)
     {
         try
         {
@@ -91,7 +91,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpGet("groups/my-groups/{userId}")]
-    public async Task<ActionResult<List<ChatGroupDto>>> GetUserGroups(Guid userId)
+    public async Task<ActionResult<List<FamilyChatGroupDto>>> GetUserGroups(Guid userId)
     {
         try
         {
@@ -106,7 +106,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpPost("groups/join")]
-    public async Task<ActionResult<ChatGroupDto>> JoinGroup([FromBody] JoinGroupDto input)
+    public async Task<ActionResult<FamilyChatGroupDto>> JoinGroup([FromBody] JoinGroupDto input)
     {
         try
         {
