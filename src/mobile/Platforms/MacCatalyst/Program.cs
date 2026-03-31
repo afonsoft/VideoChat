@@ -1,7 +1,7 @@
-﻿using ObjCRuntime;
+using ObjCRuntime;
 using UIKit;
 
-namespace FamilyChat.Mobile;
+namespace FamilyMeet.Mobile;
 
 public class Program
 {

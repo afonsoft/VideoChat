@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
-namespace FamilyChat.Mobile;
+namespace FamilyMeet.Mobile;
 
 public static class MauiProgram
 {

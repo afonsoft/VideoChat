@@ -1,4 +1,4 @@
-﻿namespace FamilyChat.Mobile;
+namespace FamilyMeet.Mobile;
 
 public partial class MainPage : ContentPage
 {

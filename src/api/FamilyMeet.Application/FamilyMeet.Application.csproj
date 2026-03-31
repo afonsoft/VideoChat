@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Garbage Collection optimizations -->
+    <GarbageCollectionAdaptationMode>1</GarbageCollectionAdaptationMode>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <ThreadPoolMinThreads>4</ThreadPoolMinThreads>
+    <ThreadPoolMaxThreads>100</ThreadPoolMaxThreads>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FamilyMeet.Domain\FamilyMeet.Domain.csproj" />
+    <ProjectReference Include="..\FamilyMeet.Application.Contracts\FamilyMeet.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
+    <PackageReference Include="Volo.Abp.AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="10.1.1" />
+  </ItemGroup>
+
+</Project>
