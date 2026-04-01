@@ -10,14 +10,15 @@ The FamilyMeet application consists of:
 - **Backend API**: .NET 8 Web API
 - **ClientWeb**: Angular chat application (port 4200)
 - **AdminWeb**: ABP Angular admin application (port 4201)
-- **PostgreSQL**: Database (port 5432)
-- **Redis**: Cache (port 6379)
+- **PostgreSQL**: Database (hosted externally)
+- **Redis**: Cache (hosted externally)
 
 ## Quick Start
 
 ### Prerequisites
 - Docker and Docker Compose installed
 - Docker Engine 20.10+ (recommended)
+- PostgreSQL and Redis running on host (or external servers)
 
 ### Start all services
 ```bash
@@ -29,7 +30,7 @@ cd VideoChat
 docker-compose up --build
 ```
 
-### Access the applications
+### Access applications
 - **ClientWeb**: http://localhost:4200
 - **AdminWeb**: http://localhost:4201
 - **API**: http://localhost:5000
@@ -98,16 +99,16 @@ docker system prune -f
 
 ## Environment Variables
 
-### Database Configuration
+### Database Configuration (External PostgreSQL)
 ```yaml
 environment:
-  ConnectionStrings__DefaultConnection: Host=postgres;Database=FamilyChat_db;Username=postgres;Password=your_password
+  ConnectionStrings__DefaultConnection: Host=your_postgres_host;Database=FamilyChat_db;Username=postgres;Password=your_password
 ```
 
-### Redis Configuration
+### Redis Configuration (External Redis)
 ```yaml
 environment:
-  Redis__Host: redis
+  Redis__Host: your_redis_host
   Redis__Port: 6379
   Redis__Password: your_redis_password
 ```
@@ -121,12 +122,37 @@ environment:
   Jwt__ExpirationMinutes: 60
 ```
 
+## External Services Setup
+
+### PostgreSQL (Host)
+Since PostgreSQL is hosted externally, make sure:
+
+1. **Database exists**: Create `FamilyChat_db` database
+2. **User permissions**: Ensure user has proper permissions
+3. **Network access**: Docker containers can reach the database
+4. **Connection string**: Update with correct host credentials
+
+```sql
+-- Create database
+CREATE DATABASE FamilyChat_db;
+
+-- Create user (if needed)
+CREATE USER postgres WITH PASSWORD 'your_password';
+GRANT ALL PRIVILEGES ON DATABASE FamilyChat_db TO postgres;
+```
+
+### Redis (Host)
+Ensure Redis is accessible from Docker containers:
+
+1. **Network access**: Allow connections from Docker network
+2. **Authentication**: Configure password if required
+3. **Port mapping**: Ensure port 6379 is accessible
+
 ## Volumes
 
 ### Persistent Data
-- **PostgreSQL data**: Stored in `postgres_data` volume
-- **Redis data**: Stored in `redis_data` volume
 - **Application logs**: Stored in `logs` volume
+- **Custom volumes**: You can mount additional directories
 
 ### Custom Volumes
 You can mount custom directories:
@@ -147,16 +173,18 @@ All services communicate through the `familymeet-network` bridge network.
 | Meet-Api | 5000 | 5000 | Backend API |
 | Client-Web | 80 | 4200 | Chat frontend |
 | Admin-Web | 80 | 4201 | Admin frontend |
-| PostgreSQL | 5432 | 5432 | Database |
-| Redis | 6379 | 6379 | Cache |
+
+### External Services
+| Service | Host Port | Description |
+|---------|------------|-------------|
+| PostgreSQL | 5432 | External database |
+| Redis | 6379 | External cache |
 
 ## Health Checks
 
 All services include health checks:
 - **API**: `/health` endpoint
 - **Frontend**: HTTP response check
-- **Database**: PostgreSQL readiness check
-- **Redis**: Redis ping check
 
 ### Health Check Status
 ```bash
@@ -173,8 +201,6 @@ docker inspect --format='{{.State.Health}}' $(docker-compose ps -q)
 - **API**: 1GB RAM, 1 CPU
 - **ClientWeb**: 256MB RAM, 0.25 CPU
 - **AdminWeb**: 512MB RAM, 0.5 CPU
-- **Database**: 1GB RAM, 0.5 CPU
-- **Redis**: 256MB RAM, 0.25 CPU
 
 ### Build Optimization
 - Multi-stage builds reduce image size
@@ -201,11 +227,20 @@ sudo lsof -ti:5000
 # Check database logs
 docker-compose logs Meet-Api
 
-# Test database connection
+# Test database connection from container
 docker-compose exec Meet-Api curl -f http://localhost:5000/health
 ```
 
-#### 3. Build Failures
+#### 3. External Service Connectivity
+```bash
+# Test PostgreSQL connection
+docker-compose exec Meet-Api ping your_postgres_host
+
+# Test Redis connection
+docker-compose exec Meet-Api redis-cli -h your_redis_host -p 6379 ping
+```
+
+#### 4. Build Failures
 ```bash
 # Clean build cache
 docker-compose down -v
@@ -215,7 +250,7 @@ docker system prune -f
 docker-compose build --no-cache
 ```
 
-#### 4. Memory Issues
+#### 5. Memory Issues
 ```bash
 # Monitor resource usage
 docker stats
@@ -269,7 +304,12 @@ environment:
 # Use HTTPS in production
 ```
 
-### 3. Image Security
+### 3. External Service Security
+- **PostgreSQL**: Use SSL connections, strong passwords
+- **Redis**: Enable authentication, network restrictions
+- **API**: Configure firewall rules for external access
+
+### 4. Image Security
 ```bash
 # Use specific image tags
 # Regularly update base images
@@ -304,20 +344,23 @@ curl http://localhost:5000/metrics
 ## Backup and Recovery
 
 ### Data Backup
-```bash
-# Backup database
-docker-compose exec postgres pg_dump -U postgres FamilyChat_db > backup.sql
+Since PostgreSQL and Redis are external, use their native backup tools:
 
-# Backup volumes
-docker run --rm -v postgres_data:/data -v $(pwd)/backup:/backup alpine tar czf /backup/backup.tar.gz /data
+```bash
+# Backup PostgreSQL (run on host)
+pg_dump -h your_postgres_host -U postgres -d FamilyChat_db > backup.sql
+
+# Backup Redis (run on host)
+redis-cli --rdb /path/to/backup.rdb
 ```
 
 ### Disaster Recovery
 ```bash
-# Restore from backup
-docker-compose down -v
-docker-compose up -d
-docker-compose exec postgres psql -U postgres -d FamilyChat_db < backup.sql
+# Restore PostgreSQL (run on host)
+psql -h your_postgres_host -U postgres -d FamilyChat_db < backup.sql
+
+# Restore Redis (run on host)
+redis-cli --rdb /path/to/backup.rdb
 ```
 
 ## Advanced Usage
@@ -351,6 +394,8 @@ docker-compose up --scale Client-Web=3 --scale Admin-Web=2
 6. **Secure Secrets**: Use environment variables, not hardcoded values
 7. **Regular Updates**: Keep base images updated
 8. **Log Everything**: Implement comprehensive logging strategy
+9. **External Services**: Properly configure external dependencies
+10. **Network Isolation**: Use Docker networks for service communication
 
 ## Support
 
@@ -358,7 +403,8 @@ For issues with Docker setup:
 1. Check container logs: `docker-compose logs [service-name]`
 2. Verify network connectivity: `docker network ls`
 3. Check resource usage: `docker stats`
-4. Review this documentation and troubleshooting section
+4. Test external service connectivity
+5. Review this documentation and troubleshooting section
 
 ---
 

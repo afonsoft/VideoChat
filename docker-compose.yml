@@ -15,12 +15,14 @@ services:
       DOTNET_gcServer: "true"
       DOTNET_gcConcurrent: "true"
       DOTNET_PROCESSOR_COUNT: "2"
-      # Database configuration
+      # Database configuration (host PostgreSQL)
       ConnectionStrings__DefaultConnection: Host=host.docker.internal;Database=FamilyChat_db;Username=postgres;Password=postgres
+      # Redis configuration (host Redis)
       Redis__Host: host.docker.internal
       Redis__Port: 6379
       Redis__Password:
       Redis__InstanceName: FamilyMeet
+      # JWT configuration
       Jwt__Issuer: FamilyMeet
       Jwt__Audience: FamilyMeetUsers
       Jwt__Key: FamilyMeetSecretKey123456789
@@ -121,68 +123,6 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # PostgreSQL Database
-  PostgreSQL:
-    image: postgres:15-alpine
-    container_name: postgres-db
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: FamilyChat_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d
-    networks:
-      - familymeet-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: "0.5"
-        reservations:
-          memory: 512M
-          cpus: "0.25"
-
-  # Redis Cache
-  Redis:
-    image: redis:7-alpine
-    container_name: redis-cache
-    restart: unless-stopped
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
-    environment:
-      REDIS_PASSWORD: your_redis_password_here
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
-    networks:
-      - familymeet-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-          cpus: "0.25"
-        reservations:
-          memory: 128M
-          cpus: "0.1"
-
 # Networks
 networks:
   familymeet-network:
@@ -190,10 +130,3 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/16
-
-# Volumes
-volumes:
-  postgres_data:
-    driver: local
-  redis_data:
-    driver: local
