@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   # Backend API - FamilyMeet
-  Meet-Api:
+  MeetApi:
     build:
       context: .
       dockerfile: src/api/Dockerfile
@@ -54,7 +54,7 @@ services:
         max-file: "3"
 
   # Frontend ClientWeb - Chat Simples
-  Client-Web:
+  MeetClientWeb:
     build:
       context: ./src/clientWeb
       dockerfile: Dockerfile
@@ -89,7 +89,7 @@ services:
         max-file: "3"
 
   # Frontend AdminWeb - Administração ABP
-  Admin-Web:
+  MeetAdminWeb:
     build:
       context: ./src/adminWeb/angular
       dockerfile: Dockerfile

@@ -58,50 +58,6 @@ check_requirements() {
 
 # Setup development environment
 setup_environment() {
-    print_status "Setting up development environment..."
-    
-    # Create development appsettings if it doesn't exist
-    if [ ! -f "src/api/appsettings.Development.json" ]; then
-        print_status "Creating development appsettings..."
-        cat > src/api/appsettings.Development.json << EOF
-{
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning",
-      "Microsoft.EntityFrameworkCore.Database.Command": "Information"
-    }
-  },
-  "ConnectionStrings": {
-    "DefaultConnection": "Host=192.168.68.113;Database=FamilyChat_db;Username=postgres;Password=postgres"
-  },
-  "Redis": {
-    "Host": "192.168.68.113",
-    "Port": 6379,
-    "Password": ""
-  },
-  "Jwt": {
-    "Issuer": "FamilyMeet",
-    "Audience": "FamilyMeetUsers",
-    "Key": "FamilyMeetSecretKey123456789",
-    "ExpirationMinutes": 60
-  },
-  "Authentication": {
-    "Google": {
-      "ClientId": "",
-      "ClientSecret": ""
-    }
-  },
-  "FileStorage": {
-    "Provider": "Local",
-    "LocalStoragePath": "./uploads",
-    "MaxFileSize": "10485760",
-    "AllowedExtensions": ".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt"
-  }
-}
-EOF
-        print_status "Development appsettings created!"
-    fi
     
     # Create uploads directory if it doesn't exist
     mkdir -p src/api/uploads
