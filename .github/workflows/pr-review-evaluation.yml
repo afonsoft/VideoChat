@@ -1,0 +1,93 @@
+---
+name: PR Review Evaluation with Gemini
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+jobs:
+  evaluate-pr:
+    runs-on: ubuntu-24.04
+    if: github.event.action == 'opened' || (github.event.action == 'synchronize' && contains(github.event.commits[0].message, '[review-needed]'))
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.ALLHANDS_BOT_GITHUB_PAT }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install OpenHands SDK
+        run: |
+          npm install -g @openhands/sdk
+
+      - name: Evaluate PR with Gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.ALLHANDS_BOT_GITHUB_PAT }}
+        run: |
+          echo " Evaluating PR #${{ github.event.pull_request.number }} with Gemini AI..."
+
+          openhands pr-review \
+            --llm-model gemini/gemini-2.0-flash-exp \
+            --review-style standard \
+            --github-token $GITHUB_TOKEN \
+            --repo ${{ github.repository }} \
+            --pr-number ${{ github.event.pull_request.number }} \
+            --base-branch ${{ github.event.pull_request.base.ref }} \
+            --head-branch ${{ github.event.pull_request.head.ref }} \
+            --auto-approve false \
+            --require-approval-for-first-time true
+
+      - name: Comment Results
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.issue.number;
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: prNumber,
+              body: '**PR Review Completed**\n\nThis PR has been automatically evaluated by Gemini AI. Check the review comments above for detailed feedback.\n\n**Status**: Review completed\n**Model**: Gemini 2.0 Flash\n\n---\n*This automated review helps maintainers identify potential issues early.*'
+            });
+
+  assign-reviewers:
+    runs-on: ubuntu-24.04
+    if: github.event.action == 'opened' && github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+
+    steps:
+      - name: Assign Reviewers
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.issue.number;
+
+            // Assign senior maintainers for first-time contributors
+            const reviewers = ['maintainer-username', 'senior-dev-username'];
+
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner,
+                repo,
+                pull_number: prNumber,
+                reviewers: reviewers
+              });
+              
+              console.log(`Assigned reviewers: ${reviewers.join(', ')}`);
+            } catch (error) {
+              console.error(`Failed to assign reviewers: ${error.message}`);
+            }

@@ -4,6 +4,8 @@ using FamilyMeet.Application.Contracts.DTOs;
 using FamilyMeet.Application.Contracts.Services;
 using FamilyMeet.Domain.Entities;
 using FamilyMeet.Domain.Repositories;
+using FamilyMeet.Domain.Shared.Constants;
+using CacheKeys = FamilyMeet.Domain.Shared.Constants.CacheKeys;
 
 namespace FamilyMeet.Application.Services;
 
@@ -194,5 +196,29 @@ public class ChatAppService : IChatAppService
         await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(15));
 
         return result;
+    }
+
+    public async Task<UserDto> GetOrCreateUserAsync(CreateUserDto input)
+    {
+        _logger.LogInformation("Getting or creating user: {Email}", input.Email);
+
+        // For now, create a new user with the provided information
+        // In a real implementation, you would check if user exists first
+        var user = new UserDto
+        {
+            Id = Guid.NewGuid(),
+            Email = input.Email,
+            Name = input.Name,
+            Avatar = input.Avatar,
+            Provider = input.Provider,
+            CreatedAt = DateTime.UtcNow,
+            IsOnline = true
+        };
+
+        // Cache user information
+        await _cacheService.SetAsync($"FamilyMeet:User:{user.Id}", user, TimeSpan.FromHours(24));
+
+        _logger.LogInformation("User {Email} created/retrieved with ID: {UserId}", input.Email, user.Id);
+        return user;
     }
 }

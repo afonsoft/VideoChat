@@ -12,6 +12,7 @@ public interface IChatAppService
     Task<FamilyMeetGroupDto> JoinGroupAsync(JoinGroupDto input);
     Task LeaveGroupAsync(LeaveGroupDto input);
     Task<List<ChatGroupMemberDto>> GetGroupMembersAsync(Guid groupId);
+    Task<UserDto> GetOrCreateUserAsync(CreateUserDto input);
 }
 
 public interface IChatMessageAppService

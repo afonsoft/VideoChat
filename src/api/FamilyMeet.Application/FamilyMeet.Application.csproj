@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FamilyMeet.Domain\FamilyMeet.Domain.csproj" />
+    <ProjectReference Include="..\FamilyMeet.Domain.Shared\FamilyMeet.Domain.Shared.csproj" />
     <ProjectReference Include="..\FamilyMeet.Application.Contracts\FamilyMeet.Application.Contracts.csproj" />
   </ItemGroup>
 

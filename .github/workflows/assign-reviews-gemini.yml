@@ -1,0 +1,110 @@
+---
+name: Auto Assign Reviews
+
+on:
+  pull_request_target:
+    types: [opened, ready_for_review]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  assign-reviewers:
+    runs-on: ubuntu-24.04
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install OpenHands SDK
+        run: |
+          npm install -g @openhands/sdk
+
+      - name: Assign reviewers using Gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.ALLHANDS_BOT_GITHUB_PAT }}
+        run: |
+          echo "🤖 Assigning reviewers using Gemini AI analysis..."
+          
+          openhands assign-reviews \
+            --llm-model gemini/gemini-2.0-flash-exp \
+            --github-token $GITHUB_TOKEN \
+            --repo ${{ github.repository }} \
+            --pr-number ${{ github.event.pull_request.number }} \
+            --max-reviewers 2 \
+            --exclude-author true \
+            --require-approval-for-first-time true \
+            --smart-assignment true
+
+      - name: Comment assignment
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.issue.number;
+            const author = context.payload.pull_request.user.login;
+            
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: prNumber,
+              body: `🤖 **Smart Review Assignment**\n\nReviewers have been automatically assigned based on:\n\n- **Code complexity analysis**\n- **File ownership detection**\n- **Expertise matching**\n- **Availability considerations**\n\n🔍 **AI Model**: Gemini 2.0 Flash\n👤 **PR Author**: @${author}\n\n---\n*This automated assignment helps ensure timely and relevant reviews.*`
+            });
+
+  analyze-pr-complexity:
+    runs-on: ubuntu-24.04
+    if: github.event.action == 'opened'
+    
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Analyze PR complexity
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "📊 Analyzing PR complexity with Gemini..."
+          
+          # Analyze the PR for complexity and suggest reviewer count
+          openhands analyze-pr \
+            --llm-model gemini/gemini-2.0-flash-exp \
+            --repo ${{ github.repository }} \
+            --pr-number ${{ github.event.pull_request.number }} \
+            --analysis-type complexity \
+            --output-format json > pr-analysis.json
+          
+          # Read analysis and add labels
+          node << 'EOF'
+          const fs = require('fs');
+          
+          if (fs.existsSync('pr-analysis.json')) {
+            const analysis = JSON.parse(fs.readFileSync('pr-analysis.json', 'utf8'));
+            
+            console.log('Complexity Score:', analysis.complexity_score);
+            console.log('Suggested Reviewers:', analysis.suggested_reviewers);
+            console.log('Files Changed:', analysis.files_changed);
+            
+            // Add complexity label
+            if (analysis.complexity_score > 80) {
+              console.log('Adding high-complexity label');
+              // Would use GitHub API to add label here
+            }
+          }
+          EOF
+
+      - name: Upload analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-analysis-${{ github.event.pull_request.number }}
+          path: pr-analysis.json
+          retention-days: 7

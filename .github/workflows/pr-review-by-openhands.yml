@@ -1,0 +1,68 @@
+---
+name: PR Review by Gemini AI
+
+on:
+    # Use pull_request_target to allow fork PRs to access secrets when triggered by maintainers
+    # Security: This workflow runs when:
+    #   1. A new PR is opened (non-draft), OR
+    #   2. A draft PR is marked as ready for review, OR
+    #   3. A maintainer adds 'review-this' label, OR
+    #   4. A maintainer requests gemini-reviewer or all-hands-bot as a reviewer
+    # Adding labels and requesting reviewers requires write access.
+    # The PR code is explicitly checked out for review, but secrets are only accessible
+    # because the workflow runs in the base repository context.
+    pull_request_target:
+        types: [opened, ready_for_review, labeled, review_requested]
+
+permissions:
+    contents: read
+    pull-requests: write
+    issues: write
+
+jobs:
+    pr-review:
+        # Run when one of the following conditions is met:
+        #   1. A new non-draft PR is opened by a non-first-time contributor, OR
+        #   2. A draft PR is converted to ready for review by a non-first-time contributor, OR
+        #   3. 'review-this' label is added, OR
+        #   4. gemini-reviewer or all-hands-bot is requested as a reviewer
+        # Note: FIRST_TIME_CONTRIBUTOR and NONE PRs require manual trigger via label/reviewer request.
+        if: |
+            (github.event.action == 'opened' && github.event.pull_request.draft == false && github.event.pull_request.author_association != 'FIRST_TIME_CONTRIBUTOR' && github.event.pull_request.author_association != 'NONE') ||
+            (github.event.action == 'ready_for_review' && github.event.pull_request.author_association != 'FIRST_TIME_CONTRIBUTOR' && github.event.pull_request.author_association != 'NONE') ||
+            github.event.label.name == 'review-this' ||
+            github.event.requested_reviewer.login == 'gemini-reviewer' ||
+            github.event.requested_reviewer.login == 'all-hands-bot'
+        concurrency:
+            group: pr-review-${{ github.event.pull_request.number }}
+            cancel-in-progress: true
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout PR Code
+              uses: actions/checkout@v4
+              with:
+                  token: ${{ secrets.ALLHANDS_BOT_GITHUB_PAT }}
+                  fetch-depth: 0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+
+            - name: Install Dependencies
+              run: |
+                  npm install -g @openhands/sdk
+
+            - name: Run Gemini PR Review
+              env:
+                  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+                  GITHUB_TOKEN: ${{ secrets.ALLHANDS_BOT_GITHUB_PAT }}
+              run: |
+                  openhands pr-review \
+                    --llm-model gemini/gemini-2.0-flash-exp \
+                    --review-style standard \
+                    --github-token $GITHUB_TOKEN \
+                    --repo ${{ github.repository }} \
+                    --pr-number ${{ github.event.pull_request.number }} \
+                    --base-branch ${{ github.event.pull_request.base.ref }} \
+                    --head-branch ${{ github.event.pull_request.head.ref }}

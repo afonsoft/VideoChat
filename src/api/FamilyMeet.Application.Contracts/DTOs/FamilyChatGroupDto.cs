@@ -43,10 +43,13 @@ public class CallParticipantDto
 {
     public Guid UserId { get; set; }
     public string UserName { get; set; } = string.Empty;
+    public string? Avatar { get; set; }
     public ParticipantStatus Status { get; set; }
     public DateTime JoinedAt { get; set; }
     public bool HasAudio { get; set; }
     public bool HasVideo { get; set; }
+    public bool IsScreenSharing { get; set; }
+    public string? ConnectionId { get; set; }
 }
 
 public class CreateChatGroupDto
