@@ -1,6 +1,6 @@
 import { Environment } from '@abp/ng.core';
 
-const baseUrl = 'http://localhost:4200';
+const baseUrl = 'http://MeetAdminWeb:4200';
 
 export const environment = {
   production: true,
@@ -10,16 +10,16 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://localhost:44350/',
+    issuer: 'http://MeetApi:5000/',
     redirectUri: baseUrl,
     clientId: 'Admin_App',
     responseType: 'code',
     scope: 'offline_access Admin',
-    requireHttps: true
+    requireHttps: false
   },
   apis: {
     default: {
-      url: 'https://localhost:44350',
+      url: 'http://MeetApi:5000',
       rootNamespace: 'FamilyMeet.Admin',
     },
   },
