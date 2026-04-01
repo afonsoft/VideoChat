@@ -12,7 +12,7 @@ namespace FamilyMeet.Domain.Settings
         public static class Authentication
         {
             public const string GroupName = FamilyMeetSettings.GroupName + ".Authentication";
-            
+
             public const string GoogleClientId = GroupName + ".GoogleClientId";
             public const string GoogleClientSecret = GroupName + ".GoogleClientSecret";
             public const string JwtExpirationMinutes = GroupName + ".JwtExpirationMinutes";
@@ -25,7 +25,7 @@ namespace FamilyMeet.Domain.Settings
         public static class FileStorage
         {
             public const string GroupName = FamilyMeetSettings.GroupName + ".FileStorage";
-            
+
             public const string Provider = GroupName + ".Provider"; // Local, Azure, AWS, etc.
             public const string LocalStoragePath = GroupName + ".LocalStoragePath";
             public const string AzureStorageConnectionString = GroupName + ".AzureStorageConnectionString";
@@ -42,7 +42,7 @@ namespace FamilyMeet.Domain.Settings
         public static class VideoCall
         {
             public const string GroupName = FamilyMeetSettings.GroupName + ".VideoCall";
-            
+
             public const string MaxParticipants = GroupName + ".MaxParticipants";
             public const string EnableRecording = GroupName + ".EnableRecording";
             public const string RecordingStoragePath = GroupName + ".RecordingStoragePath";
@@ -56,7 +56,7 @@ namespace FamilyMeet.Domain.Settings
         public static class Notification
         {
             public const string GroupName = FamilyMeetSettings.GroupName + ".Notification";
-            
+
             public const string EmailProvider = GroupName + ".EmailProvider";
             public const string SmtpHost = GroupName + ".SmtpHost";
             public const string SmtpPort = GroupName + ".SmtpPort";
@@ -71,7 +71,7 @@ namespace FamilyMeet.Domain.Settings
         public static class Security
         {
             public const string GroupName = FamilyMeetSettings.GroupName + ".Security";
-            
+
             public const string EnableTwoFactorAuthentication = GroupName + ".EnableTwoFactorAuthentication";
             public const string PasswordPolicyMinLength = GroupName + ".PasswordPolicyMinLength";
             public const string PasswordPolicyRequireUppercase = GroupName + ".PasswordPolicyRequireUppercase";
@@ -86,7 +86,7 @@ namespace FamilyMeet.Domain.Settings
         public static class Audit
         {
             public const string GroupName = FamilyMeetSettings.GroupName + ".Audit";
-            
+
             public const string EnableAuditLogging = GroupName + ".EnableAuditLogging";
             public const string AuditLogRetentionDays = GroupName + ".AuditLogRetentionDays";
             public const string EnableEntityChangeTracking = GroupName + ".EnableEntityChangeTracking";
@@ -98,7 +98,7 @@ namespace FamilyMeet.Domain.Settings
         public static class Cache
         {
             public const string GroupName = FamilyMeetSettings.GroupName + ".Cache";
-            
+
             public const string DefaultExpirationMinutes = GroupName + ".DefaultExpirationMinutes";
             public const string UserCacheExpirationMinutes = GroupName + ".UserCacheExpirationMinutes";
             public const string GroupCacheExpirationMinutes = GroupName + ".GroupCacheExpirationMinutes";
@@ -109,7 +109,7 @@ namespace FamilyMeet.Domain.Settings
         public static class RateLimiting
         {
             public const string GroupName = FamilyMeetSettings.GroupName + ".RateLimiting";
-            
+
             public const string EnableRateLimiting = GroupName + ".EnableRateLimiting";
             public const string MaxRequestsPerMinute = GroupName + ".MaxRequestsPerMinute";
             public const string MaxRequestsPerHour = GroupName + ".MaxRequestsPerHour";
@@ -120,7 +120,7 @@ namespace FamilyMeet.Domain.Settings
         public static class General
         {
             public const string GroupName = FamilyMeetSettings.GroupName + ".General";
-            
+
             public const string ApplicationName = GroupName + ".ApplicationName";
             public const string ApplicationVersion = GroupName + ".ApplicationVersion";
             public const string DefaultLanguage = GroupName + ".DefaultLanguage";
@@ -138,39 +138,19 @@ namespace FamilyMeet.Domain.Settings
             context.Add(
                 new SettingDefinition(
                     FamilyMeetSettings.Authentication.GoogleClientId,
-                    string.Empty,
-                    displayName: L("DisplayName:FamilyMeet.Authentication.GoogleClientId"),
-                    description: L("Description:FamilyMeet.Authentication.GoogleClientId"),
-                    group: FamilyMeetSettings.Authentication.GroupName,
-                    isVisibleToClients: false,
-                    isLocalizable: false
+                    string.Empty
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.Authentication.GoogleClientSecret,
-                    string.Empty,
-                    displayName: L("DisplayName:FamilyMeet.Authentication.GoogleClientSecret"),
-                    description: L("Description:FamilyMeet.Authentication.GoogleClientSecret"),
-                    group: FamilyMeetSettings.Authentication.GroupName,
-                    isVisibleToClients: false,
-                    isLocalizable: false
+                    string.Empty
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.Authentication.JwtExpirationMinutes,
-                    "60",
-                    displayName: L("DisplayName:FamilyMeet.Authentication.JwtExpirationMinutes"),
-                    description: L("Description:FamilyMeet.Authentication.JwtExpirationMinutes"),
-                    group: FamilyMeetSettings.Authentication.GroupName,
-                    isVisibleToClients: false,
-                    isLocalizable: false
+                    "60"
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.Authentication.JwtSecretKey,
-                    "FamilyMeetSecretKey123456789",
-                    displayName: L("DisplayName:FamilyMeet.Authentication.JwtSecretKey"),
-                    description: L("Description:FamilyMeet.Authentication.JwtSecretKey"),
-                    group: FamilyMeetSettings.Authentication.GroupName,
-                    isVisibleToClients: false,
-                    isLocalizable: false
+                    "FamilyMeetSecretKey123456789"
                 )
             );
 
@@ -178,39 +158,19 @@ namespace FamilyMeet.Domain.Settings
             context.Add(
                 new SettingDefinition(
                     FamilyMeetSettings.FileStorage.Provider,
-                    "Local",
-                    displayName: L("DisplayName:FamilyMeet.FileStorage.Provider"),
-                    description: L("Description:FamilyMeet.FileStorage.Provider"),
-                    group: FamilyMeetSettings.FileStorage.GroupName,
-                    isVisibleToClients: false,
-                    isLocalizable: false
+                    "Local"
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.FileStorage.LocalStoragePath,
-                    "./uploads",
-                    displayName: L("DisplayName:FamilyMeet.FileStorage.LocalStoragePath"),
-                    description: L("Description:FamilyMeet.FileStorage.LocalStoragePath"),
-                    group: FamilyMeetSettings.FileStorage.GroupName,
-                    isVisibleToClients: false,
-                    isLocalizable: false
+                    "./uploads"
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.FileStorage.MaxFileSize,
-                    "10485760", // 10MB
-                    displayName: L("DisplayName:FamilyMeet.FileStorage.MaxFileSize"),
-                    description: L("Description:FamilyMeet.FileStorage.MaxFileSize"),
-                    group: FamilyMeetSettings.FileStorage.GroupName,
-                    isVisibleToClients: false,
-                    isLocalizable: false
+                    "10485760" // 10MB
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.FileStorage.AllowedExtensions,
-                    ".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt",
-                    displayName: L("DisplayName:FamilyMeet.FileStorage.AllowedExtensions"),
-                    description: L("Description:FamilyMeet.FileStorage.AllowedExtensions"),
-                    group: FamilyMeetSettings.FileStorage.GroupName,
-                    isVisibleToClients: false,
-                    isLocalizable: false
+                    ".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.txt"
                 )
             );
 
@@ -218,30 +178,15 @@ namespace FamilyMeet.Domain.Settings
             context.Add(
                 new SettingDefinition(
                     FamilyMeetSettings.VideoCall.MaxParticipants,
-                    "50",
-                    displayName: L("DisplayName:FamilyMeet.VideoCall.MaxParticipants"),
-                    description: L("Description:FamilyMeet.VideoCall.MaxParticipants"),
-                    group: FamilyMeetSettings.VideoCall.GroupName,
-                    isVisibleToClients: true,
-                    isLocalizable: true
+                    "50"
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.VideoCall.EnableRecording,
-                    "true",
-                    displayName: L("DisplayName:FamilyMeet.VideoCall.EnableRecording"),
-                    description: L("Description:FamilyMeet.VideoCall.EnableRecording"),
-                    group: FamilyMeetSettings.VideoCall.GroupName,
-                    isVisibleToClients: true,
-                    isLocalizable: true
+                    "true"
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.VideoCall.MaxCallDurationMinutes,
-                    "240", // 4 hours
-                    displayName: L("DisplayName:FamilyMeet.VideoCall.MaxCallDurationMinutes"),
-                    description: L("Description:FamilyMeet.VideoCall.MaxCallDurationMinutes"),
-                    group: FamilyMeetSettings.VideoCall.GroupName,
-                    isVisibleToClients: true,
-                    isLocalizable: true
+                    "240" // 4 hours
                 )
             );
 
@@ -249,30 +194,15 @@ namespace FamilyMeet.Domain.Settings
             context.Add(
                 new SettingDefinition(
                     FamilyMeetSettings.Security.EnableTwoFactorAuthentication,
-                    "false",
-                    displayName: L("DisplayName:FamilyMeet.Security.EnableTwoFactorAuthentication"),
-                    description: L("Description:FamilyMeet.Security.EnableTwoFactorAuthentication"),
-                    group: FamilyMeetSettings.Security.GroupName,
-                    isVisibleToClients: true,
-                    isLocalizable: true
+                    "false"
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.Security.PasswordPolicyMinLength,
-                    "8",
-                    displayName: L("DisplayName:FamilyMeet.Security.PasswordPolicyMinLength"),
-                    description: L("Description:FamilyMeet.Security.PasswordPolicyMinLength"),
-                    group: FamilyMeetSettings.Security.GroupName,
-                    isVisibleToClients: true,
-                    isLocalizable: true
+                    "8"
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.Security.MaxLoginAttempts,
-                    "5",
-                    displayName: L("DisplayName:FamilyMeet.Security.MaxLoginAttempts"),
-                    description: L("Description:FamilyMeet.Security.MaxLoginAttempts"),
-                    group: FamilyMeetSettings.Security.GroupName,
-                    isVisibleToClients: true,
-                    isLocalizable: true
+                    "5"
                 )
             );
 
@@ -280,28 +210,13 @@ namespace FamilyMeet.Domain.Settings
             context.Add(
                 new SettingDefinition(
                     FamilyMeetSettings.Audit.EnableAuditLogging,
-                    "true",
-                    displayName: L("DisplayName:FamilyMeet.Audit.EnableAuditLogging"),
-                    description: L("Description:FamilyMeet.Audit.EnableAuditLogging"),
-                    group: FamilyMeetSettings.Audit.GroupName,
-                    isVisibleToClients: true,
-                    isLocalizable: true
+                    "true"
                 ),
                 new SettingDefinition(
                     FamilyMeetSettings.Audit.AuditLogRetentionDays,
-                    "90",
-                    displayName: L("DisplayName:FamilyMeet.Audit.AuditLogRetentionDays"),
-                    description: L("Description:FamilyMeet.Audit.AuditLogRetentionDays"),
-                    group: FamilyMeetSettings.Audit.GroupName,
-                    isVisibleToClients: true,
-                    isLocalizable: true
+                    "90"
                 )
             );
-        }
-
-        private static LocalizableString L(string name)
-        {
-            return LocalizableString.Create<FamilyMeetResource>(name);
         }
     }
 }

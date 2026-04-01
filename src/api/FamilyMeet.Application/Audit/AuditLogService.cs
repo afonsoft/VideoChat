@@ -10,7 +10,7 @@ using Volo.Abp.Settings;
 using Volo.Abp.Users;
 using Volo.Abp.Uow;
 using FamilyMeet.Domain.Audit;
-using FamilyMeet.Settings;
+using FamilyMeet.Domain.Settings;
 using System.Text.Json;
 
 namespace FamilyMeet.Application.Audit
@@ -60,7 +60,7 @@ namespace FamilyMeet.Application.Audit
 
                 await Repository.InsertAsync(auditLog);
 
-                _logger.LogInformation("Audit log created: {Action} by {User} at {Time}", 
+                _logger.LogInformation("Audit log created: {Action} by {User} at {Time}",
                     action, CurrentUser.UserName, DateTime.UtcNow);
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace FamilyMeet.Application.Audit
                 auditLog.SetSecurityLog(true);
                 await Repository.InsertAsync(auditLog);
 
-                _logger.LogWarning("Security audit log: {Action} by {User} at {Time}", 
+                _logger.LogWarning("Security audit log: {Action} by {User} at {Time}",
                     action, CurrentUser.UserName, DateTime.UtcNow);
             }
             catch (Exception ex)
@@ -142,12 +142,12 @@ namespace FamilyMeet.Application.Audit
                 auditLog.SetEntityChangeLog(true);
                 await Repository.InsertAsync(auditLog);
 
-                _logger.LogInformation("Entity change audit log: {EntityType} {Operation} by {User}", 
+                _logger.LogInformation("Entity change audit log: {EntityType} {Operation} by {User}",
                     entityType, operation, CurrentUser.UserName);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating entity change audit log for: {EntityType} {Operation}", 
+                _logger.LogError(ex, "Error creating entity change audit log for: {EntityType} {Operation}",
                     entityType, operation);
             }
         }
@@ -190,7 +190,7 @@ namespace FamilyMeet.Application.Audit
                 auditLog.SetRequestLog(true);
                 await Repository.InsertAsync(auditLog);
 
-                _logger.LogDebug("Request audit log: {Method} {Url} by {User}", 
+                _logger.LogDebug("Request audit log: {Method} {Url} by {User}",
                     method, url, CurrentUser.UserName);
             }
             catch (Exception ex)
@@ -309,34 +309,34 @@ namespace FamilyMeet.Application.Audit
         USER_DISABLE_2FA,
         USER_LINK_SOCIAL,
         USER_UNLINK_SOCIAL,
-        
+
         GROUP_CREATE,
         GROUP_UPDATE,
         GROUP_DELETE,
         GROUP_ADD_MEMBER,
         GROUP_REMOVE_MEMBER,
         GROUP_UPDATE_MEMBER_ROLE,
-        
+
         MESSAGE_SEND,
         MESSAGE_UPDATE,
         MESSAGE_DELETE,
-        
+
         CALL_START,
         CALL_END,
         CALL_JOIN,
         CALL_LEAVE,
         CALL_RECORDING_START,
         CALL_RECORDING_STOP,
-        
+
         FILE_UPLOAD,
         FILE_DOWNLOAD,
         FILE_DELETE,
-        
+
         SETTINGS_UPDATE,
         ROLE_CREATE,
         ROLE_UPDATE,
         ROLE_DELETE,
-        
+
         SYSTEM_BACKUP,
         SYSTEM_RESTORE,
         SYSTEM_MAINTENANCE

@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Http;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
 using FamilyMeet.Domain.Users;
-using FamilyMeet.Settings;
+using FamilyMeet.Domain.Settings;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -31,7 +32,7 @@ namespace FamilyMeet.Application.Auth
 
         public async Task<GoogleUserInfo> ValidateGoogleTokenAsync(string idToken)
         {
-            var clientId = await _settingManager.GetOrNullAsync(FamilyMeetSettings.Authentication.GoogleClientId) 
+            var clientId = await _settingManager.GetOrNullAsync(FamilyMeetSettings.Authentication.GoogleClientId)
                           ?? _configuration["Authentication:Google:ClientId"];
 
             if (string.IsNullOrEmpty(clientId))
@@ -41,7 +42,7 @@ namespace FamilyMeet.Application.Auth
 
             // Validate token with Google
             var validationUrl = $"https://www.googleapis.com/oauth2/v1/tokeninfo?id_token={idToken}";
-            
+
             var response = await _httpClient.GetAsync(validationUrl);
             response.EnsureSuccessStatusCode();
 
@@ -64,7 +65,7 @@ namespace FamilyMeet.Application.Auth
         public async Task<GoogleUserInfo> GetUserInfoAsync(string googleId)
         {
             var userInfoUrl = $"https://www.googleapis.com/oauth2/v2/userinfo";
-            
+
             var response = await _httpClient.GetAsync(userInfoUrl);
             response.EnsureSuccessStatusCode();
 
@@ -112,7 +113,7 @@ namespace FamilyMeet.Application.Auth
         {
             var clientId = await _settingManager.GetOrNullAsync(FamilyMeetSettings.Authentication.GoogleClientId)
                           ?? _configuration["Authentication:Google:ClientId"];
-            
+
             var clientSecret = await _settingManager.GetOrNullAsync(FamilyMeetSettings.Authentication.GoogleClientSecret)
                               ?? _configuration["Authentication:Google:ClientSecret"];
 
@@ -122,7 +123,7 @@ namespace FamilyMeet.Application.Auth
             }
 
             var tokenUrl = "https://oauth2.googleapis.com/token";
-            
+
             var parameters = new Dictionary<string, string>
             {
                 ["client_id"] = clientId,
@@ -153,8 +154,8 @@ namespace FamilyMeet.Application.Auth
         public async Task<GoogleUserInfo> GetUserInfoFromAccessTokenAsync(string accessToken)
         {
             var userInfoUrl = "https://www.googleapis.com/oauth2/v2/userinfo";
-            
-            _httpClient.DefaultRequestHeaders.Authorization = 
+
+            _httpClient.DefaultRequestHeaders.Authorization =
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await _httpClient.GetAsync(userInfoUrl);

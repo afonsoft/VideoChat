@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
-using FamilyMeet.Settings;
-using Microsoft.AspNetCore.Http;
+using FamilyMeet.Domain.Settings;
 using System.Linq;
 
 namespace FamilyMeet.Application.FileStorage
@@ -36,7 +36,7 @@ namespace FamilyMeet.Application.FileStorage
             _configuration = configuration;
             _settingManager = settingManager;
             _storagePath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-            
+
             // Ensure storage directory exists
             Directory.CreateDirectory(_storagePath);
         }
@@ -119,7 +119,7 @@ namespace FamilyMeet.Application.FileStorage
         public async Task<byte[]> DownloadFileAsync(string filePath)
         {
             var fullPath = GetFullPath(filePath);
-            
+
             if (!File.Exists(fullPath))
             {
                 throw new UserFriendlyException("File not found.");
@@ -133,13 +133,13 @@ namespace FamilyMeet.Application.FileStorage
             try
             {
                 var fullPath = GetFullPath(filePath);
-                
+
                 if (File.Exists(fullPath))
                 {
                     File.Delete(fullPath);
                     return true;
                 }
-                
+
                 return false;
             }
             catch
@@ -151,7 +151,7 @@ namespace FamilyMeet.Application.FileStorage
         public async Task<List<string>> GetFilesAsync(string folder = "uploads")
         {
             var folderPath = Path.Combine(_storagePath, folder);
-            
+
             if (!Directory.Exists(folderPath))
             {
                 return new List<string>();
@@ -186,7 +186,7 @@ namespace FamilyMeet.Application.FileStorage
             {
                 return size;
             }
-            
+
             var configValue = _configuration["FileStorage:MaxFileSize"];
             if (long.TryParse(configValue, out size))
             {
@@ -203,7 +203,7 @@ namespace FamilyMeet.Application.FileStorage
             {
                 return setting.Split(',').Select(ext => ext.Trim().ToLowerInvariant()).ToList();
             }
-            
+
             var configValue = _configuration["FileStorage:AllowedExtensions"];
             if (!string.IsNullOrEmpty(configValue))
             {
@@ -228,10 +228,10 @@ namespace FamilyMeet.Application.FileStorage
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFileName);
             var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
             var random = new Random().Next(1000, 9999);
-            
+
             // Sanitize file name
             fileNameWithoutExtension = SanitizeFileName(fileNameWithoutExtension);
-            
+
             return $"{fileNameWithoutExtension}_{timestamp}_{random}{extension}";
         }
 
@@ -242,13 +242,13 @@ namespace FamilyMeet.Application.FileStorage
             {
                 fileName = fileName.Replace(invalidChar.ToString(), "_");
             }
-            
+
             // Remove multiple underscores
             fileName = System.Text.RegularExpressions.Regex.Replace(fileName, "_+", "_");
-            
+
             // Remove leading/trailing underscores
             fileName = fileName.Trim('_');
-            
+
             return fileName;
         }
 
@@ -264,8 +264,8 @@ namespace FamilyMeet.Application.FileStorage
 
         public async Task<string> GetStorageProviderAsync()
         {
-            return await _settingManager.GetOrNullAsync(FamilyMeetSettings.FileStorage.Provider) 
-                   ?? _configuration["FileStorage:Provider"] 
+            return await _settingManager.GetOrNullAsync(FamilyMeetSettings.FileStorage.Provider)
+                   ?? _configuration["FileStorage:Provider"]
                    ?? "Local";
         }
     }
