@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using FamilyMeet.Domain.Entities;
+using FamilyMeet.Domain.Shared.ValueObjects;
 
 namespace FamilyMeet.EntityFrameworkCore;
 
@@ -205,5 +206,10 @@ public static class FamilyMeetDbContextModelCreatingExtensions
                 .HasForeignKey(x => x.ChatMessageId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
+
+        // Configure value objects as owned/entity types if needed
+        // If CallParticipant is a value object in Domain.Shared (ValueObjects), it should be mapped appropriately.
+
+        // Attempt to map CallParticipant as owned type somewhere else; nothing configured here by default.
     }
 }
