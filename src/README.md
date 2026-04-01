@@ -95,9 +95,7 @@ src/
 │   │   └── guards/
 │   │       └── auth.guard.ts
 │   └── package.json
-├── adminWeb/           # Aplicação administrativa ABP
-│   ├── angular/         # Frontend Angular
-│   └── aspnet-core/   # Backend API
+├── adminWeb/           # Frontend Angular Aplicação administrativa ABP
 └── api/               # API principal compartilhada
     ├── HttpApi/
     ├── Application/
