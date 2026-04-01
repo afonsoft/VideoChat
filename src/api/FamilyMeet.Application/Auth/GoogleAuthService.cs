@@ -11,6 +11,7 @@ using FamilyMeet.Domain.Settings;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Abp.Configuration;
 
 namespace FamilyMeet.Application.Auth
 {
@@ -32,7 +33,7 @@ namespace FamilyMeet.Application.Auth
 
         public async Task<GoogleUserInfo> ValidateGoogleTokenAsync(string idToken)
         {
-            var clientId = await _settingManager.GetOrNullAsync(FamilyMeetSettings.Authentication.GoogleClientId)
+            var clientId = await _settingManager.GetSettingValueAsync(FamilyMeetSettings.Authentication.GoogleClientId)
                           ?? _configuration["Authentication:Google:ClientId"];
 
             if (string.IsNullOrEmpty(clientId))
@@ -85,7 +86,7 @@ namespace FamilyMeet.Application.Auth
 
         public async Task<string> GetAuthUrlAsync(string redirectUri, string state = null)
         {
-            var clientId = await _settingManager.GetOrNullAsync(FamilyMeetSettings.Authentication.GoogleClientId)
+            var clientId = await _settingManager.GetSettingValueAsync(FamilyMeetSettings.Authentication.GoogleClientId)
                           ?? _configuration["Authentication:Google:ClientId"];
 
             var scopes = new List<string>
@@ -111,10 +112,10 @@ namespace FamilyMeet.Application.Auth
 
         public async Task<GoogleTokenResponse> ExchangeCodeForTokenAsync(string code, string redirectUri)
         {
-            var clientId = await _settingManager.GetOrNullAsync(FamilyMeetSettings.Authentication.GoogleClientId)
+            var clientId = await _settingManager.GetSettingValueAsync(FamilyMeetSettings.Authentication.GoogleClientId)
                           ?? _configuration["Authentication:Google:ClientId"];
 
-            var clientSecret = await _settingManager.GetOrNullAsync(FamilyMeetSettings.Authentication.GoogleClientSecret)
+            var clientSecret = await _settingManager.GetSettingValueAsync(FamilyMeetSettings.Authentication.GoogleClientSecret)
                               ?? _configuration["Authentication:Google:ClientSecret"];
 
             if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))

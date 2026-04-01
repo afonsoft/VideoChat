@@ -9,17 +9,24 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
 using FamilyMeet.Domain.Settings;
 using System.Linq;
+using Abp.Configuration;
 
 namespace FamilyMeet.Application.FileStorage
 {
     public interface IFileStorageService
     {
         Task<string> UploadFileAsync(IFormFile file, string folder = "uploads");
+
         Task<string> UploadFileAsync(byte[] fileBytes, string fileName, string contentType, string folder = "uploads");
+
         Task<byte[]> DownloadFileAsync(string filePath);
+
         Task<bool> DeleteFileAsync(string filePath);
+
         Task<List<string>> GetFilesAsync(string folder = "uploads");
+
         Task<bool> FileExistsAsync(string filePath);
+
         string GetFileUrl(string filePath);
     }
 
@@ -181,7 +188,7 @@ namespace FamilyMeet.Application.FileStorage
 
         private async Task<long> GetMaxFileSizeAsync()
         {
-            var setting = await _settingManager.GetOrNullAsync(FamilyMeetSettings.FileStorage.MaxFileSize);
+            var setting = await _settingManager.GetSettingValueAsync(FamilyMeetSettings.FileStorage.MaxFileSize);
             if (long.TryParse(setting, out var size))
             {
                 return size;
@@ -198,7 +205,7 @@ namespace FamilyMeet.Application.FileStorage
 
         private async Task<List<string>> GetAllowedExtensionsAsync()
         {
-            var setting = await _settingManager.GetOrNullAsync(FamilyMeetSettings.FileStorage.AllowedExtensions);
+            var setting = await _settingManager.GetSettingValueAsync(FamilyMeetSettings.FileStorage.AllowedExtensions);
             if (!string.IsNullOrEmpty(setting))
             {
                 return setting.Split(',').Select(ext => ext.Trim().ToLowerInvariant()).ToList();
@@ -264,7 +271,7 @@ namespace FamilyMeet.Application.FileStorage
 
         public async Task<string> GetStorageProviderAsync()
         {
-            return await _settingManager.GetOrNullAsync(FamilyMeetSettings.FileStorage.Provider)
+            return await _settingManager.GetSettingValueAsync(FamilyMeetSettings.FileStorage.Provider)
                    ?? _configuration["FileStorage:Provider"]
                    ?? "Local";
         }
