@@ -99,27 +99,112 @@ docker system prune -f
 
 ## Environment Variables
 
+### Using .env File
+
+Create a `.env` file based on `.env.example`:
+
+```bash
+# Copy example file
+cp .env.example .env
+
+# Edit with your values
+nano .env
+```
+
 ### Database Configuration (External PostgreSQL)
 ```yaml
+# Using environment variables
 environment:
-  ConnectionStrings__DefaultConnection: Host=your_postgres_host;Database=FamilyChat_db;Username=postgres;Password=your_password
+  ConnectionStrings__DefaultConnection: Host=${POSTGRESDB_HOST:-host.docker.internal};Database=${POSTGRESDB_NAME:-FamilyChat_db};Username=${POSTGRESDB_USER:-postgres};Password=${POSTGRESDB_PASSWORD:-postgres};Port=${POSTGRESDB_PORT:-5432}
 ```
 
 ### Redis Configuration (External Redis)
 ```yaml
+# Using environment variables
 environment:
-  Redis__Host: your_redis_host
-  Redis__Port: 6379
-  Redis__Password: your_redis_password
+  Redis__Host: ${REDIS_HOST:-host.docker.internal}
+  Redis__Port: ${REDIS_PORT:-6379}
+  Redis__Password: ${REDIS_PASSWORD:-}
+  Redis__InstanceName: ${REDIS_INSTANCE_NAME:-FamilyMeet}
 ```
 
 ### JWT Configuration
 ```yaml
+# Using environment variables
 environment:
-  Jwt__Issuer: FamilyMeet
-  Jwt__Audience: FamilyMeetUsers
-  Jwt__Key: your_secret_key_here
-  Jwt__ExpirationMinutes: 60
+  Jwt__Issuer: ${JWT_ISSUER:-FamilyMeet}
+  Jwt__Audience: ${JWT_AUDIENCE:-FamilyMeetUsers}
+  Jwt__Key: ${JWT_KEY:-FamilyMeetSecretKey123456789}
+  Jwt__ExpirationMinutes: ${JWT_EXPIRATION_MINUTES:-60}
+```
+
+### Port Configuration
+```yaml
+# Using environment variables
+ports:
+  - "${API_PORT:-5000}:5000"
+  - "${CLIENTWEB_PORT:-4200}:80"
+  - "${ADMINWEB_PORT:-4201}:80"
+```
+
+## Development vs Production
+
+### Development Environment
+Use `docker-compose.dev.yml` for development:
+
+```bash
+# Uses .env file
+docker-compose -f docker-compose.dev.yml up --build
+
+# Features:
+- Hot reload with source mounting
+- Development environment variables
+- Debugging enabled
+- Performance optimizations disabled
+```
+
+### Production Environment
+Use `docker-compose.yml` for production:
+
+```bash
+# Uses default values
+docker-compose up --build -d
+
+# Features:
+- Optimized builds
+- Production environment
+- Performance optimizations enabled
+- No source mounting
+```
+
+## Environment-Specific Variables
+
+### Local Development
+```bash
+# .env for local development
+POSTGRESDB_HOST=192.168.68.113
+REDIS_HOST=192.168.68.113
+POSTGRESDB_PASSWORD=your_local_password
+REDIS_PASSWORD=your_local_redis_password
+```
+
+### Docker Development
+```bash
+# .env for Docker containers
+POSTGRESDB_HOST=host.docker.internal
+REDIS_HOST=host.docker.internal
+POSTGRESDB_PASSWORD=postgres
+REDIS_PASSWORD=
+```
+
+### Production
+```bash
+# .env for production
+POSTGRESDB_HOST=your_production_db_host
+REDIS_HOST=your_production_redis_host
+POSTGRESDB_PASSWORD=your_production_password
+REDIS_PASSWORD=your_production_redis_password
+JWT_KEY=your_super_secret_production_key
 ```
 
 ## External Services Setup
