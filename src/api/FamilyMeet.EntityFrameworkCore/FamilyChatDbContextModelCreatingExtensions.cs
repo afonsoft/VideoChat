@@ -208,8 +208,7 @@ public static class FamilyMeetDbContextModelCreatingExtensions
         });
 
         // Configure value objects as owned/entity types if needed
-        // If CallParticipant is a value object in Domain.Shared (ValueObjects), it should be mapped appropriately.
-
-        // Attempt to map CallParticipant as owned type somewhere else; nothing configured here by default.
+        // Register CallParticipant as an owned value object so EF Core won't require a primary key
+        builder.Owned<CallParticipant>();
     }
 }
