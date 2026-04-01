@@ -51,32 +51,23 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # Frontend - FamilyMeet Angular
-  meet-frontend:
+  # Frontend ClientWeb - Chat Simples
+  Client-Web:
     build:
-      dockerfile: .src/web/Dockerfile
-    container_name: familymeet-frontend
+      context: ./src/clientWeb
+      dockerfile: Dockerfile
+    container_name: client-web
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "4200:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
+      - ./src/clientWeb/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - familymeet-network
     depends_on:
-      - meet-api
+      - Meet-Api
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost/health",
-        ]
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -95,6 +86,114 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  # Frontend AdminWeb - Administração ABP
+  Admin-Web:
+    build:
+      context: ./src/adminWeb/angular
+      dockerfile: Dockerfile
+    container_name: admin-web
+    restart: unless-stopped
+    ports:
+      - "4201:80"
+    volumes:
+      - ./src/adminWeb/angular/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - familymeet-network
+    depends_on:
+      - Meet-Api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
+        reservations:
+          memory: 256M
+          cpus: "0.25"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # PostgreSQL Database
+  PostgreSQL:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: FamilyChat_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d
+    networks:
+      - familymeet-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "0.5"
+        reservations:
+          memory: 512M
+          cpus: "0.25"
+
+  # Redis Cache
+  Redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+    environment:
+      REDIS_PASSWORD: your_redis_password_here
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - familymeet-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.25"
+        reservations:
+          memory: 128M
+          cpus: "0.1"
+
+# Networks
 networks:
   familymeet-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volumes
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

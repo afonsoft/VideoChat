@@ -45,6 +45,20 @@ src/web/**/.nx/
 src/web/**/coverage/
 src/web/**/.env*
 
+# Frontend builds
+src/clientWeb/dist/
+src/clientWeb/build/
+src/adminWeb/angular/dist/
+src/adminWeb/angular/build/
+
+# Frontend temp files
+src/clientWeb/tmp/
+src/adminWeb/angular/tmp/
+
+# Frontend cache
+src/clientWeb/.angular/
+src/adminWeb/angular/.angular/
+
 # Logs
 logs/
 *.log
@@ -162,6 +176,8 @@ azure-pipelines.yml
 appveyor.yml
 
 # IDE files
+.vscode/
+.idea/
 *.swp
 *.swo
 *~
