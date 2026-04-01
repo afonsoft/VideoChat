@@ -75,7 +75,7 @@ build_projects() {
     # Build API
     print_status "Building API..."
     cd src/api
-    dotnet build --configuration Development
+    dotnet build FamilyMeet.HttpApi/FamilyMeet.HttpApi.csproj --configuration Development
     cd ../..
     
     # Build ClientWeb
@@ -91,7 +91,7 @@ build_projects() {
 start_api() {
     print_status "Starting API on port 5000..."
     cd src/api
-    dotnet run --project FamilyMeet.HttpApi --configuration Development &
+    dotnet run --project FamilyMeet.HttpApi/FamilyMeet.HttpApi.csproj --configuration Development &
     API_PID=$!
     cd ../..
     
