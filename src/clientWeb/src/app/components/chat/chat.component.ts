@@ -19,6 +19,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   groups: ChatGroup[] = [];
   messages: Message[] = [];
   newMessage = '';
+  newGroupName = '';
   isLoading = false;
   showGroupList = true;
   showNewGroupModal = false;

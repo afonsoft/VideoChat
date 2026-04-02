@@ -1,5 +1,13 @@
 # FamilyChat - Aplicação de Comunicação Familiar em Tempo Real
 
+## 📋 Sumário
+
+- [Arquitetura](#arquitetura-implementada)
+- [Funcionalidades](#-funcionalidades-implementadas)
+- [Build e Execução](#-build-e-execução)
+- [Testes Unitários](#-testes-unitários)
+- [Documentação](#-documentação)
+
 ## Arquitetura Implementada
 
 ### Backend (.NET 10 + ABP.io)
@@ -158,22 +166,180 @@ docker-compose -f docker-compose.familychat.yml logs -f familychat-frontend
 - **Redis**: `localhost:6379` (se incluído no compose)
 - **Health Checks**: `/health` endpoint disponível
 
-### 2. Build Individual
+## 🚀 Build e Execução
+
+### Pré-requisitos
+
+- **.NET 10 SDK** ou superior
+- **Node.js 20+** e **npm**
+- **PostgreSQL** (para desenvolvimento local)
+- **Redis** (para cache e SignalR)
+- **Docker** e **Docker Compose** (opcional)
+
+### Build dos Projetos
+
+#### 1. API (.NET)
 
 ```bash
-# Build API
-cd src/api/FamilyChat.HttpApi
-dotnet build
+# Build da API completa
+cd src/api
+dotnet build FamilyMeet.HttpApi/FamilyMeet.HttpApi.csproj
 
-# Build Frontend
-cd src/web
+# Executar API em desenvolvimento
+dotnet run --project FamilyMeet.HttpApi
+
+# Executar testes da API
+dotnet test FamilyMeet.Application.Tests/FamilyMeet.Application.Tests.csproj
+```
+
+#### 2. Frontend Admin (Angular)
+
+```bash
+# Instalar dependências
+cd src/adminWeb
 npm install
+
+# Build para desenvolvimento
 npm run build
 
-# Run individual containers
-docker run -d --name familychat-api -p 5000:80 familychat-api
-docker run -d --name familychat-frontend -p 80:80 familychat-frontend
+# Build para produção
+npm run build:prod
+
+# Executar servidor de desenvolvimento
+npm run start
+
+# Executar testes
+npm run test
 ```
+
+#### 3. Frontend Client Web (Angular)
+
+```bash
+# Instalar dependências
+cd src/clientWeb
+npm install
+
+# Build para desenvolvimento
+npm run build
+
+# Executar servidor de desenvolvimento
+npm run start
+
+# Executar testes
+npm run test
+```
+
+#### 4. Build Completo
+
+```bash
+# Build de todos os projetos
+./start.sh build
+
+# Executar todos os serviços
+./start.sh run
+
+# Executar testes de todos os projetos
+./start.sh test
+```
+
+### Execução com Docker
+
+```bash
+# Build e execução de todos os serviços
+docker-compose up --build -d
+
+# Verificar status
+docker-compose ps
+
+# Acessar logs
+docker-compose logs -f
+```
+
+### Endpoints
+
+- **API Backend**: `http://localhost:5000`
+- **Frontend Admin**: `http://localhost:4200`
+- **Frontend Client**: `http://localhost:4201`
+- **Swagger Documentation**: `http://localhost:5000/swagger`
+
+## 🧪 Testes Unitários
+
+### API (.NET xUnit)
+
+```bash
+# Executar todos os testes
+cd src/api
+dotnet test
+
+# Executar com cobertura de código
+dotnet test --collect:"XPlat Code Coverage"
+
+# Executar testes específicos
+dotnet test FamilyMeet.Application.Tests/FamilyMeet.Application.Tests.csproj
+```
+
+**Testes Implementados:**
+- ✅ `ChatAppServiceTests`: Testes para serviço de chat
+- ✅ `VideoCallAppServiceTests`: Testes para serviço de videochamadas
+- ✅ Cobertura de métodos CRUD, cache e validações
+
+### Frontend Admin (Angular + Jasmine)
+
+```bash
+# Executar testes
+cd src/adminWeb
+npm test
+
+# Executar testes com coverage
+npm run test -- --code-coverage
+
+# Executar testes no modo watch
+npm run test -- --watch
+```
+
+**Testes Implementados:**
+- ✅ `HomeComponent`: Testes de componente principal
+- ✅ Testes de autenticação ABP
+- ✅ Testes de integração com serviços
+
+### Frontend Client Web (Angular + Jasmine)
+
+```bash
+# Executar testes
+cd src/clientWeb
+npm test
+
+# Executar testes com coverage
+npm run test -- --code-coverage
+
+# Executar testes no modo watch
+npm run test -- --watch
+```
+
+**Testes Implementados:**
+- ✅ `AuthService`: Testes completos de autenticação
+- ✅ `LoginComponent`: Testes de componente de login
+- ✅ Mock services e testes de integração
+
+## 📚 Documentação
+
+### Documentação Completa
+- **[README.md](README.md)** - Documentação principal do projeto
+- **[TESTING.md](TESTING.md)** - Guia completo de testes unitários
+- **[DATABASE.md](DATABASE.md)** - Guia de configuração do banco de dados
+- **[DOCKER.md](DOCKER.md)** - Guia de Docker e deploy
+- **[ESPEC.md](ESPEC.md)** - Especificação técnica detalhada
+- **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** - Estrutura do projeto
+
+### Documentação da API
+- **Swagger/OpenAPI**: `http://localhost:5000/swagger`
+- **Postman Collection**: Disponível em `docs/postman/`
+- **API Documentation**: Documentação automática com ABP
+
+### Recursos Adicionais
+- **Guia de Desenvolvimento**: Configuração completa do ambiente
+- **Troubleshooting**: Problemas comuns e soluções
+- **Arquitetura**: DDD, ABP Framework, e boas práticas
 
 ### 3. Configuração de Banco de Dados
 

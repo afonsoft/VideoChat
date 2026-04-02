@@ -47,6 +47,19 @@ public static class FamilyMeetDbContextModelCreatingExtensions
             b.HasIndex(x => x.LastActivityAt);
             b.HasIndex(x => x.IsActive);
 
+            // Configure CallParticipant as owned value object
+            b.OwnsMany(x => x.ActiveCallParticipants, cp =>
+            {
+                cp.WithOwner().HasForeignKey("ChatGroupId");
+                cp.HasKey("UserId"); // Use UserId as key within the owned collection
+                cp.Property(cp => cp.UserId).HasColumnName("UserId");
+                cp.Property(cp => cp.UserName).HasColumnName("UserName");
+                cp.Property(cp => cp.Status).HasColumnName("Status");
+                cp.Property(cp => cp.JoinedAt).HasColumnName("JoinedAt");
+                cp.Property(cp => cp.HasAudio).HasColumnName("HasAudio");
+                cp.Property(cp => cp.HasVideo).HasColumnName("HasVideo");
+            });
+
             // Relationships
             b.HasMany(x => x.Members)
                 .WithOne(x => x.ChatGroup)
@@ -206,9 +219,5 @@ public static class FamilyMeetDbContextModelCreatingExtensions
                 .HasForeignKey(x => x.ChatMessageId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
-
-        // Configure value objects as owned/entity types if needed
-        // Register CallParticipant as an owned value object so EF Core won't require a primary key
-        builder.Owned<CallParticipant>();
     }
 }

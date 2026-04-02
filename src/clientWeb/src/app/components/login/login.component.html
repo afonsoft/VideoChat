@@ -28,22 +28,17 @@
         />
       </div>
 
-      @if (errorMessage) {
-        <div class="error-message">
-          {{ errorMessage }}
-        </div>
-      }
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
 
       <button
         type="submit"
         class="login-btn"
         [disabled]="isLoading"
       >
-        @if (isLoading) {
-          <span class="spinner"></span>
-        } else {
-          Entrar
-        }
+        <span *ngIf="!isLoading">Entrar</span>
+        <span *ngIf="isLoading">Carregando...</span>
       </button>
     </form>
 
