@@ -6,13 +6,10 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using afonsoft.FamilyMeet.Chat.Dtos;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Authorization;
 using afonsoft.FamilyMeet.Localization;
 
 namespace afonsoft.FamilyMeet.Chat;
 
-[Authorize]
 public class ChatMessageAppService : CrudAppService<
     ChatMessage,
     ChatMessageDto,
@@ -21,15 +18,8 @@ public class ChatMessageAppService : CrudAppService<
     CreateChatMessageDto,
     UpdateChatMessageDto>, IChatMessageAppService
 {
-    protected IRepository<ChatMessage, Guid> Repository { get; }
-    protected IRepository<ChatGroup, Guid> GroupRepository { get; }
-
-    public ChatMessageAppService(
-        IRepository<ChatMessage, Guid> repository,
-        IRepository<ChatGroup, Guid> groupRepository) : base(repository)
+    public ChatMessageAppService(IRepository<ChatMessage, Guid> repository) : base(repository)
     {
-        Repository = repository;
-        GroupRepository = groupRepository;
     }
 
     public override async Task<ChatMessageDto> CreateAsync(CreateChatMessageDto input)
@@ -46,11 +36,6 @@ public class ChatMessageAppService : CrudAppService<
 
         await Repository.InsertAsync(chatMessage, autoSave: true);
 
-        // Update group last message time
-        var group = await GroupRepository.GetAsync(input.ChatGroupId);
-        group.SetLastMessageTime(chatMessage.CreationTime);
-        await GroupRepository.UpdateAsync(group, autoSave: true);
-
         return await MapToGetOutputDtoAsync(chatMessage);
     }
 
@@ -62,7 +47,7 @@ public class ChatMessageAppService : CrudAppService<
     public async Task<ChatMessageDto> EditAsync(Guid id, UpdateChatMessageDto input)
     {
         var chatMessage = await Repository.GetAsync(id);
-        
+
         // Check if user is the sender
         if (chatMessage.SenderId != (CurrentUser.Id ?? Guid.Empty))
         {
@@ -78,7 +63,7 @@ public class ChatMessageAppService : CrudAppService<
     public async Task DeleteSoftAsync(Guid id)
     {
         var chatMessage = await Repository.GetAsync(id);
-        
+
         // Check if user is the sender
         if (chatMessage.SenderId != (CurrentUser.Id ?? Guid.Empty))
         {
@@ -113,13 +98,15 @@ public class ChatMessageAppService : CrudAppService<
     protected override async Task<ChatMessageDto> MapToGetOutputDtoAsync(ChatMessage entity)
     {
         var dto = await base.MapToGetOutputDtoAsync(entity);
-        
+
         // Load reply to message if exists
         if (entity.ReplyToMessageId.HasValue)
         {
-            dto.ReplyToMessage = await MapToGetOutputDtoAsync(
-                await Repository.FirstOrDefaultAsync(x => x.Id == entity.ReplyToMessageId.Value)
-            );
+            var replyMessage = await Repository.FirstOrDefaultAsync(x => x.Id == entity.ReplyToMessageId.Value);
+            if (replyMessage != null)
+            {
+                dto.ReplyToMessage = await MapToGetOutputDtoAsync(replyMessage);
+            }
         }
 
         return dto;

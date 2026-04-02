@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace afonsoft.FamilyMeet.Chat.Hubs;
 
 [Authorize]
-public class ChatHub : AbpHub, IChatHub
+public class ChatHub : AbpHub
 {
     private readonly ILogger<ChatHub> _logger;
 
@@ -22,7 +22,7 @@ public class ChatHub : AbpHub, IChatHub
     public async Task SendMessageAsync(ChatMessageSignalRDto message)
     {
         var connectionId = Context.ConnectionId;
-        var userId = CurrentUser.GetId();
+        var userId = CurrentUser.Id ?? Guid.Empty;
         var userName = CurrentUser.Name ?? "Anonymous";
 
         _logger.LogInformation("User {UserId} ({UserName}) sent message to group {GroupId}", userId, userName, message.ChatGroupId);
@@ -34,11 +34,11 @@ public class ChatHub : AbpHub, IChatHub
     public async Task JoinGroupAsync(Guid groupId)
     {
         var connectionId = Context.ConnectionId;
-        var userId = CurrentUser.GetId();
+        var userId = CurrentUser.Id ?? Guid.Empty;
         var userName = CurrentUser.Name ?? "Anonymous";
 
         await Groups.AddToGroupAsync(connectionId, $"ChatGroup_{groupId}");
-        
+
         _logger.LogInformation("User {UserId} ({UserName}) joined group {GroupId}", userId, userName, groupId);
 
         // Notify others in the group
@@ -53,11 +53,11 @@ public class ChatHub : AbpHub, IChatHub
     public async Task LeaveGroupAsync(Guid groupId)
     {
         var connectionId = Context.ConnectionId;
-        var userId = CurrentUser.GetId();
+        var userId = CurrentUser.Id ?? Guid.Empty;
         var userName = CurrentUser.Name ?? "Anonymous";
 
         await Groups.RemoveFromGroupAsync(connectionId, $"ChatGroup_{groupId}");
-        
+
         _logger.LogInformation("User {UserId} ({UserName}) left group {GroupId}", userId, userName, groupId);
 
         // Notify others in the group
@@ -101,19 +101,19 @@ public class ChatHub : AbpHub, IChatHub
 
     public override async Task OnConnectedAsync()
     {
-        var userId = CurrentUser.GetId();
+        var userId = CurrentUser.Id ?? Guid.Empty;
         var userName = CurrentUser.Name ?? "Anonymous";
-        
+
         _logger.LogInformation("User {UserId} ({UserName}) connected to chat hub", userId, userName);
 
         await base.OnConnectedAsync();
     }
 
-    public override async Task OnDisconnectedAsync(Exception exception)
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        var userId = CurrentUser.GetId();
+        var userId = CurrentUser.Id ?? Guid.Empty;
         var userName = CurrentUser.Name ?? "Anonymous";
-        
+
         _logger.LogInformation("User {UserId} ({UserName}) disconnected from chat hub", userId, userName);
 
         await base.OnDisconnectedAsync(exception);

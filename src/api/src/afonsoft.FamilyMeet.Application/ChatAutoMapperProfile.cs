@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using afonsoft.FamilyMeet.Chat;
 using afonsoft.FamilyMeet.Chat.Dtos;
@@ -14,7 +15,7 @@ public class ChatAutoMapperProfile : Profile
 
         CreateMap<CreateChatGroupDto, ChatGroup>()
             .ConstructUsing(src => new ChatGroup(
-                Guid.NewGuid(),
+                System.Guid.NewGuid(),
                 src.Name,
                 src.Description,
                 src.IsPublic,
@@ -32,7 +33,7 @@ public class ChatAutoMapperProfile : Profile
 
         CreateMap<CreateChatMessageDto, ChatMessage>()
             .ConstructUsing(src => new ChatMessage(
-                Guid.NewGuid(),
+                System.Guid.NewGuid(),
                 src.ChatGroupId,
                 Guid.Empty, // Will be set in service
                 string.Empty, // Will be set in service

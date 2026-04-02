@@ -12,6 +12,8 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using afonsoft.FamilyMeet.Chat;
+using afonsoft.FamilyMeet.Localization;
 
 namespace afonsoft.FamilyMeet.EntityFrameworkCore;
 
@@ -53,6 +55,14 @@ public class FamilyMeetDbContext :
 
     #endregion
 
+    #region Chat Entities
+
+    public DbSet<ChatGroup> ChatGroups { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<ChatParticipant> ChatParticipants { get; set; }
+
+    #endregion
+
     public FamilyMeetDbContext(DbContextOptions<FamilyMeetDbContext> options)
         : base(options)
     {
@@ -76,11 +86,6 @@ public class FamilyMeetDbContext :
 
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(FamilyMeetConsts.DbTablePrefix + "YourEntities", FamilyMeetConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.ConfigureChat();
     }
 }

@@ -18,18 +18,8 @@ public class ChatGroupAppService : CrudAppService<
     CreateChatGroupDto,
     UpdateChatGroupDto>, IChatGroupAppService
 {
-    protected IRepository<ChatGroup, Guid> Repository { get; }
-    protected IRepository<ChatParticipant, Guid> ParticipantRepository { get; }
-    protected IRepository<ChatMessage, Guid> MessageRepository { get; }
-
-    public ChatGroupAppService(
-        IRepository<ChatGroup, Guid> repository,
-        IRepository<ChatParticipant, Guid> participantRepository,
-        IRepository<ChatMessage, Guid> messageRepository) : base(repository)
+    public ChatGroupAppService(IRepository<ChatGroup, Guid> repository) : base(repository)
     {
-        Repository = repository;
-        ParticipantRepository = participantRepository;
-        MessageRepository = messageRepository;
     }
 
     public override async Task<ChatGroupDto> CreateAsync(CreateChatGroupDto input)
@@ -77,13 +67,6 @@ public class ChatGroupAppService : CrudAppService<
 
         var dtos = await MapToGetListOutputDtosAsync(items);
 
-        // Load participant and message counts
-        foreach (var dto in dtos)
-        {
-            dto.ParticipantCount = await ParticipantRepository.CountAsync(x => x.ChatGroupId == dto.Id);
-            dto.MessageCount = await MessageRepository.CountAsync(x => x.ChatGroupId == dto.Id && !x.IsDeleted);
-        }
-
         return new PagedResultDto<ChatGroupDto>(totalCount, dtos);
     }
 
@@ -103,16 +86,5 @@ public class ChatGroupAppService : CrudAppService<
         await Repository.UpdateAsync(chatGroup, autoSave: true);
 
         return await MapToGetOutputDtoAsync(chatGroup);
-    }
-
-    protected override async Task<ChatGroupDto> MapToGetOutputDtoAsync(ChatGroup entity)
-    {
-        var dto = await base.MapToGetOutputDtoAsync(entity);
-        
-        // Load additional data
-        dto.ParticipantCount = await ParticipantRepository.CountAsync(x => x.ChatGroupId == entity.Id);
-        dto.MessageCount = await MessageRepository.CountAsync(x => x.ChatGroupId == entity.Id && !x.IsDeleted);
-
-        return dto;
     }
 }
