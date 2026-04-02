@@ -1,26 +1,26 @@
 import { Environment } from '@abp/ng.core';
 
-const baseUrl = 'http://localhost:4201';
+const baseUrl = 'http://localhost:4200';
 
 export const environment = {
   production: false,
   application: {
     baseUrl,
-    name: 'Admin',
+    name: 'FamilyMeet',
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'http://localhost:5000/',
+    issuer: 'https://localhost:44336/',
     redirectUri: baseUrl,
-    clientId: 'Admin_App',
+    clientId: 'FamilyMeet_App',
     responseType: 'code',
-    scope: 'offline_access Admin',
-    requireHttps: false,
+    scope: 'offline_access FamilyMeet',
+    requireHttps: true,
   },
   apis: {
     default: {
-      url: 'http://localhost:5000',
-      rootNamespace: 'FamilyMeet.Admin',
+      url: 'https://localhost:44336',
+      rootNamespace: 'afonsoft.FamilyMeet',
     },
   },
 } as Environment;

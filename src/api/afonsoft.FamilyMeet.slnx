@@ -1,0 +1,35 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/afonsoft.FamilyMeet.Application.Contracts/afonsoft.FamilyMeet.Application.Contracts.csproj" />
+    <Project Path="src/afonsoft.FamilyMeet.Application/afonsoft.FamilyMeet.Application.csproj" />
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <Project Path="src/afonsoft.FamilyMeet.DbMigrator/afonsoft.FamilyMeet.DbMigrator.csproj" />
+    <Project Path="src/afonsoft.FamilyMeet.Domain.Shared/afonsoft.FamilyMeet.Domain.Shared.csproj" />
+    <Project Path="src/afonsoft.FamilyMeet.Domain/afonsoft.FamilyMeet.Domain.csproj" />
+    <Project Path="src/afonsoft.FamilyMeet.EntityFrameworkCore/afonsoft.FamilyMeet.EntityFrameworkCore.csproj" />
+    <Project Path="src/afonsoft.FamilyMeet.HttpApi.Client/afonsoft.FamilyMeet.HttpApi.Client.csproj" />
+    
+    <Project Path="src/afonsoft.FamilyMeet.HttpApi.Host/afonsoft.FamilyMeet.HttpApi.Host.csproj" />
+    <Project Path="src/afonsoft.FamilyMeet.HttpApi/afonsoft.FamilyMeet.HttpApi.csproj" />
+    
+    
+    
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/afonsoft.FamilyMeet.Application.Tests/afonsoft.FamilyMeet.Application.Tests.csproj" />
+    <Project Path="test/afonsoft.FamilyMeet.Domain.Tests/afonsoft.FamilyMeet.Domain.Tests.csproj" />
+    <Project Path="test/afonsoft.FamilyMeet.EntityFrameworkCore.Tests/afonsoft.FamilyMeet.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/afonsoft.FamilyMeet.HttpApi.Client.ConsoleTestApp/afonsoft.FamilyMeet.HttpApi.Client.ConsoleTestApp.csproj" />
+    
+    <Project Path="test/afonsoft.FamilyMeet.TestBase/afonsoft.FamilyMeet.TestBase.csproj" />
+    
+  </Folder>
+</Solution>
