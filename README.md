@@ -1,4 +1,4 @@
-# FamilyChat - Aplicação de Comunicação Familiar em Tempo Real
+# FamilyMeet - Plataforma de Comunicação Familiar em Tempo Real
 
 ## 📋 Sumário
 
@@ -10,30 +10,34 @@
 
 ## Arquitetura Implementada
 
-### Backend (.NET 10 + ABP.io)
-- **ABP Framework**: Framework enterprise com módulos pré-construídos
-- **Domain Layer**: Entidades ChatGroup, ChatMessage, ChatGroupMember, ChatMessageAttachment
-- **Value Objects**: CallParticipant, WebRTCMessage para gerenciamento de chamadas
-- **Application Layer**: DTOs, Services e AutoMapper com ABP Application Services
-- **Infrastructure**: Entity Framework Core com PostgreSQL (Code-First)
-- **API**: ASP.NET Core Web API com ABP Controllers e SignalR Hub
-- **SignalR**: Hub completo com métodos de chat e sinalização WebRTC
+### Backend (.NET 10 + ABP.io Framework)
+- **ABP Framework**: Framework enterprise com DDD, modularidade e melhores práticas
+- **Domain Layer**: Entidades ChatGroup, ChatMessage, ChatParticipant com padrões DDD
+- **Application Layer**: Application Services com CRUD completo e SignalR Hub
+- **Infrastructure**: Entity Framework Core com PostgreSQL e configurações otimizadas
+- **API**: ASP.NET Core Web API com controllers RESTful
+- **SignalR**: Hub completo para comunicação em tempo real
 - **Authentication**: ABP Identity com JWT e OAuth 2.0
-- **Authorization**: ABP Permission System
+- **Authorization**: Sistema de permissões granular
 - **Multi-tenancy**: Suporte a múltiplos tenants
-- **Settings**: ABP Setting Management
+- **Auto Mapper**: Configuração completa de DTOs
 
-### Frontend Web (Angular 21 + ABP.io)
+### Frontend Admin (Angular 21 + ABP.io)
 - **ABP Ng.Core**: Módulos ABP para Angular com Dependency Injection
 - **ABP Theme Shared**: Tema LeptonX com componentes reutilizáveis
 - **ABP Identity**: Sistema de login, registro e gerenciamento de usuários
 - **ABP Account**: Portal de conta com perfil e configurações
 - **ABP Tenant Management**: Gerenciamento de multi-tenancy
 - **ABP Setting Management**: Configurações dinâmicas da aplicação
+- **Componentes**: Interface administrativa completa
+
+### Frontend Client Web (Angular 21)
+- **Angular 21**: Framework frontend com standalone components
 - **SignalR Client**: Serviço de comunicação em tempo real
-- **WebRTC Service**: Serviço para chamadas de vídeo P2P
-- **API Service**: Cliente HTTP com ABP RestService
-- **Componentes**: ChatRoom com interface ABP integrada
+- **AuthService**: Serviço completo de autenticação
+- **Chat Components**: Componentes reutilizáveis para chat
+- **SSR Support**: Suporte a Server-Side Rendering
+- **TypeScript**: Tipagem completa e segura
 
 ### Mobile (.NET MAUI)
 - **Models**: Entidades compartilhadas para iOS, Android, Windows
@@ -42,20 +46,295 @@
 ## 🚀 Funcionalidades Implementadas
 
 ### 1. Chat em Grupo
-- ✅ Criação de grupos com até 10 participantes
-- ✅ Envio de mensagens em tempo real
-- ✅ Edição e exclusão de mensagens
-- ✅ Respostas a mensagens
-- ✅ Histórico de conversas com paginação
+- ✅ Criação de grupos com configurações avançadas
+- ✅ Envio de mensagens em tempo real via SignalR
+- ✅ Edição e exclusão de mensagens (soft delete)
+- ✅ Respostas a mensagens (threading)
+- ✅ Histórico de conversas com paginação otimizada
+- ✅ Upload de arquivos e imagens
+- ✅ Indicadores de usuários online
+- ✅ Sistema de notificações em tempo real
 
-### 2. Videochamada em Grupo
-- ✅ Chamadas com até 10 participantes simultâneos
-- ✅ WebRTC para comunicação P2P
-- ✅ Sinalização via SignalR (offer/answer/ice-candidates)
-- ✅ Controles de áudio e vídeo
-- ✅ Status dos participantes (conectado, mudo, vídeo desligado)
+### 2. Gerenciamento de Grupos
+- ✅ Grupos públicos e privados
+- ✅ Sistema de permissões granular
+- ✅ Limite de participantes configurável
+- ✅ Ativação/desativação de grupos
+- ✅ Estatísticas de uso
+- ✅ Busca e filtragem avançada
 
-### 3. Gerenciamento de Grupos
+### 3. Sistema de Mensagens
+- ✅ Tipos de mensagem: Texto, Imagem, Arquivo, Sistema
+- ✅ Edição de mensagens com histórico
+- ✅ Exclusão suave (soft delete)
+- ✅ Respostas encadeadas
+- ✅ Estado de edição e leitura
+- ✅ Busca full-text em mensagens
+
+### 4. SignalR Hub
+- ✅ Conexão em tempo real para múltiplos grupos
+- ✅ Eventos: join/leave, typing, online/offline
+- ✅ Escalabilidade com grupos SignalR
+- ✅ Autenticação e autorização no hub
+- ✅ Tratamento de desconexões
+
+## 🏗️ Estrutura do Projeto
+
+```
+src/
+├── api/                                    # Backend .NET
+│   ├── src/
+│   │   ├── afonsoft.FamilyMeet.Domain/       # Entidades e domínio
+│   │   │   └── Chat/                        # Módulo de chat
+│   │   ├── afonsoft.FamilyMeet.Application/  # Services e DTOs
+│   │   │   └── Chat/                        # App Services
+│   │   ├── afonsoft.FamilyMeet.EntityFrameworkCore/ # DbContext
+│   │   ├── afonsoft.FamilyMeet.HttpApi/      # Controllers
+│   │   │   └── Controllers/Chat/            # API Controllers
+│   │   └── afonsoft.FamilyMeet.HttpApi.Host/ # Host da API
+│   └── test/                                # Testes da API
+├── adminWeb/                               # Frontend Admin
+│   └── src/app/                            # Aplicação Angular
+├── clientWeb/                              # Frontend Client
+│   └── src/app/                            # Aplicação Angular
+└── mobile/                                # Aplicação MAUI
+    └── FamilyMeet.Mobile/                  # Projeto mobile
+```
+
+## 🚀 Build e Execução
+
+### Pré-requisitos
+
+- **.NET 10 SDK** ou superior
+- **Node.js 20+** e **npm**
+- **PostgreSQL** (para desenvolvimento local)
+- **Redis** (para cache e SignalR)
+- **Docker** e **Docker Compose** (opcional)
+
+### Build dos Projetos
+
+#### 1. API (.NET)
+
+```bash
+# Build da API completa
+cd src/api
+dotnet build afonsoft.FamilyMeet.HttpApi.Host/afonsoft.FamilyMeet.HttpApi.Host.csproj
+
+# Executar API em desenvolvimento
+dotnet run --project afonsoft.FamilyMeet.HttpApi.Host
+
+# Executar migrações do banco
+dotnet run --project afonsoft.FamilyMeet.DbMigrator
+
+# Executar testes da API
+dotnet test afonsoft.FamilyMeet.Application.Tests/
+```
+
+#### 2. Frontend Admin (Angular)
+
+```bash
+# Instalar dependências
+cd src/adminWeb
+npm install
+
+# Build para desenvolvimento
+npm run build
+
+# Build para produção
+npm run build:prod
+
+# Executar servidor de desenvolvimento
+npm run start
+
+# Executar testes
+npm run test
+```
+
+#### 3. Frontend Client Web (Angular)
+
+```bash
+# Instalar dependências
+cd src/clientWeb
+npm install
+
+# Build para desenvolvimento
+npm run build
+
+# Executar servidor de desenvolvimento
+npm run start
+
+# Executar testes
+npm run test
+```
+
+### Execução com Docker
+
+```bash
+# Build e execução de todos os serviços
+docker-compose up --build -d
+
+# Verificar status
+docker-compose ps
+
+# Acessar logs
+docker-compose logs -f
+```
+
+### Endpoints
+
+- **API Backend**: `http://localhost:5000`
+- **Frontend Admin**: `http://localhost:4200`
+- **Frontend Client**: `http://localhost:4201`
+- **Swagger Documentation**: `http://localhost:5000/swagger`
+- **SignalR Hub**: `ws://localhost:5000/chat-hub`
+
+## 🧪 Testes Unitários
+
+### API (.NET xUnit)
+
+```bash
+# Executar todos os testes
+cd src/api
+dotnet test
+
+# Executar com cobertura de código
+dotnet test --collect:"XPlat Code Coverage"
+
+# Executar testes específicos
+dotnet test afonsoft.FamilyMeet.Application.Tests/
+```
+
+**Testes Implementados:**
+- ✅ `ChatGroupAppServiceTests`: Testes completos para CRUD de grupos
+- ✅ `ChatMessageAppServiceTests`: Testes para mensagens e SignalR
+- ✅ Cobertura de métodos CRUD, validações e regras de negócio
+
+### Frontend Admin (Angular + Jasmine)
+
+```bash
+# Executar testes
+cd src/adminWeb
+npm test
+
+# Executar testes com coverage
+npm run test -- --code-coverage
+```
+
+**Testes Implementados:**
+- ✅ `HomeComponent`: Testes de componente principal
+- ✅ Testes de autenticação ABP
+- ✅ Testes de integração com serviços
+
+### Frontend Client Web (Angular + Jasmine)
+
+```bash
+# Executar testes
+cd src/clientWeb
+npm test
+
+# Executar testes com coverage
+npm run test -- --code-coverage
+```
+
+**Testes Implementados:**
+- ✅ `AuthService`: Testes completos de autenticação
+- ✅ `LoginComponent`: Testes de componente de login
+- ✅ Mock services e testes de integração
+
+## 📚 Documentação
+
+### Documentação Completa
+- **[README.md](README.md)** - Documentação principal do projeto
+- **[TESTING.md](TESTING.md)** - Guia completo de testes unitários
+- **[DATABASE.md](DATABASE.md)** - Guia de configuração do banco de dados
+- **[DOCKER.md](DOCKER.md)** - Guia de Docker e deploy
+- **[ESPEC.md](ESPEC.md)** - Especificação técnica detalhada
+
+### Documentação da API
+- **Swagger/OpenAPI**: `http://localhost:5000/swagger`
+- **API Documentation**: Documentação automática com ABP
+
+### Recursos Adicionais
+- **Guia de Desenvolvimento**: Configuração completa do ambiente
+- **Troubleshooting**: Problemas comuns e soluções
+- **Arquitetura**: DDD, ABP Framework, e boas práticas
+
+## 🔧 Configuração do Banco de Dados
+
+### PostgreSQL Setup
+
+```bash
+# Criar banco de dados
+CREATE DATABASE familymeet;
+
+# Configurar connection string em appsettings.json
+"ConnectionStrings": {
+  "Default": "Host=localhost;Database=familymeet;Username=postgres;Password=password"
+}
+```
+
+### Migrations
+
+```bash
+# Adicionar nova migration
+dotnet ef migrations add AddChatModule
+
+# Aplicar migrations
+dotnet ef database update
+```
+
+## 🚀 Deploy
+
+### Docker Compose
+
+```bash
+# Build e deploy em produção
+docker-compose -f docker-compose.prod.yml up -d
+
+# Verificar status
+docker-compose -f docker-compose.prod.yml ps
+```
+
+### Variáveis de Ambiente
+
+```bash
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/familymeet
+
+# Redis
+REDIS_URL=localhost:6379
+
+# SignalR
+SIGNALR_URL=http://localhost:5000/chat-hub
+```
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie uma feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+### Diretrizes de Contribuição
+- Siga os padrões de código ABP
+- Escreva testes unitários para novas funcionalidades
+- Atualize a documentação
+- Use mensagens de commit semânticas
+
+## 📄 Licença
+
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+## 📞 Suporte
+
+- **Issues**: [GitHub Issues](https://github.com/afonsoft/FamilyMeet/issues)
+- **Documentação**: [Wiki do Projeto](https://github.com/afonsoft/FamilyMeet/wiki)
+- **Discord**: [Servidor Discord](https://discord.gg/familymeet)
+
+---
+
+**Desenvolvido com ❤️ usando ABP Framework e Angular**
 - ✅ Entrada e saída de grupos
 - ✅ Permissões básicas (criador/membros)
 - ✅ Lista de grupos por usuário

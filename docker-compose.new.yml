@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: familymeet-postgres
+    environment:
+      POSTGRES_DB: familymeet
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database-setup.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - familymeet-network
+    restart: unless-stopped
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: familymeet-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - familymeet-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # API Backend
+  api:
+    build:
+      context: ./src/api
+      dockerfile: Dockerfile
+    container_name: familymeet-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__Default=Host=postgres;Database=familymeet;Username=postgres;Password=postgres;
+      - Redis__Configuration=localhost:6379
+    ports:
+      - "5000:80"
+      - "5001:443"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - familymeet-network
+    restart: unless-stopped
+    volumes:
+      - ./src/api/src/afonsoft.FamilyMeet.HttpApi.Host/appsettings.Production.json:/app/appsettings.Production.json
+
+  # Admin Web Frontend
+  adminweb:
+    build:
+      context: ./src/adminWeb
+      dockerfile: Dockerfile
+    container_name: familymeet-admin
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - familymeet-network
+    restart: unless-stopped
+
+  # Client Web Frontend
+  clientweb:
+    build:
+      context: ./src/clientWeb
+      dockerfile: Dockerfile.new
+    container_name: familymeet-client
+    ports:
+      - "4201:80"
+    depends_on:
+      - api
+    networks:
+      - familymeet-network
+    restart: unless-stopped
+
+  # Database Migrator
+  dbmigrator:
+    build:
+      context: ./src/api
+      dockerfile: Dockerfile
+    container_name: familymeet-db-migrator
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__Default=Host=postgres;Database=familymeet;Username=postgres;Password=postgres;
+    depends_on:
+      - postgres
+    networks:
+      - familymeet-network
+    command: ["dotnet", "afonsoft.FamilyMeet.DbMigrator.dll"]
+    profiles:
+      - migration
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  familymeet-network:
+    driver: bridge
