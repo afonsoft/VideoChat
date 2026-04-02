@@ -10,6 +10,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.AspNetCore.SignalR;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 

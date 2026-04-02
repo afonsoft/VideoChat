@@ -9,6 +9,8 @@ using FamilyMeet.Domain;
 using FamilyMeet.EntityFrameworkCore;
 using FamilyMeet.HttpApi.Services;
 using Volo.Abp.AspNetCore.SignalR;
+using Prometheus;
+using Serilog;
 
 namespace FamilyMeet.HttpApi;
 
@@ -58,6 +60,9 @@ public class FamilyMeetHttpApiModule : AbpModule
         // Configure Swagger
         ConfigureSwaggerServices(context);
 
+        // Configure Prometheus
+        ConfigurePrometheus(context);
+
         // Register ConnectionManager
         context.Services.AddSingleton<IConnectionManager, ConnectionManager>();
     }
@@ -80,5 +85,28 @@ public class FamilyMeetHttpApiModule : AbpModule
             null,
             swaggerClientId
         );
+    }
+
+    private void ConfigurePrometheus(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+        var prometheusEnabled = configuration.GetValue<bool>("Prometheus:Enabled", true);
+
+        if (prometheusEnabled)
+        {
+            // Configurar Serilog para Prometheus
+            var loggerConfig = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.Console();
+
+            // Adicionar sink do Prometheus se estiver disponível
+            var prometheusEndpoint = configuration.GetValue<string>("Prometheus:Endpoint");
+            if (!string.IsNullOrEmpty(prometheusEndpoint))
+            {
+                loggerConfig.WriteTo.Prometheus(prometheusEndpoint);
+            }
+
+            Log.Logger = loggerConfig.CreateLogger();
+        }
     }
 }
