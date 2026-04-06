@@ -16,7 +16,7 @@ public class ChatMessageDto : FullAuditedEntityDto<Guid>
     public DateTime? EditedAt { get; set; }
     public Guid? ReplyToMessageId { get; set; }
     public ChatMessageDto ReplyToMessage { get; set; }
-    public bool IsDeleted { get; set; }
+    public new bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 }
 
@@ -49,17 +49,4 @@ public class ChatMessageListDto : PagedAndSortedResultRequestDto
     public MessageType? Type { get; set; }
     public Guid? SenderId { get; set; }
     public bool? IncludeDeleted { get; set; }
-}
-
-public class ChatMessageSignalRDto
-{
-    public Guid Id { get; set; }
-    public Guid ChatGroupId { get; set; }
-    public Guid SenderId { get; set; }
-    public string SenderName { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
-    public MessageType Type { get; set; }
-    public DateTime CreationTime { get; set; }
-    public Guid? ReplyToMessageId { get; set; }
-    public ChatMessageSignalRDto ReplyToMessage { get; set; }
 }

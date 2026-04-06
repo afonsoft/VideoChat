@@ -1,3 +1,4 @@
+using afonsoft.FamilyMeet.Localization;
 using System;
 
 namespace afonsoft.FamilyMeet.Chat.Dtos;
@@ -476,4 +477,4 @@ public enum GroupEventType
     GroupDeleted = 6
 }
 
-#endregion
+#endregion Enums
