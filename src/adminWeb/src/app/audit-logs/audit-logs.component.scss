@@ -1,0 +1,91 @@
+.audit-logs-container {
+  padding: 24px;
+}
+
+.audit-logs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.audit-logs-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.audit-logs-tools {
+  display: flex;
+  gap: 12px;
+}
+
+.audit-logs-filters {
+  background: #fafafa;
+  border: 1px solid #f0f0f;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.audit-logs-table {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.audit-logs-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.audit-logs-loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.audit-logs-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.audit-logs-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.audit-logs-action-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.audit-logs-status-tag {
+  font-weight: 500;
+}
+
+.audit-logs-duration {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+}
+
+.audit-logs-timestamp {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.audit-logs-url {
+  color: #1890ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.audit-logs-url:hover {
+  color: #40a9ff;
+}
