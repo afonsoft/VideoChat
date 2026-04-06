@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks;
 
 namespace afonsoft.FamilyMeet;
 
@@ -20,14 +21,37 @@ public class Program
 #endif
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+            .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
             .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt"))
-            .WriteTo.Async(c => c.Console())
+            .Enrich.WithProperty("Application", "FamilyMeet.HttpApi.Host")
+            .WriteTo.Async(c => c.Console(
+                outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}"))
+            .WriteTo.Async(c => c.File(
+                path: "Logs/familymeet-.log",
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 30,
+                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}"))
+#if DEBUG
+            .WriteTo.Async(c => c.File(
+                path: "Logs/familymeet-debug-.log",
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 7,
+                outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}"))
+#endif
             .CreateLogger();
 
         try
         {
             Log.Information("Starting afonsoft.FamilyMeet.HttpApi.Host.");
+            Log.Information("Environment: {Environment}", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production");
+            Log.Information("Log Level: {LogLevel}",
+#if DEBUG
+                "Debug"
+#else
+                "Information"
+#endif
+            );
+
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
@@ -40,11 +64,6 @@ public class Program
         }
         catch (Exception ex)
         {
-            if (ex is HostAbortedException)
-            {
-                throw;
-            }
-
             Log.Fatal(ex, "Host terminated unexpectedly!");
             return 1;
         }
