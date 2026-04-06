@@ -54,9 +54,9 @@ public class ChatAutoMapperProfile : Profile
             .ForMember(dest => dest.DeletedAt, opt => opt.Ignore());
 
         CreateMap<ChatMessage, ChatMessageSignalRDto>()
-            .ForMember(dest => dest.ReplyToMessage, opt => opt.Ignore());
+            .ForMember(dest => dest.ReplyToMessageId, opt => opt.Ignore());
 
         CreateMap<ChatMessageDto, ChatMessageSignalRDto>()
-            .ForMember(dest => dest.ReplyToMessage, opt => opt.Ignore());
+            .ForMember(dest => dest.ReplyToMessageId, opt => opt.Ignore());
     }
 }

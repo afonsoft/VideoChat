@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Volo.Abp.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace afonsoft.FamilyMeet.Chat.Hubs;
 
@@ -12,9 +13,10 @@ namespace afonsoft.FamilyMeet.Chat.Hubs;
 public class VideoHub : AbpHub
 {
     private readonly ILogger<VideoHub> _logger;
-    
+
     // Armazena informações de chamadas de vídeo ativas
     private static readonly ConcurrentDictionary<Guid, VideoCallInfo> _activeCalls = new();
+
     private static readonly ConcurrentDictionary<string, UserVideoInfo> _userVideoSessions = new();
 
     public VideoHub(ILogger<VideoHub> logger)
@@ -30,7 +32,7 @@ public class VideoHub : AbpHub
         var callerName = CurrentUser.Name ?? "Anonymous";
         var callId = Guid.NewGuid();
 
-        _logger.LogInformation("User {CallerId} ({CallerName}) starting video call {CallId} with {TargetUserId} in group {GroupId}", 
+        _logger.LogInformation("User {CallerId} ({CallerName}) starting video call {CallId} with {TargetUserId} in group {GroupId}",
             callerId, callerName, callId, targetUserId, groupId);
 
         // Verificar se ambos os usuários estão online
@@ -110,7 +112,7 @@ public class VideoHub : AbpHub
         callInfo.Status = VideoCallStatus.Active;
         callInfo.AcceptedAt = DateTime.UtcNow;
 
-        _logger.LogInformation("User {UserId} ({UserName}) accepted video call {CallId}", 
+        _logger.LogInformation("User {UserId} ({UserName}) accepted video call {CallId}",
             userId, userName, callId);
 
         // Notificar o chamador
@@ -158,7 +160,7 @@ public class VideoHub : AbpHub
         callInfo.Status = VideoCallStatus.Rejected;
         callInfo.EndedAt = DateTime.UtcNow;
 
-        _logger.LogInformation("User {UserId} ({UserName}) rejected video call {CallId}. Reason: {Reason}", 
+        _logger.LogInformation("User {UserId} ({UserName}) rejected video call {CallId}. Reason: {Reason}",
             userId, userName, callId, reason);
 
         // Notificar o chamador
@@ -192,7 +194,7 @@ public class VideoHub : AbpHub
         callInfo.Status = VideoCallStatus.Ended;
         callInfo.EndedAt = DateTime.UtcNow;
 
-        _logger.LogInformation("User {UserId} ({UserName}) ended video call {CallId}", 
+        _logger.LogInformation("User {UserId} ({UserName}) ended video call {CallId}",
             userId, userName, callId);
 
         // Notificar ambos os participantes
@@ -222,7 +224,7 @@ public class VideoHub : AbpHub
         _activeCalls.TryRemove(callId, out _);
     }
 
-    #endregion
+    #endregion Video Call Management
 
     #region WebRTC Signaling
 
@@ -300,7 +302,7 @@ public class VideoHub : AbpHub
         }
     }
 
-    #endregion
+    #endregion WebRTC Signaling
 
     #region Screen Sharing
 
@@ -356,7 +358,7 @@ public class VideoHub : AbpHub
         }
     }
 
-    #endregion
+    #endregion Screen Sharing
 
     #region Connection Management
 
@@ -395,7 +397,7 @@ public class VideoHub : AbpHub
         var userName = CurrentUser.Name ?? "Anonymous";
 
         // Encerrar chamadas ativas do usuário
-        var userCalls = _activeCalls.Where(kvp => 
+        var userCalls = _activeCalls.Where(kvp =>
             kvp.Value.CallerId == userId || kvp.Value.TargetUserId == userId).ToList();
 
         foreach (var call in userCalls)
@@ -411,7 +413,7 @@ public class VideoHub : AbpHub
         await base.OnDisconnectedAsync(exception);
     }
 
-    #endregion
+    #endregion Connection Management
 
     #region Helper Methods
 
@@ -428,7 +430,7 @@ public class VideoHub : AbpHub
     public async Task GetUserVideoStatusAsync(Guid targetUserId)
     {
         var targetConnection = _userVideoSessions.FirstOrDefault(kvp => kvp.Value.UserId == targetUserId);
-        
+
         await Clients.Caller.SendAsync("UserVideoStatus", new
         {
             UserId = targetUserId,
@@ -438,7 +440,7 @@ public class VideoHub : AbpHub
         });
     }
 
-    #endregion
+    #endregion Helper Methods
 }
 
 #region Supporting Classes
@@ -474,4 +476,4 @@ public enum VideoCallStatus
     Failed
 }
 
-#endregion
+#endregion Supporting Classes
