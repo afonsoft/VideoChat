@@ -30,6 +30,9 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace afonsoft.FamilyMeet;
 
@@ -73,6 +76,7 @@ public class FamilyMeetHttpApiHostModule : AbpModule
         ConfigureCors(context, configuration);
         ConfigureSwaggerServices(context, configuration);
         ConfigureSignalR(context, configuration);
+        ConfigureForwardedHeaders(context, configuration);
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -190,17 +194,6 @@ public class FamilyMeetHttpApiHostModule : AbpModule
 
             // Configurar para streaming de vídeo
             options.StreamBufferCapacity = 10; // Buffer para streaming
-            options.MaximumMessageSize = 32 * 1024 * 1024; // 32MB para mensagens grandes (vídeo)
-        });
-
-        // Configurar WebSocket options
-        context.Services.Configure<WebSocketOptions>(options =>
-        {
-            options.KeepAliveInterval = TimeSpan.FromSeconds(120);
-            options.AllowedOrigins = configuration["App:CorsOrigins"]?
-                .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                .Select(o => o.RemovePostFix("/"))
-                .ToArray() ?? Array.Empty<string>();
         });
 
         // Configurar Hub options para performance
@@ -210,8 +203,61 @@ public class FamilyMeetHttpApiHostModule : AbpModule
             options.KeepAliveInterval = TimeSpan.FromSeconds(15);
             options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
             options.HandshakeTimeout = TimeSpan.FromSeconds(15);
-            options.MaximumMessageSize = 32 * 1024 * 1024; // 32MB para streaming
             options.StreamBufferCapacity = 10;
+        });
+    }
+
+    private void ConfigureForwardedHeaders(ServiceConfigurationContext context, IConfiguration configuration)
+    {
+        // Configurar Forwarded Headers para suporte a reverse proxy, load balancer, etc.
+        context.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            // Habilitar headers específicos
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                                      ForwardedHeaders.XForwardedProto |
+                                      ForwardedHeaders.XForwardedHost;
+
+            // Configurar IPs confiáveis (para segurança)
+            // Se não especificar, aceitará de qualquer fonte (não recomendado para produção)
+            var knownProxies = configuration["ForwardedHeaders:KnownProxies"]?.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            if (knownProxies?.Length > 0)
+            {
+                foreach (var proxy in knownProxies)
+                {
+                    if (System.Net.IPAddress.TryParse(proxy.Trim(), out var ipAddress))
+                    {
+                        options.KnownProxies.Add(ipAddress);
+                    }
+                }
+            }
+            else
+            {
+                // Para desenvolvimento, aceitar de localhost
+                options.KnownProxies.Add(System.Net.IPAddress.Loopback);
+                options.KnownProxies.Add(System.Net.IPAddress.IPv6Loopback);
+            }
+
+            // Configurações adicionais para segurança
+            options.RequireHeaderSymmetry = false;
+            options.AllowedHosts = configuration["ForwardedHeaders:AllowedHosts"]?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                ?? new[] { "*" };
+
+            // Configurar para processar headers corretamente
+            options.ForwardLimit = null; // Sem limite de forwards
+
+            // Configurar para preservar o header original
+            options.ForwardedForHeaderName = "X-Forwarded-For";
+            options.ForwardedProtoHeaderName = "X-Forwarded-Proto";
+            options.ForwardedHostHeaderName = "X-Forwarded-Host";
+        });
+
+        // Configurar X-Forwarded-For para múltiplos IPs
+        context.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            // Processar múltiplos IPs no X-Forwarded-For header
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                                      ForwardedHeaders.XForwardedProto |
+                                      ForwardedHeaders.XForwardedHost;
         });
     }
 
@@ -220,9 +266,23 @@ public class FamilyMeetHttpApiHostModule : AbpModule
         var app = context.GetApplicationBuilder();
         var env = context.GetEnvironment();
 
+        // Forwarded Headers deve ser configurado o mais cedo possível
+        // mas depois do error handling em produção
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseErrorPage();
+        }
+
+        // Configurar Forwarded Headers antes de outros middlewares
+        app.UseForwardedHeaders();
+
+        if (!env.IsDevelopment())
+        {
+            app.UseHsts();
         }
 
         app.UseAbpRequestLocalization();
@@ -266,12 +326,10 @@ public class FamilyMeetHttpApiHostModule : AbpModule
         {
             endpoints.MapHub<Chat.Hubs.ChatHub>("/chat-hub", options =>
             {
-                options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets |
-                                     Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling;
+                options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
 
                 // Configurar WebSocket options específicas
                 options.WebSockets.CloseTimeout = TimeSpan.FromSeconds(30);
-                options.WebSockets.KeepAliveInterval = TimeSpan.FromSeconds(120);
 
                 // Configurar para P2P e streaming
                 options.ApplicationMaxBufferSize = 32 * 1024 * 1024; // 32MB
@@ -281,9 +339,8 @@ public class FamilyMeetHttpApiHostModule : AbpModule
             endpoints.MapControllers();
             endpoints.MapHub<Chat.Hubs.VideoHub>("/video-hub", options =>
             {
-                options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+                options.Transports = HttpTransportType.WebSockets;
                 options.WebSockets.CloseTimeout = TimeSpan.FromSeconds(30);
-                options.WebSockets.KeepAliveInterval = TimeSpan.FromSeconds(60);
                 options.ApplicationMaxBufferSize = 64 * 1024 * 1024; // 64MB para vídeo
                 options.TransportMaxBufferSize = 64 * 1024 * 1024; // 64MB para vídeo
             });

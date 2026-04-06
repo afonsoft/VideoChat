@@ -41,17 +41,16 @@ public class FamilyMeetEntityFrameworkCoreModule : AbpModule
     {
         context.Services.AddAbpDbContext<FamilyMeetDbContext>(options =>
         {
-                /* Remove "includeAllEntities: true" to create
-                 * default repositories only for aggregate roots */
+            /* Remove "includeAllEntities: true" to create
+             * default repositories only for aggregate roots */
             options.AddDefaultRepositories(includeAllEntities: true);
         });
 
         Configure<AbpDbContextOptions>(options =>
         {
-                /* The main point to change your DBMS.
-                 * See also FamilyMeetMigrationsDbContextFactory for EF Core tooling. */
+            /* The main point to change your DBMS.
+             * See also FamilyMeetMigrationsDbContextFactory for EF Core tooling. */
             options.UseNpgsql();
         });
-
     }
 }

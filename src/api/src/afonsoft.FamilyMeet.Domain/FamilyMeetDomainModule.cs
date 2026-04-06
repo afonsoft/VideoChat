@@ -14,6 +14,7 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.VirtualFileSystem;
 
 namespace afonsoft.FamilyMeet;
 
@@ -59,6 +60,15 @@ public class FamilyMeetDomainModule : AbpModule
         Configure<AbpMultiTenancyOptions>(options =>
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
+
+        // Configure Virtual File System for future CMS/Docs integration
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<FamilyMeetDomainModule>(
+                "afonsoft.FamilyMeet.Domain",
+                "afonsoft/FamilyMeet/VirtualFiles"
+            );
         });
 
 #if DEBUG

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -14,7 +16,7 @@ namespace afonsoft.FamilyMeet.Chat.Hubs;
 public class ChatHub : AbpHub
 {
     private readonly ILogger<ChatHub> _logger;
-    
+
     // Armazena informações de conexão para P2P
     private static readonly ConcurrentDictionary<string, UserConnectionInfo> _userConnections = new();
     private static readonly ConcurrentDictionary<Guid, List<string>> _groupConnections = new();
@@ -98,8 +100,8 @@ public class ChatHub : AbpHub
         await Groups.AddToGroupAsync(connectionId, $"ChatGroup_{groupId}");
 
         // Track group connections
-        _groupConnections.AddOrUpdate(groupId, 
-            new List<string> { connectionId }, 
+        _groupConnections.AddOrUpdate(groupId,
+            new List<string> { connectionId },
             (key, existing) => { existing.Add(connectionId); return existing; });
 
         _logger.LogInformation("User {UserId} ({UserName}) joined group {GroupId}", userId, userName, groupId);
@@ -205,12 +207,11 @@ public class ChatHub : AbpHub
         var callerId = CurrentUser.Id ?? Guid.Empty;
         var callerName = CurrentUser.Name ?? "Anonymous";
 
-        _logger.LogInformation("User {CallerId} ({CallerName}) starting video call with {TargetUserId} in group {GroupId}", 
+        _logger.LogInformation("User {CallerId} ({CallerName}) starting video call with {TargetUserId} in group {GroupId}",
             callerId, callerName, targetUserId, groupId);
 
         // Find target user connection
         var targetConnection = _userConnections.FirstOrDefault(kvp => kvp.Value.UserId == targetUserId);
-        
         if (targetConnection.Key != null)
         {
             await Clients.Client(targetConnection.Key).SendAsync("VideoCallRequest", new
@@ -238,12 +239,12 @@ public class ChatHub : AbpHub
         var userId = CurrentUser.Id ?? Guid.Empty;
         var userName = CurrentUser.Name ?? "Anonymous";
 
-        _logger.LogInformation("User {UserId} ({UserName}) accepted video call {CallId} from {CallerId}", 
+        _logger.LogInformation("User {UserId} ({UserName}) accepted video call {CallId} from {CallerId}",
             userId, userName, callId, callerId);
 
         // Find caller connection
         var callerConnection = _userConnections.FirstOrDefault(kvp => kvp.Value.UserId == callerId);
-        
+
         if (callerConnection.Key != null)
         {
             await Clients.Client(callerConnection.Key).SendAsync("VideoCallAccepted", new
@@ -261,12 +262,12 @@ public class ChatHub : AbpHub
         var userId = CurrentUser.Id ?? Guid.Empty;
         var userName = CurrentUser.Name ?? "Anonymous";
 
-        _logger.LogInformation("User {UserId} ({UserName}) rejected video call {CallId} from {CallerId}", 
+        _logger.LogInformation("User {UserId} ({UserName}) rejected video call {CallId} from {CallerId}",
             userId, userName, callId, callerId);
 
         // Find caller connection
         var callerConnection = _userConnections.FirstOrDefault(kvp => kvp.Value.UserId == callerId);
-        
+
         if (callerConnection.Key != null)
         {
             await Clients.Client(callerConnection.Key).SendAsync("VideoCallRejected", new
@@ -284,12 +285,12 @@ public class ChatHub : AbpHub
         var userId = CurrentUser.Id ?? Guid.Empty;
         var userName = CurrentUser.Name ?? "Anonymous";
 
-        _logger.LogInformation("User {UserId} ({UserName}) ended video call {CallId} with {TargetUserId}", 
+        _logger.LogInformation("User {UserId} ({UserName}) ended video call {CallId} with {TargetUserId}",
             userId, userName, callId, targetUserId);
 
         // Notify both parties
         var targetConnection = _userConnections.FirstOrDefault(kvp => kvp.Value.UserId == targetUserId);
-        
+
         if (targetConnection.Key != null)
         {
             await Clients.Client(targetConnection.Key).SendAsync("VideoCallEnded", new
@@ -319,7 +320,7 @@ public class ChatHub : AbpHub
 
         // Find target user connection
         var targetConnection = _userConnections.FirstOrDefault(kvp => kvp.Value.UserId == targetUserId);
-        
+
         if (targetConnection.Key != null)
         {
             await Clients.Client(targetConnection.Key).SendAsync("WebRTCSignal", new
@@ -410,7 +411,7 @@ public class ChatHub : AbpHub
         if (_groupConnections.TryGetValue(groupId, out var connections))
         {
             var onlineUsers = new List<object>();
-            
+
             foreach (var connId in connections)
             {
                 if (_userConnections.TryGetValue(connId, out var userInfo))
