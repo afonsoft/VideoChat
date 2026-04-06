@@ -1,0 +1,84 @@
+<div class="audit-logs-container">
+  <h2>Audit Logs</h2>
+
+  <form [formGroup]="form" (ngSubmit)="search()">
+    <div class="filters-grid">
+      <div>
+            <label for="startDate">Start Date:</label>
+            <input type="datetime-local" formControlName="startDate">
+          </div>
+          <div>
+            <label for="endDate">End Date:</label>
+            <input type="datetime-local" formControlName="endDate">
+          </div>
+          <div>
+            <label for="userId">User:</label>
+            <input type="text" formControlName="userId" placeholder="User ID">
+          </div>
+          <div>
+            <label for="action">Action:</label>
+            <select formControlName="action">
+              <option value="">Select action</option>
+              <option value="CreateChatMessage">Create Message</option>
+              <option value="UpdateChatMessage">Update Message</option>
+              <option value="DeleteChatMessage">Delete Message</option>
+              <option value="Login">Login</option>
+              <option value="Logout">Logout</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <button type="submit" [disabled]="loading">
+            @if (loading) {
+              Loading...
+            } @else {
+              Search
+            }
+          </button>
+          <button type="button" (click)="reset()">
+            Reset
+          </button>
+        </div>
+      </form>
+
+      @if (loading) {
+        <div class="loading">
+          Loading audit logs...
+        </div>
+      } @else {
+        <div class="results">
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>User</th>
+                <th>Action</th>
+                <th>URL</th>
+                <th>Method</th>
+                <th>Status</th>
+                <th>Duration</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (log of auditLogs; track log.id) {
+                <tr>
+                  <td>{{ log.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                  <td>{{ log.userName }}</td>
+                  <td>{{ log.action }}</td>
+                  <td>{{ log.url }}</td>
+                  <td>{{ log.httpMethod }}</td>
+                  <td>{{ log.httpStatusCode }}</td>
+                  <td>{{ log.executionDuration }}ms</td>
+                  <td>
+                    <button type="button" (click)="viewDetails(log)">
+                      View
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
