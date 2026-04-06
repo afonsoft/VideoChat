@@ -23,6 +23,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
+using Volo.Abp.AspNetCore.SignalR;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
@@ -41,7 +42,8 @@ namespace afonsoft.FamilyMeet;
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAspNetCoreSignalRModule)
 )]
 public class FamilyMeetHttpApiHostModule : AbpModule
 {
@@ -70,6 +72,7 @@ public class FamilyMeetHttpApiHostModule : AbpModule
         ConfigureVirtualFileSystem(context);
         ConfigureCors(context, configuration);
         ConfigureSwaggerServices(context, configuration);
+        ConfigureSignalR(context, configuration);
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -175,6 +178,43 @@ public class FamilyMeetHttpApiHostModule : AbpModule
         });
     }
 
+    private void ConfigureSignalR(ServiceConfigurationContext context, IConfiguration configuration)
+    {
+        context.Services.AddSignalR(options =>
+        {
+            // Configurar para suportar WebSocket e streaming
+            options.EnableDetailedErrors = true;
+            options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+            options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+            options.HandshakeTimeout = TimeSpan.FromSeconds(15);
+
+            // Configurar para streaming de vídeo
+            options.StreamBufferCapacity = 10; // Buffer para streaming
+            options.MaximumMessageSize = 32 * 1024 * 1024; // 32MB para mensagens grandes (vídeo)
+        });
+
+        // Configurar WebSocket options
+        context.Services.Configure<WebSocketOptions>(options =>
+        {
+            options.KeepAliveInterval = TimeSpan.FromSeconds(120);
+            options.AllowedOrigins = configuration["App:CorsOrigins"]?
+                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                .Select(o => o.RemovePostFix("/"))
+                .ToArray() ?? Array.Empty<string>();
+        });
+
+        // Configurar Hub options para performance
+        context.Services.Configure<HubOptions>(options =>
+        {
+            options.EnableDetailedErrors = true;
+            options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+            options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+            options.HandshakeTimeout = TimeSpan.FromSeconds(15);
+            options.MaximumMessageSize = 32 * 1024 * 1024; // 32MB para streaming
+            options.StreamBufferCapacity = 10;
+        });
+    }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
@@ -219,6 +259,36 @@ public class FamilyMeetHttpApiHostModule : AbpModule
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
+
+        // Configurar SignalR Hub
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapHub<Chat.Hubs.ChatHub>("/chat-hub", options =>
+            {
+                options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets |
+                                     Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling;
+
+                // Configurar WebSocket options específicas
+                options.WebSockets.CloseTimeout = TimeSpan.FromSeconds(30);
+                options.WebSockets.KeepAliveInterval = TimeSpan.FromSeconds(120);
+
+                // Configurar para P2P e streaming
+                options.ApplicationMaxBufferSize = 32 * 1024 * 1024; // 32MB
+                options.TransportMaxBufferSize = 32 * 1024 * 1024; // 32MB
+            });
+
+            endpoints.MapControllers();
+            endpoints.MapHub<Chat.Hubs.VideoHub>("/video-hub", options =>
+            {
+                options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+                options.WebSockets.CloseTimeout = TimeSpan.FromSeconds(30);
+                options.WebSockets.KeepAliveInterval = TimeSpan.FromSeconds(60);
+                options.ApplicationMaxBufferSize = 64 * 1024 * 1024; // 64MB para vídeo
+                options.TransportMaxBufferSize = 64 * 1024 * 1024; // 64MB para vídeo
+            });
+        });
+
         app.UseConfiguredEndpoints();
     }
 }
