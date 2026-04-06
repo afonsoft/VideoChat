@@ -24,4 +24,8 @@ export const appRoutes: Routes = [
     loadChildren: () =>
       import('@abp/ng.setting-management').then(m => m.createRoutes()),
   },
+  {
+    path: 'audit-logs',
+    loadChildren: () => import('./audit-logs/audit-logs.routes').then(m => m.default),
+  },
 ];
