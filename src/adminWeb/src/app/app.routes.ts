@@ -26,6 +26,6 @@ export const appRoutes: Routes = [
   },
   {
     path: 'audit-logs',
-    loadChildren: () => import('./audit-logs-simple/audit-logs-simple.routes').then(m => m.default),
+    loadChildren: () => import('./audit-logs/audit-logs.routes').then(m => m.default),
   },
 ];
