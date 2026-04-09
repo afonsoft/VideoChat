@@ -40,7 +40,7 @@ function Wait-ForService {
             # Service not ready yet
         }
         
-        Write-Host "Attempt $attempt/$MaxAttempts: $ServiceName not ready yet..." -ForegroundColor Yellow
+        Write-Host "Attempt ${attempt}/${MaxAttempts}: ${ServiceName} not ready yet..." -ForegroundColor Yellow
         Start-Sleep -Seconds 2
         $attempt++
     }
