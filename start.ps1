@@ -114,7 +114,7 @@ if (-not (Test-Path "bin/Debug/net8.0")) {
 $apiScript = {
     param($Port)
     Set-Location "src/api"
-    dotnet run --project "src/FamilyMeet.Api.csproj" --urls "http://localhost:$Port"
+    dotnet run --project "src/afonsoft.FamilyMeet.HttpApi.Host/afonsoft.FamilyMeet.HttpApi.Host.csproj" --urls "http://localhost:$Port"
 }
 Start-Job -ScriptBlock $apiScript -ArgumentList $API_PORT -Name "API" | Out-Null
 Set-Location "../.."

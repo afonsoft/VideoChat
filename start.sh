@@ -100,10 +100,10 @@ echo -e "${BLUE}Starting API Backend on port $API_PORT...${NC}"
 cd src/api
 if [ ! -d "bin/Debug/net8.0" ]; then
     echo -e "${YELLOW}Building API...${NC}"
-    dotnet build
+    dotnet build src/afonsoft.FamilyMeet.HttpApi.Host/afonsoft.FamilyMeet.HttpApi.Host.csproj
 fi
 
-dotnet run --project src/FamilyMeet.Api.csproj --urls "http://localhost:$API_PORT" > ../api.log 2>&1 &
+dotnet run --project src/afonsoft.FamilyMeet.HttpApi.Host/afonsoft.FamilyMeet.HttpApi.Host.csproj --urls "http://localhost:$API_PORT" > ../api.log 2>&1 &
 API_PID=$!
 cd ../..
 
