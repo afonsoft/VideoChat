@@ -125,9 +125,9 @@ public class FamilyMeetHttpApiHostModule : AbpModule
                 options.FileSets.ReplaceEmbeddedByPhysical<FamilyMeetDomainSharedModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}afonsoft.FamilyMeet.Domain.Shared"));
-                options.FileSets.ReplaceEmbeddedByPhysical<FamilyMeetDomainModule>(
-                    Path.Combine(hostingEnvironment.ContentRootPath,
-                        $"..{Path.DirectorySeparatorChar}afonsoft.FamilyMeet.Domain"));
+                //options.FileSets.ReplaceEmbeddedByPhysical<FamilyMeetDomainModule>(
+                //    Path.Combine(hostingEnvironment.ContentRootPath,
+                //        $"..{Path.DirectorySeparatorChar}afonsoft.FamilyMeet.Domain"));
                 options.FileSets.ReplaceEmbeddedByPhysical<FamilyMeetApplicationContractsModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}afonsoft.FamilyMeet.Application.Contracts"));
