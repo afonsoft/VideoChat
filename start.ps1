@@ -108,7 +108,7 @@ Set-Location "src/api"
 
 if (-not (Test-Path "bin/Debug/net8.0")) {
     Write-Host "Building API..." -ForegroundColor Yellow
-    dotnet build
+    dotnet build src/afonsoft.FamilyMeet.HttpApi.Host/afonsoft.FamilyMeet.HttpApi.Host.csproj --no-restore --verbosity quiet
 }
 
 $apiScript = {
@@ -120,7 +120,7 @@ Start-Job -ScriptBlock $apiScript -ArgumentList $API_PORT -Name "API" | Out-Null
 Set-Location "../.."
 
 # Wait for API to start
-if (-not (Wait-ForService -Url "http://localhost:$API_PORT/health" -ServiceName "API Backend")) {
+if (-not (Wait-ForService -Url "http://localhost:$API_PORT" -ServiceName "API Backend")) {
     Write-Host "Failed to start API Backend. Check logs for details." -ForegroundColor Red
     Cleanup-Processes
 }
