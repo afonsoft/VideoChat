@@ -6,7 +6,7 @@ using Xunit;
 
 namespace afonsoft.FamilyMeet.Application.Tests.Services.FeatureManagement;
 
-public abstract class FeatureManagementAppServiceTestBase : FamilyMeetApplicationTestBase
+public abstract class FeatureManagementAppServiceTestBase : FamilyMeetApplicationTestBase<FamilyMeetApplicationTestModule>
 {
     protected IFeatureAppService FeatureAppService { get; }
     protected IFeatureChecker FeatureChecker { get; }
@@ -262,7 +262,7 @@ public class FeatureAppServiceTests : FeatureManagementAppServiceTestBase
         // Assert
         result.ShouldNotBeNull();
         result.Items.ShouldNotBeNull();
-        
+
         // All features should belong to the specified provider
         foreach (var feature in result.Items)
         {
@@ -326,11 +326,11 @@ public class FeatureDefinitionTests : FeatureManagementAppServiceTestBase
         // Assert
         result.ShouldNotBeNull();
         result.Items.ShouldNotBeNull();
-        
+
         // Verify that some standard features are available
         var features = result.Items;
         features.Count.ShouldBeGreaterThan(0);
-        
+
         // Each feature should have required properties
         foreach (var feature in features)
         {
@@ -355,11 +355,11 @@ public class FeatureDefinitionTests : FeatureManagementAppServiceTestBase
 
         // Assert
         result.ShouldNotBeNull();
-        
+
         if (result.Items.Count > 0)
         {
             var firstFeature = result.Items[0];
-            
+
             firstFeature.Name.ShouldNotBeNullOrEmpty();
             firstFeature.DisplayName.ShouldNotBeNullOrEmpty();
             firstFeature.Description.ShouldNotBeNull();

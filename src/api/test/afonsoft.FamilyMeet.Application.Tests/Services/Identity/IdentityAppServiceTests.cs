@@ -8,12 +8,13 @@ using Xunit;
 
 namespace afonsoft.FamilyMeet.Application.Tests.Services.Identity;
 
-public abstract class IdentityAppServiceTestBase : FamilyMeetApplicationTestBase
+public abstract class IdentityAppServiceTests : FamilyMeetApplicationTestBase<FamilyMeetApplicationTestModule>
 {
     protected IIdentityUserAppService IdentityUserAppService { get; }
     protected IIdentityRoleAppService IdentityRoleAppService { get; }
     protected IIdentityClaimTypeAppService IdentityClaimTypeAppService { get; }
 
+    protected IdentityAppServiceTests()
     protected IdentityAppServiceTestBase()
     {
         IdentityUserAppService = GetRequiredService<IIdentityUserAppService>();

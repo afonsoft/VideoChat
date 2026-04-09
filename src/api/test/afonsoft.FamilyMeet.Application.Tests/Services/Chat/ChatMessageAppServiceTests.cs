@@ -9,7 +9,7 @@ using afonsoft.FamilyMeet.Chat.Dtos;
 
 namespace afonsoft.FamilyMeet.Application.Tests.Services.Chat;
 
-public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
+public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase<FamilyMeetApplicationTestModule>
 {
     private readonly IChatMessageAppService _chatMessageAppService;
 
@@ -38,7 +38,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
     {
         // Arrange
         var groupId = Guid.NewGuid();
-        
+
         // First create a message
         var createInput = new CreateChatMessageDto
         {
@@ -46,7 +46,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
             Content = "Test Message",
             Type = MessageType.Text
         };
-        
+
         var createdMessage = await _chatMessageAppService.CreateAsync(createInput);
 
         // Act
@@ -91,7 +91,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
     {
         // Arrange
         var groupId = Guid.NewGuid();
-        
+
         // Create a message first
         var createInput = new CreateChatMessageDto
         {
@@ -99,7 +99,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
             Content = "Original Message",
             Type = MessageType.Text
         };
-        
+
         var createdMessage = await _chatMessageAppService.CreateAsync(createInput);
 
         var updateInput = new UpdateChatMessageDto
@@ -123,7 +123,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
     {
         // Arrange
         var groupId = Guid.NewGuid();
-        
+
         // Create a message first
         var createInput = new CreateChatMessageDto
         {
@@ -131,7 +131,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
             Content = "Message to Delete",
             Type = MessageType.Text
         };
-        
+
         var createdMessage = await _chatMessageAppService.CreateAsync(createInput);
 
         // Act
@@ -149,7 +149,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
     {
         // Arrange
         var groupId = Guid.NewGuid();
-        
+
         // Create multiple messages for the group
         var message1 = await _chatMessageAppService.CreateAsync(new CreateChatMessageDto
         {
@@ -157,7 +157,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
             Content = "Message 1",
             Type = MessageType.Text
         });
-        
+
         var message2 = await _chatMessageAppService.CreateAsync(new CreateChatMessageDto
         {
             ChatGroupId = groupId,
@@ -206,7 +206,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
     {
         // Arrange
         var groupId = Guid.NewGuid();
-        
+
         // Create original message
         var originalMessage = await _chatMessageAppService.CreateAsync(new CreateChatMessageDto
         {
@@ -363,7 +363,7 @@ public class ChatMessageAppServiceTests : FamilyMeetApplicationTestBase
     {
         // Arrange
         var groupId = Guid.NewGuid();
-        
+
         // Create a message first
         var createdMessage = await _chatMessageAppService.CreateAsync(new CreateChatMessageDto
         {

@@ -9,7 +9,7 @@ using afonsoft.FamilyMeet.Chat.Dtos;
 
 namespace afonsoft.FamilyMeet.Application.Tests.Services.Chat;
 
-public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase
+public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase<FamilyMeetApplicationTestModule>
 {
     private readonly IChatGroupAppService _chatGroupAppService;
 
@@ -44,7 +44,7 @@ public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase
             IsPublic = true,
             MaxParticipants = 50
         };
-        
+
         var createdGroup = await _chatGroupAppService.CreateAsync(input);
 
         // Act
@@ -96,7 +96,7 @@ public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase
             IsPublic = true,
             MaxParticipants = 50
         };
-        
+
         var createdGroup = await _chatGroupAppService.CreateAsync(createInput);
 
         var updateInput = new UpdateChatGroupDto
@@ -131,7 +131,7 @@ public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase
             IsPublic = true,
             MaxParticipants = 10
         };
-        
+
         var createdGroup = await _chatGroupAppService.CreateAsync(createInput);
 
         // Act
@@ -153,9 +153,9 @@ public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase
             IsPublic = true,
             MaxParticipants = 10
         };
-        
+
         var createdGroup = await _chatGroupAppService.CreateAsync(createInput);
-        
+
         // First deactivate
         await _chatGroupAppService.DeactivateAsync(createdGroup.Id);
 
@@ -179,7 +179,7 @@ public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase
             IsPublic = true,
             MaxParticipants = 10
         };
-        
+
         var createdGroup = await _chatGroupAppService.CreateAsync(createInput);
 
         // Act
@@ -202,7 +202,7 @@ public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase
             IsPublic = true,
             MaxParticipants = 20
         });
-        
+
         var group2 = await _chatGroupAppService.CreateAsync(new CreateChatGroupDto
         {
             Name = "My Group 2",
@@ -272,7 +272,7 @@ public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase
             IsPublic = true,
             MaxParticipants = 10
         });
-        
+
         // First join the group
         await _chatGroupAppService.JoinGroupAsync(group.Id);
 
@@ -447,7 +447,7 @@ public class ChatGroupAppServiceTests : FamilyMeetApplicationTestBase
             IsPublic = true,
             MaxParticipants = 50
         };
-        
+
         var createdGroup = await _chatGroupAppService.CreateAsync(createInput);
         var originalCreationTime = createdGroup.CreationTime;
 

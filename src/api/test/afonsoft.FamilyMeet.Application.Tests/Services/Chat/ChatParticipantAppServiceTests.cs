@@ -8,7 +8,7 @@ using afonsoft.FamilyMeet.Chat.Dtos;
 
 namespace afonsoft.FamilyMeet.Application.Tests.Services.Chat;
 
-public class ChatParticipantAppServiceTests : FamilyMeetApplicationTestBase
+public class ChatParticipantAppServiceTests : FamilyMeetApplicationTestBase<FamilyMeetApplicationTestModule>
 {
     private readonly IChatParticipantAppService _chatParticipantAppService;
 
@@ -22,7 +22,7 @@ public class ChatParticipantAppServiceTests : FamilyMeetApplicationTestBase
     {
         // Arrange
         var groupId = Guid.NewGuid();
-        
+
         // Create a group first
         var groupService = GetRequiredService<IChatGroupAppService>();
         var group = await groupService.CreateAsync(new CreateChatGroupDto
