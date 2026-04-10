@@ -1,15 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService, User } from '../../services/auth.service';
 import { ChatService, Message, ChatGroup } from '../../services/chat.service';
+import { SignalRService } from '../../services/signalr.service';
+import { VideoCallComponent } from '../video-call/video-call.component';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, VideoCallComponent],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
@@ -23,12 +25,18 @@ export class ChatComponent implements OnInit, OnDestroy {
   isLoading = false;
   showGroupList = true;
   showNewGroupModal = false;
+  showVideoCall = false;
+  videoCallTargetUserId = '';
+  showIncomingCall = false;
+  incomingCallData: { callId: string; callerId: string; callerName: string; groupId: string } | null = null;
 
   private subscriptions: Subscription[] = [];
 
   constructor(
     private authService: AuthService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private signalrService: SignalRService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +48,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     this.loadGroups();
     this.setupMessageListener();
+    this.setupIncomingCallListener();
   }
 
   ngOnDestroy(): void {
@@ -116,8 +125,26 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   startVideoCall(): void {
     if (this.selectedGroup) {
-      // Implement video call functionality
-      console.log('Starting video call for group:', this.selectedGroup.name);
+      this.showVideoCall = true;
+    }
+  }
+
+  onVideoCallEnded(): void {
+    this.showVideoCall = false;
+  }
+
+  acceptIncomingCall(): void {
+    if (this.incomingCallData) {
+      this.showIncomingCall = false;
+      this.showVideoCall = true;
+    }
+  }
+
+  rejectIncomingCall(): void {
+    if (this.incomingCallData) {
+      this.signalrService.rejectVideoCall(this.incomingCallData.callId);
+      this.showIncomingCall = false;
+      this.incomingCallData = null;
     }
   }
 
@@ -139,6 +166,22 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(messageSub);
+  }
+
+  private setupIncomingCallListener(): void {
+    const incomingSub = this.signalrService.incomingVideoCall$.subscribe((data: unknown) => {
+      const callData = data as { callId: string; callerId: string; callerName: string; groupId: string };
+      this.incomingCallData = callData;
+      this.showIncomingCall = true;
+    });
+    this.subscriptions.push(incomingSub);
+
+    const requestSub = this.signalrService.videoCallRequest$.subscribe((data: unknown) => {
+      const callData = data as { callId: string; callerId: string; callerName: string; groupId: string };
+      this.incomingCallData = callData;
+      this.showIncomingCall = true;
+    });
+    this.subscriptions.push(requestSub);
   }
 
   formatTime(date: Date): string {

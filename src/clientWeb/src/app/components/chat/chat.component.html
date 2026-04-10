@@ -139,6 +139,33 @@
   }
 </div>
 
+<!-- Video Call -->
+@if (showVideoCall && selectedGroup) {
+  <app-video-call
+    [groupId]="selectedGroup.id"
+    [groupName]="selectedGroup.name"
+  ></app-video-call>
+}
+
+<!-- Incoming Call Modal -->
+@if (showIncomingCall && incomingCallData) {
+  <div class="incoming-call-overlay">
+    <div class="incoming-call-modal">
+      <div class="incoming-call-icon">
+        <svg viewBox="0 0 24 24" width="48" height="48">
+          <path fill="currentColor" d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+        </svg>
+      </div>
+      <h3>{{ incomingCallData.callerName }}</h3>
+      <p>Chamada de video recebida</p>
+      <div class="incoming-call-actions">
+        <button class="reject-call-btn" (click)="rejectIncomingCall()">Recusar</button>
+        <button class="accept-call-btn" (click)="acceptIncomingCall()">Aceitar</button>
+      </div>
+    </div>
+  </div>
+}
+
 <!-- New Group Modal -->
 @if (showNewGroupModal) {
   <div class="modal-overlay" (click)="showNewGroupModal = false">
